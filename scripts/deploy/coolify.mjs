@@ -15,7 +15,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let res;
 for (let attempt = 1; !res; attempt++) {
   try {
-    res = await fetch(url, { headers: { authorization: `Bearer ${token}` } });
+    // POST: Coolify 4.4 answers GET on /api/v1/deploy with 405; it still reads uuid from the query string.
+    res = await fetch(url, { method: 'POST', headers: { authorization: `Bearer ${token}` } });
   } catch (e) {
     if (attempt === 6) {
       console.error(`Coolify did not answer over the tailnet (${e.cause?.code || e.message}).`);
