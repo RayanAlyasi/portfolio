@@ -113,6 +113,24 @@ const gates = {
       : { ok: true, detail: 'no inline JavaScript' };
   },
 
+  // `.a` elements start invisible and name their entrance with --an. An unknown name animates
+  // nothing, so the element never appears, and no other check notices.
+  anim() {
+    const defined = new Set();
+    for (const f of filesInScope(['src/styles/']))
+      for (const m of readStagedOrDisk(f).matchAll(/@keyframes\s+([\w-]+)/g)) defined.add(m[1]);
+    const hits = [];
+    for (const f of filesInScope(['src/'])) {
+      if (!TEXT.test(f)) continue;
+      const text = readStagedOrDisk(f);
+      for (const m of text.matchAll(/--an:\s*([\w-]+)/g))
+        if (!defined.has(m[1])) hits.push(`${f}:${lineOf(text, m.index)}: --an:${m[1]} has no @keyframes`);
+    }
+    return hits.length
+      ? { ok: false, detail: `Unknown animation, so the element stays invisible:\n${hits.slice(0, 10).join('\n')}` }
+      : { ok: true, detail: `every --an names one of ${defined.size} @keyframes` };
+  },
+
   privacy() {
     const phone = [/(?:\+|00)966[\s-]?5\d(?:[\s-]?\d){7}/g, /\b05\d(?:[\s-]?\d){7}\b/g, /href=["']tel:/gi];
     const hits = [];
@@ -242,7 +260,7 @@ const gates = {
   },
 };
 
-const order = ['build', 'lint', 'format', 'csp', 'privacy', 'claims', 'docs', 'budget', 'secrets'];
+const order = ['build', 'lint', 'format', 'csp', 'anim', 'privacy', 'claims', 'docs', 'budget', 'secrets'];
 const selected = order.filter((g) => (!only || only.includes(g)) && !skip.includes(g) && !(args.ci && g === 'build'));
 let failed = 0;
 for (const name of selected) {
