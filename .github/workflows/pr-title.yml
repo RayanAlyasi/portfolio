@@ -1,0 +1,28 @@
+# Fails a pull request whose title is not a Conventional Commits 1.0.0 header. Squash merges into
+# staging and promotion merges into main use the title as the commit message, so this keeps the
+# history consistent. A required check in both rulesets; the rules are in AGENTS.md.
+name: PR title
+
+on:
+  pull_request:
+    # synchronize: required checks attach to the head commit, so every push needs a result.
+    types: [opened, edited, reopened, synchronize]
+
+permissions: {}
+
+jobs:
+  pr-title:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      # The title is untrusted input: it reaches the shell only as an environment variable.
+      - name: Check the title
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?!?: [a-z0-9](.*[^.])?$'
+          if [[ ! "$TITLE" =~ $pattern ]]; then
+            echo "::error::Use type(scope): summary, lowercase, no trailing period. Got: $TITLE"
+            exit 1
+          fi
+          (( ${#TITLE} <= 72 )) || echo "::warning::The title is ${#TITLE} characters; aim for 72 or fewer."

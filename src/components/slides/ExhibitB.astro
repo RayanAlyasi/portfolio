@@ -1,0 +1,24 @@
+---
+// Exhibit B: the objection, its rebuttal and the evidence.
+import Pic from '../ui/Pic.astro';
+---
+<section class="slide bg-paper ex" id="exhibit-b" data-photo="flash" data-hl="up" data-style="stage" data-mark="strike" data-ink="#000" data-label="Exhibit B · Industry" data-fx="square" data-fxc="#ECE9E3" data-flip="3">
+  <div class="inner">
+    <div class="obj">
+      <div class="speak">
+        <span class="who a" style="--d:.05s">Juror 3 objects</span>
+        <div class="quote-wrap"><p class="big quote">“He’s a student. He’s never worked anywhere real.”</p><i class="strike" aria-hidden="true"></i></div>
+        <p class="conv a" style="--d:calc(var(--t) + 1s)"><i></i>Juror 3 is convinced.</p>
+      </div>
+      <div class="pics a" style="--d:calc(var(--t) + .1s);--an:fade"><Pic name="talk" alt="Rayan presenting at Tabby's Interns Day" class="p1" sizes="(max-width: 820px) 1px, 30vw" /><Pic name="tabbygroup" alt="Rayan with fellow Tabby interns" class="p2" sizes="(max-width: 820px) 1px, 20vw" /></div>
+    </div>
+    <div class="evi">
+      <div class="evtags a" style="--d:calc(var(--t) + .1s)"><span class="badge"><i><b>B</b></i>Exhibit B</span><span class="lg lg-tabby" role="img" aria-label="Tabby"></span><span class="lg lg-lucidya" role="img" aria-label="Lucidya"></span></div>
+      <h2 class="evh" style="--d:calc(var(--t) + .25s)">A fintech used by millions hired him in year one.</h2>
+      <p class="lead a" style="--d:calc(var(--t) + .45s)">DevOps engineering intern at Tabby. He built a GitOps proof of concept on Google Cloud, then onboarded a live service he wrote onto it in 7.5 hours. The CIO extended his internship.</p>
+      <Pic name="talk" alt="" class="mpic a" style="--d:calc(var(--t) + .5s)" sizes="(max-width: 820px) 92vw, 1px" />
+      <ul class="stats a" style="--d:calc(var(--t) + .6s)"><li><b>7.5 h</b><span>to onboard a live service</span></li><li><b data-count="1300" data-prefix="~">~1,300</b><span>developers protected</span></li><li><b>+6 mo</b><span>extension from the CIO</span></li></ul>
+      <button class="read a" style="--d:calc(var(--t) + .8s)" type="button" data-open="d-b">Read exhibit B <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>
+  </div>
+</section>

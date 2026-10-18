@@ -1,0 +1,45 @@
+# Rayan Alyasi
+
+> DevOps engineering intern at Tabby (a Saudi fintech used by millions), BCG Jeel Tamooh Fellow, and Information Systems student at King Abdulaziz University in Jeddah, Saudi Arabia. Hired onto Tabby's DevOps team in his first university year; the CIO extended the internship by six months. Self-taught on a home lab he has run since 2021. Two-time hackathon winner. Open to DevOps, platform engineering, cloud engineering and ML/AIOps roles.
+
+The portfolio at https://alyasi.tech/ is an interactive site inspired by the film 12 Angry Men: eight "exhibits" answer eight jurors' doubts about whether a second-year student is ready for real engineering work. This file gives the same facts in plain text.
+
+## Links
+
+- [Portfolio](https://alyasi.tech/): the interactive site
+- [CV (PDF)](https://alyasi.tech/cv/Rayan-Alyasi-CV.pdf): one-page CV
+- [LinkedIn](https://www.linkedin.com/in/rayanalyasi)
+- [GitHub](https://github.com/RayanAlyasi)
+- Email: rayanalyasi@gmail.com
+
+## Experience
+
+- **DevOps Engineering Intern, Tabby** (Mar 2026 – present, extended six months by the CIO): built a GitOps proof of concept on GKE where an ArgoCD ApplicationSet auto-discovers new services: a new service is one new file plus two small shared-config edits (a namespace with restricted Pod Security labels and ArgoCD project access), and a test service went from merge to Healthy in under 2 minutes. Services that need more add Workload Identity IAM, a Vault role and Crossplane-managed Cloud SQL through a reusable Helm chart. Onboarded a live service he wrote onto it in 7.5 hours: wa-guardian, a Go/PostgreSQL anti-spam bot protecting Tabby's WhatsApp developer communities (24 groups, ~1,300 members), which removes invite-link spammers and routes borderline cases to admins. Database migrations run as ArgoCD PreSync hooks (5 releases, no manual database steps; 60 automated tests). Operated it for 12 weeks, including incident response: diagnosed a lost session from Cloud Logging, and traced 16 failed removals to a linked-device addressing bug through log and SQL analysis, fixed with an address fallback, a retry sweep and a ban list. Also worked with Terraform, Terragrunt, Istio, Cloud KMS and the LGTM stack.
+- **Jeel Tamooh Fellow, Boston Consulting Group** (Mar 2026 – present): one of ~150 fellows in BCG's six-month flagship leadership program, mentored one-on-one by a BCG consultant; training in BCG's structured problem-solving.
+- **API Integration Researcher, Lucidya** (Oct – Nov 2025): mapped third-party API capabilities for a leading Saudi AI customer-experience platform; validated endpoints in Postman; wrote technical specs and integration guides.
+- **Freelance Java Developer, Fiverr** (Aug 2024 – Oct 2025): custom server-side plugins and extensions for clients.
+
+## Projects
+
+- **Home lab** (2021 – present): a 2015 HP desktop turned into a headless Ubuntu server running 25 Docker containers for 15 users. Cloudflare Tunnel with zero inbound ports for admin interfaces, Tailscale for admin access, Nginx Proxy Manager; key-only SSH, UFW, fail2ban, least-privilege mounts; self-healing cron automation. Built a Prometheus/Grafana/Loki stack, measured its cost (about 30% of RAM) and decommissioned it. Learned before AI tools, from documentation and debugging. It was the first thing Tabby asked about in his interview.
+- **Engineering Day WhatsApp AI chatbot** (Feb 2026): served 8,000+ attendees of King Abdulaziz University's largest event, up to 1,000 at once, with zero downtime. Human-paced send queue to avoid WhatsApp bans, a tiered answer ladder (fuzzy FAQ, cache, Gemini, human), and human-in-the-loop learning. TypeScript, SQLite.
+- **Wafir** (Sep 2026): 1st place and SAR 15,000 at TCS Sustainathon Saudi Arabia 2026. An AI digital twin that ranks fixes for a building's electricity bill; he built the digital twin.
+- **FieldLog** (Apr 2026): 1st place and SAR 3,000 at the TechHub Innovation Startup Challenge. Voice-to-ERP app that logs field inspections in under 20 seconds; React, Whisper, GPT-4o; built in 48 hours.
+- **Cleanrr**: open-source Telegram bot that lets home media server users fix their own issues. https://github.com/RayanAlyasi/cleanrr
+- **RGB Guardian**: an Arduino LED-strip arcade game built for the Oracle Student Club's Engineering Day booth.
+
+## Leadership and community
+
+- AI Team Lead, KAU Engineering Day: led 10 developers to ship 4 products.
+- Vice Lead of Technology, Oracle Student Club: leads 14 members; deployed the club website on Oracle Cloud; taught a two-day cloud bootcamp to 55+ students.
+- Technical Consultant, Programming Club: runs the club's cloud deployments.
+- Volunteer AI Solutions Developer, Synapse (non-profit under SDAIA), Oct 2025 – Mar 2026.
+
+## Selection and awards
+
+- KAUST Academy AI Specialization: top ~500 of ~7,000 applicants, advanced stage.
+- McKinsey Forward Program. IELTS 8.5.
+
+## Skills
+
+GKE, Kubernetes, Helm, ArgoCD, Terraform, Terragrunt, Crossplane, Istio, Vault, Docker, Linux, Nginx, Cloudflare, Tailscale, Prometheus, Grafana, Loki, GitHub Actions, Python, TypeScript, Java, Bash, SQL. Planned certifications before graduation: Terraform Associate, CKA, Google Cloud Professional Cloud DevOps Engineer, CKS.

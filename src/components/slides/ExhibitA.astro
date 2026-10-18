@@ -1,0 +1,32 @@
+---
+// Exhibit A: the objection, its rebuttal and the evidence.
+import Pic from '../ui/Pic.astro';
+---
+<section class="slide bg-black ex" id="exhibit-a" data-style="crt" data-mark="poweroff" data-photo="topo" data-hl="chars" data-ink="#FFF" data-label="Exhibit A · Home lab" data-fx="slab" data-fxc="#000000" data-flip="6,1">
+  <div class="inner">
+    <div class="obj">
+      <div class="speak">
+        <span class="who a" style="--d:.05s">Juror 6 objects</span>
+        <div class="quote-wrap"><p class="big quote">“He only knows this stuff because Tabby taught him.”</p><i class="strike" aria-hidden="true"></i></div>
+        <p class="conv a" style="--d:calc(var(--t) + 1s)"><i></i>Jurors 6 and 1 are convinced.</p>
+      </div>
+      <div class="labshot a" style="--d:calc(var(--t) + .05s);--an:fade">
+        <figure class="lab-pc"><Pic name="labPc" alt="The 2015 HP Pavilion desktop that runs the home lab" sizes="(max-width: 820px) 1px, 290px" /><i class="scanbar" aria-hidden="true"></i></figure>
+        <ul class="callouts">
+          <li style="--k:0"><b>2015 HP Pavilion</b><span>my old PC, repurposed</span></li>
+          <li style="--k:1"><b>i7-4790S · 12 GB</b><span>4 cores, 8 threads</span></li>
+          <li style="--k:2"><b>1 TB spinning disk</b><span>one drive, managed tightly</span></li>
+          <li style="--k:3"><b>25 containers</b><span>media, games, automations</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="evi">
+      <span class="badge a" style="--d:calc(var(--t) + .1s)"><i><b>A</b></i>Exhibit A</span>
+      <h2 class="evh" style="--d:calc(var(--t) + .25s)">He built his own server in high school.</h2>
+      <p class="lead a" style="--d:calc(var(--t) + .45s)">In 2021 he turned his old desktop into a headless Ubuntu server and taught himself Linux, Docker, networking and security by reading docs and breaking things. It still runs today, and it was the first thing Tabby asked about.</p>
+      <Pic name="labPc" alt="" class="mpic a pcpic" style="--d:calc(var(--t) + .5s)" sizes="(max-width: 820px) 92vw, 1px" />
+      <ul class="stats a" style="--d:calc(var(--t) + .6s)"><li><b class="since" data-count="1500" data-suffix="">1,500</b><span>days running, since 2021</span></li><li><b data-count="25">25</b><span>containers</span></li><li><b data-count="15">15</b><span>friends and family streaming</span></li></ul>
+      <button class="read a" style="--d:calc(var(--t) + .8s)" type="button" data-open="d-a">Read exhibit A <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,33 @@
+# Checks the live site every 30 minutes. If it is down or its security headers are missing,
+# the run fails and GitHub emails you. (GitHub pauses scheduled workflows in a repository with
+# no activity for 60 days; any push re-enables them.)
+name: Uptime
+
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    if: vars.SITE_URL != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out (smoke test only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Check the live site
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: node scripts/deploy/smoke.mjs --url "$SITE_URL" --timeout 30

@@ -1,0 +1,36 @@
+---
+// "Case not found": a standalone page with no deck script.
+import '@fontsource/big-shoulders-display/latin-900';
+import '@fontsource/libre-franklin/latin-400';
+import '@fontsource/libre-franklin/latin-700';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Case not found · Rayan Alyasi</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main>
+      <span class="tag">Objection sustained</span>
+      <h1>Case <span>not</span> found.</h1>
+      <p>This exhibit was never entered into evidence. The page you’re looking for doesn’t exist, but the case for Rayan Alyasi does.</p>
+      <a href="/">Back to the case</a>
+    </main>
+  </body>
+</html>
+<style is:global>
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#000;color:#ECE9E3;font-family:'Libre Franklin',Helvetica,Arial,sans-serif}
+  main{min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:22px;padding:8vh clamp(20px,6vw,80px)}
+  .tag{align-self:flex-start;padding:4px 10px;border:2px solid currentColor;font-weight:700;font-size:14px}
+  h1{margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(72px,14vw,200px);line-height:.86;text-transform:uppercase}
+  h1 span{position:relative;display:inline-block}
+  h1 span::after{content:"";position:absolute;left:-2%;top:46%;width:104%;height:.12em;background:#E5481E;transform:rotate(-3deg)}
+  p{margin:0;max-width:44ch;font-size:clamp(17px,1.8vw,21px);line-height:1.5;color:#CFCBC3}
+  a{align-self:flex-start;display:inline-flex;align-items:center;min-height:50px;padding:0 22px;background:#E5481E;color:#000;font-weight:700;text-decoration:none}
+  a:hover{background:#ECE9E3}
+</style>

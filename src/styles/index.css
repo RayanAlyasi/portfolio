@@ -1,0 +1,15 @@
+/* Global stylesheet: imported once by the base layout. Order matters: later files refine earlier ones. */
+@import './01-base.css';
+@import './02-animations.css';
+@import './03-chrome.css';
+@import './04-deck.css';
+@import './05-leader.css';
+@import './06-opening.css';
+@import './07-table.css';
+@import './08-facts.css';
+@import './09-evidence.css';
+@import './10-objections.css';
+@import './11-verdict.css';
+@import './12-credits.css';
+@import './13-panels.css';
+@import './14-responsive.css';

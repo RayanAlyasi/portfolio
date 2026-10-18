@@ -1,0 +1,6 @@
+# Only the built site and its nginx config go into the image.
+*
+!dist/
+!deploy/nginx/site.conf
+# The source of site.conf; nginx does not serve it.
+dist/_headers

@@ -1,0 +1,18 @@
+---
+// Panel: Exhibit D.
+import Pic from '../ui/Pic.astro';
+import Vid from '../ui/Vid.astro';
+import Drawer from './Drawer.astro';
+---
+<Drawer id="d-d" label="Exhibit D">
+    <h2 id="d-d-h">Two first places</h2>
+    <h3>Wafir · TCS Sustainathon Saudi Arabia 2026</h3>
+    <p>An AI digital twin for buildings: it finds which appliances drive the electricity bill and ranks fixes in riyals against the real bill. I built the digital twin. First place and the SAR 15,000 grand prize. The competition drew 250+ registrations and 50+ final submissions from 40+ universities, and 10 teams reached the finals.</p>
+    <div class="gal"><Pic name="tcsWin" alt="Team Wafir with the trophy and first-prize board" class="wide" sizes="(max-width: 680px) 92vw, 610px" /><Pic name="tcsPitch" alt="Pitching Wafir on stage" sizes="(max-width: 680px) 46vw, 300px" /><Pic name="tcsTrophy" alt="The TCS Sustainathon first-prize trophy" sizes="(max-width: 680px) 46vw, 300px" /></div>
+    <figure class="shot-f"><Pic name="tcsHonor" alt="Team Wafir holding their awards at King AbdulAziz University’s 2026 honoring ceremony" sizes="(max-width: 680px) 92vw, 610px" /><figcaption>Honored by KAU’s president at the university’s 2026 ceremony for outstanding students, for the TCS Sustainathon win.</figcaption></figure>
+    <a class="ext" href="https://www.zawya.com/en/press-release/events-conferences/tcs-sustainathon-saudi-arabia-2026-winners-showcase-ai-powered-solutions-for-a-sustainable-future-1470699" target="_blank" rel="noopener">Read the press release</a>
+    <h3>FieldLog · TechHub Innovation Startup Challenge</h3>
+    <p>A voice-to-ERP platform that lets industrial field auditors log a compliance observation in under 20 seconds, just by speaking. Built on React, Whisper and GPT-4o, and live after 48 hours. First place and a SAR 3,000 prize.</p>
+    <figure class="shot-f"><Vid name="fieldlog" poster="flPoster" fallback="th2" label="FieldLog pitch video" controls /><figcaption>The FieldLog pitch video: the problem, the 20-second voice flow, and the product. Two minutes, with subtitles.</figcaption></figure>
+    <div class="gal"><Pic name="th1" alt="Receiving first place at TechHub" sizes="(max-width: 680px) 46vw, 300px" /><Pic name="th2" alt="Team FieldLog with the first-place prize" sizes="(max-width: 680px) 46vw, 300px" /></div>
+</Drawer>

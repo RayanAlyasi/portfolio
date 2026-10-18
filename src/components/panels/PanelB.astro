@@ -1,0 +1,38 @@
+---
+// Panel: Exhibit B.
+import Pic from '../ui/Pic.astro';
+import Drawer from './Drawer.astro';
+---
+<Drawer id="d-b" label="Exhibit B">
+    <h2 id="d-b-h">Tabby and Lucidya</h2>
+    <p>DevOps engineering intern at a Saudi fintech used by millions. I joined in March 2026, in my first year of the major, and the CIO extended the internship for six more months.</p>
+    <div class="facts"><div><b>7.5 h</b><span>to onboard a live service</span></div><div><b>~1,300</b><span>community members protected</span></div><div><b>12 weeks</b><span>live, moderating 24 groups</span></div><div><b>60 tests</b><span>behind 5 releases</span></div></div>
+    <h3>The platform: a GitOps proof of concept</h3>
+    <p>Onboarding a new service should be a small change in Git, not days of setup. I built a proof of concept for that on GKE: an ArgoCD ApplicationSet discovers every new service definition on its own, so a new service is one new file plus two small additions to shared files, its namespace (with restricted Pod Security labels) and permission for ArgoCD to deploy there. A test service went from merge to Healthy in under 2 minutes. Services that need more, like wa-guardian below, add Workload Identity, a Vault role and a Crossplane-managed Cloud SQL database through a reusable Helm chart. Around it I worked with Terraform and Terragrunt, Istio, KMS encryption and the LGTM observability stack.</p>
+    <h3>The service running on it: wa-guardian</h3>
+    <p>An anti-spam bot I wrote in Go and PostgreSQL for Tabby’s WhatsApp developer communities. It deletes “join my group” invite-link spam, removes the sender, and sends borderline cases to the group admins for a yes or no. Every approved case teaches it a new pattern. It keeps only message metadata, and only for flagged messages.</p>
+    <p>I onboarded it onto the proof of concept in 7.5 hours. Its platform side is a single manifest in Git, and the app ships from the chart and one values file.</p>
+    <figure class="shot-f"><Pic name="argoApp" alt="wa-guardian in ArgoCD: service, service accounts, deployment with six revisions, migration job and Vault-synced secrets, all healthy" sizes="(max-width: 680px) 92vw, 610px" /><figcaption>wa-guardian in ArgoCD: the deployment on its sixth revision, with earlier ones kept for rollback, the PreSync migration job, and secrets synced from Vault. Migrations run with their own service account, Vault role and database password, separate from the app.</figcaption></figure>
+    <ul>
+      <li><b>Hands-off releases.</b> Database migrations run as an ArgoCD PreSync hook, so no release has needed a manual database step.</li>
+      <li><b>Built to run as one.</b> Distroless images built with Cloud Build, and a single-replica Recreate deployment with resource limits, so two copies of the bot never share one WhatsApp session.</li>
+      <li><b>Tested before it ships.</b> 5 releases backed by 60 automated tests, some end to end against a real Postgres with a fake WhatsApp client.</li>
+    </ul>
+    <h3>Running it</h3>
+    <ul>
+      <li><b>An outage.</b> The bot lost its WhatsApp session. I found it in Cloud Logging, confirmed the database was intact, re-paired it, and made it restart cleanly on any future logout.</li>
+      <li><b>A silent failure.</b> Analyzing logs and database exports, I found 16 spammer removals failing with a 400 error, all from linked-device sender IDs, so spammers stayed in groups after their messages were deleted. I fixed it with an address fallback and a retry sweep, added a ban list that removes known spammers the moment they rejoin, and grew the tests from 40 to 60.</li>
+      <li><b>A rule from the data.</b> About 90% of spammers posted within 23 seconds of their first message, so a new member whose first message is an invite link is now removed instantly.</li>
+      <li><b>Humans in the loop.</b> Of 12 borderline cases sent to admins, 6 were approved and 6 rejected, which is why medium-confidence cases are never removed automatically.</li>
+    </ul>
+    <h3>Interns Day</h3>
+    <p>Spoke to 70+ people at Tabby’s public Interns Day about the internship and what I built.</p>
+    <div class="gal"><Pic name="talk" alt="Rayan speaking at Tabby's Interns Day" class="wide" sizes="(max-width: 680px) 92vw, 610px" /><Pic name="talkclose" alt="Rayan mid-talk with a microphone" sizes="(max-width: 680px) 46vw, 300px" /><Pic name="tabbyqa" alt="Q&amp;A after the talk" sizes="(max-width: 680px) 46vw, 300px" /><Pic name="tabbygroup" alt="Rayan with fellow Tabby interns" class="wide" sizes="(max-width: 680px) 92vw, 610px" /></div>
+    <h3>Lucidya</h3>
+    <p>API integration researcher at Lucidya, a Riyadh AI company with an Arabic-first customer experience platform serving enterprises in 11 countries. Its 2025 Series B was reported as MENA’s largest AI funding round.</p>
+    <ul>
+      <li>Researched complex third-party API documentation to map technical capabilities and integration limits for the product roadmap.</li>
+      <li>Validated API endpoints, authentication methods and payloads in Postman to confirm feasibility before development started.</li>
+      <li>Wrote technical specs and integration guides that turned raw API data into clear requirements for the engineering team.</li>
+    </ul>
+</Drawer>

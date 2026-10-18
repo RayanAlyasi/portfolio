@@ -1,0 +1,12 @@
+/* Slide deck: layout, backgrounds and the entrance system */
+.deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;visibility:hidden;overflow:hidden;contain:layout paint}
+.slide.active{visibility:visible}
+.bg-paper{background:var(--paper);color:var(--black)}
+.bg-black{background:var(--black);color:var(--white)}
+.bg-char{background:var(--char);color:var(--white)}
+.inner{position:absolute;inset:calc(var(--hh) + env(safe-area-inset-top,0px)) clamp(16px,5vw,72px) calc(var(--fh) + env(safe-area-inset-bottom,0px))}
+.big{margin:0;font-family:var(--display);font-weight:900;line-height:.86;text-transform:uppercase}
+.a{opacity:0}
+.slide.active .a{animation:var(--an,rise) .8s var(--ease) both;animation-delay:var(--d,0s)}
+.bg-orange{background:var(--red);color:var(--black)}

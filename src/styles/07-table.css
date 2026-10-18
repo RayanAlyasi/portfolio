@@ -1,0 +1,45 @@
+/* Jury room table (jury and verdict slides) */
+.tablebox{position:relative;width:min(88vw,940px,calc((100vh - var(--hh) - var(--fh) - 250px) * 2.59));width:min(88vw,940px,calc((100svh - var(--hh) - var(--fh) - 250px) * 2.59));aspect-ratio:1000/386;margin:0 auto}
+.tablebox::before{content:"";position:absolute;inset:-30% -12%;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(255,255,255,.11),rgba(255,255,255,0) 70%);pointer-events:none}
+.tablebox svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.tb{fill:#2C2B29}
+.tbe{fill:none;stroke:#46443F;stroke-width:2}
+.chair{transform-box:fill-box;transform-origin:center;opacity:0}
+.chair .cb,.chair .cs{fill:#0F0F0F;stroke:#9C9890;stroke-width:2.5}
+.slide.active .chair{animation:chairIn .6s cubic-bezier(.2,.9,.25,1.1) both;animation-delay:calc(.6s + var(--i) * 60ms)}
+.slide.active .chair.me .cb,.slide.active .chair.me .cs{animation:litc .35s ease forwards 4.15s}
+.plate{opacity:0}
+.plate > g{transform-box:fill-box;transform-origin:center}
+.plate rect{fill:var(--paper)}
+.plate text{fill:var(--black);font-family:var(--display);font-weight:900;font-size:19px}
+.slide.active .plate{animation:plateUp .45s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(1.15s + var(--i) * 35ms)}
+.you{fill:var(--red);font-family:var(--display);font-weight:900;font-size:24px;letter-spacing:.08em;opacity:0}
+.slide.active .you{animation:fade .5s ease both 4.25s}
+.s-verdict .chair{opacity:1}
+.s-verdict .plate{opacity:1}
+.slide.active.s-verdict .chair{animation:lit .5s ease forwards;animation-delay:calc(.25s + var(--o) * 90ms)}
+.slide.active.s-verdict .chair .cb,.slide.active.s-verdict .chair .cs{animation:litc .5s ease forwards;animation-delay:calc(.25s + var(--o) * 90ms)}
+.slide.active.s-verdict .plate{animation:none}
+.ballot{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);translate:-50% -50%;opacity:0}
+.bf{position:relative;display:block;padding:3px 6px;background:var(--paper);color:var(--black);font-family:var(--display);font-weight:900;font-size:clamp(7px,.82vw,11px);text-transform:uppercase;white-space:nowrap;transform:rotate(var(--rot,0deg))}
+.bf::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,#D2CDC3 0 3px,#BCB6AA 3px 6px)}
+.ballot.me .bf{background:var(--red)}
+.slide.active .ballot{animation:deal .6s cubic-bezier(.2,.85,.25,1) both;animation-delay:calc(1.55s + var(--di) * 85ms)}
+.slide.active .bf{animation:flipC .5s cubic-bezier(.45,0,.55,1) both var(--rv)}
+.slide.active .bf::after{animation:backOff .5s steps(1) both var(--rv)}
+.slide.active .ballot.me{animation:deal .6s cubic-bezier(.2,.85,.25,1) both calc(1.55s + var(--di) * 85ms),mePulse .6s cubic-bezier(.3,1.6,.5,1) calc(var(--rv) + .5s)}
+.s-jury .tablebox::before{opacity:0}
+.slide.active.s-jury .tablebox::before{animation:lamp 1s linear both .15s}
+.s-jury .tb,.s-jury .tbe{transform-box:fill-box;transform-origin:center;opacity:0}
+.slide.active.s-jury .tb,.slide.active.s-jury .tbe{animation:tableIn .8s cubic-bezier(.2,.9,.2,1) both .35s}
+.s-jury .inner{display:flex;flex-direction:column;justify-content:center}
+.how{list-style:none;margin:5vh 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 4vw;counter-reset:how}
+.how li{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:2px solid rgba(255,255,255,.35);counter-increment:how}
+.how li:last-child{border-top-color:var(--red)}
+.how b{font-family:var(--display);font-weight:900;font-size:clamp(22px,2.2vw,32px);text-transform:uppercase;line-height:1}
+.how b::before{content:counter(how) ". ";color:var(--red)}
+.how span{font-size:clamp(14px,1.25vw,17px);line-height:1.45;opacity:.88}
+.slide.seen .chair,.slide.seen .plate,.slide.seen .ballot,.slide.seen .you,.slide.seen .f-now,.slide.seen .tb,.slide.seen .tbe,.slide.seen .tablebox::before{animation:none !important;opacity:1;transform:none}
+.slide.seen .bf{animation:none !important;transform:rotate(var(--rot,0deg))}
+.slide.seen .bf::after{animation:none !important;opacity:0}
+.slide.seen.s-jury .chair.me .cb,.slide.seen.s-jury .chair.me .cs{animation:none !important;fill:var(--red);stroke:var(--red)}

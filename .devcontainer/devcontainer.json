@@ -1,0 +1,12 @@
+{
+  "name": "alyasi.tech",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postCreateCommand": "bash scripts/setup.sh --with-deps",
+  "forwardPorts": [4321],
+  "customizations": {
+    "vscode": { "extensions": ["astro-build.astro-vscode"] }
+  }
+}

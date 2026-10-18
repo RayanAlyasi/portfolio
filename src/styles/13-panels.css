@@ -1,0 +1,58 @@
+/* Panels: exhibit drawers, case file, contact, CV viewer, lightbox */
+.cvbtn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;min-height:46px;padding:0 18px;border:0;background:var(--black);color:var(--paper);font:inherit;font-weight:700;font-size:15px;cursor:pointer}
+.cvbtn svg{width:16px;height:16px}
+.cvnote{min-height:1.2em;margin:-6px 0 0;font-size:13px;font-weight:600;color:#4A4741}
+.d-body video{width:100%;max-height:70vh;background:#000;display:block}
+.pc-f img{max-width:360px}
+dialog.drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(660px,100vw);height:100%;max-height:none;max-width:none;padding:0;border:0;background:var(--paper);color:var(--black);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+dialog.drawer::backdrop{background:rgba(0,0,0,.62)}
+dialog.drawer[open]{animation:slideIn .5s var(--ease)}
+.d-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 22px 12px;background:var(--black);color:var(--white)}
+.d-head span{font-weight:700;font-size:14px}
+.d-close{min-width:44px;min-height:44px;border:2px solid var(--white);background:transparent;color:var(--white);font-weight:700;cursor:pointer;padding:0 14px}
+.d-body{padding:28px 24px 64px;display:flex;flex-direction:column;gap:16px}
+.d-body h2{margin:0;font-family:var(--display);font-weight:900;font-size:clamp(42px,7vw,66px);line-height:.9;text-transform:uppercase}
+.d-body h3{margin:14px 0 0;font-family:var(--display);font-weight:900;font-size:26px;text-transform:uppercase;line-height:1}
+.d-body p{margin:0;font-size:16.5px;line-height:1.6;color:#1E1E1E}
+.d-body ul{margin:0;padding-left:20px;font-size:16px;line-height:1.6;color:#1E1E1E;display:flex;flex-direction:column;gap:8px}
+.gal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gal img{width:100%;aspect-ratio:4/3;object-fit:cover;background:#cfccc6}
+.gal img.wide{grid-column:span 2;aspect-ratio:16/9}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.facts div{border:2px solid var(--black);padding:12px 14px}
+.facts b{display:block;font-family:var(--display);font-weight:900;font-size:30px;line-height:1}
+.facts span{font-size:13px;font-weight:500}
+.d-body a.ext{align-self:flex-start;font-weight:700;text-decoration:none;border-bottom:2px solid var(--red);padding-bottom:2px}
+.mailbox{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:16px;border:2px solid var(--black)}
+.mailbox .addr{flex:1 1 220px;font-family:var(--display);font-weight:900;font-size:clamp(24px,4.4vw,34px);word-break:break-all;user-select:all}
+.copy{min-height:46px;padding:0 18px;border:0;background:var(--black);color:var(--paper);font-weight:700;cursor:pointer}
+.copied{min-height:1.4em;font-size:14px;font-weight:600;color:#1E1E1E}
+.clinks{display:flex;flex-wrap:wrap;gap:10px}
+.cbtn{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;border:2.5px solid var(--black);font-weight:700;text-decoration:none}
+.cbtn.solid{background:var(--red);border-color:var(--red)}
+.ctabtn{align-self:flex-start;gap:10px;margin-top:6px;font-size:16px;color:var(--black);cursor:pointer;transition:background .2s ease,border-color .2s ease}
+.ctabtn svg{width:16px;height:16px}
+.ctabtn:hover{background:var(--black);border-color:var(--black);color:var(--paper)}
+.shot-f{margin:2px 0 8px}
+.shot-f img{display:block;width:100%;height:auto;border:1px solid rgba(0,0,0,.15);box-shadow:0 10px 28px rgba(0,0,0,.18);cursor:zoom-in}
+.shot-f figcaption{margin-top:8px;font-size:13.5px;line-height:1.45;color:#4A4741}
+.gal img{cursor:zoom-in}
+dialog.lightbox{position:fixed;inset:0;width:100vw;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:rgba(0,0,0,.95);overflow:auto;overscroll-behavior:contain}
+dialog.lightbox::backdrop{background:rgba(0,0,0,.8)}
+dialog.lightbox[open]{animation:fade .25s ease}
+.lightbox img{display:block;width:100%;height:100%;object-fit:contain;touch-action:pinch-zoom;cursor:zoom-out}
+.lb-x{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;z-index:2;min-height:44px;padding:0 16px;border:2px solid #FFF;background:rgba(0,0,0,.6);color:#FFF;font-weight:700;cursor:pointer}
+dialog.drawer.cvview{width:min(940px,100vw);background:#2E2D2A}
+.cv-actions{display:flex;gap:8px;align-items:center}
+.cv-dl{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:2px solid var(--red);background:var(--red);color:var(--black);font:inherit;font-weight:700;cursor:pointer}
+.cv-dl svg{width:16px;height:16px}
+.cv-dl:hover{background:var(--white);border-color:var(--white)}
+.cvview .cvnote{margin:0;padding:0 22px;min-height:0;color:#E9E5DD;font-size:13px;font-weight:600}
+.cvview .cvnote:not(:empty){padding:10px 22px 0}
+.cv-page{padding:18px 18px 40px}
+.cv-page img{display:block;width:100%;max-width:860px;height:auto;margin:0 auto 18px;background:#FFF;box-shadow:0 24px 60px rgba(0,0,0,.45);touch-action:pinch-zoom}
+@media (max-width:560px){
+  .cv-dl{padding:0 12px;font-size:13.5px}
+  .cv-page{padding:10px 8px 30px}
+  .cvview .d-head span#d-cv-h{display:none}
+}

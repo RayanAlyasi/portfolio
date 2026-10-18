@@ -1,0 +1,26 @@
+/* The facts of the case */
+.slide.seen .f-seg i::after{animation:none !important}
+.s-facts .inner{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(24px,5vw,80px);align-items:center}
+.f-left{display:flex;flex-direction:column;gap:2.4vh}
+.f-year{font-size:clamp(84px,min(13vw,21vh),230px);line-height:.82}
+.f-sub{margin:0;max-width:36ch;font-size:clamp(17px,min(1.7vw,2.7vh),24px);line-height:1.38;font-weight:500}
+.f-sub b{font-weight:700}
+.f-bar{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:2.2vh;padding-top:30px}
+.f-seg{display:flex;flex-direction:column;gap:7px}
+.f-seg i{position:relative;display:block;height:16px;border:2.5px solid var(--black);overflow:hidden}
+.f-seg i::after{content:"";position:absolute;inset:0;background:var(--black);transform-origin:0 50%;transform:scaleX(var(--fill,0))}
+.slide.active .f-seg i::after{animation:fillbar 1.2s var(--ease) both;animation-delay:calc(1s + var(--k,0) * .35s)}
+.f-seg span{font-size:13px;font-weight:700}
+.f-now{position:absolute;top:0;left:var(--now,30%);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;font-size:12.5px;font-weight:700;opacity:0}
+.f-now::after{content:"";width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:9px solid var(--black);margin-top:2px}
+.slide.active .f-now{animation:rise .6s var(--ease) both 2.1s}
+.f-right{display:flex;flex-direction:column;gap:3vh}
+.f-group h3{margin:0 0 10px;font-family:var(--display);font-weight:900;font-size:clamp(22px,2.1vw,30px);text-transform:uppercase;line-height:1}
+.f-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.f-list li{display:grid;grid-template-columns:5.6em minmax(0,1fr);gap:12px;padding:9px 0;border-top:2px solid rgba(0,0,0,.85);font-size:clamp(14px,min(1.25vw,2.1vh),17px);line-height:1.3}
+.f-list time{white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
+.f-list span{font-weight:500}
+.reel-w{display:inline-block;height:.82em;overflow:hidden;vertical-align:top}
+.reel{display:inline-flex;flex-direction:column;line-height:.82}
+.slide.active .reel{animation:reelUp 1.25s cubic-bezier(.2,1.3,.35,1) both .55s}
+.slide.seen .reel{animation:none;transform:translateY(calc(-.82em * (var(--n,1) - 1)))}

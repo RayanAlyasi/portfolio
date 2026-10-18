@@ -1,0 +1,42 @@
+---
+// Lazily hydrated video. scripts/media.js picks MP4 or WebM, sets the poster,
+// and swaps in the fallback image if the browser can't play either.
+import { getImage } from 'astro:assets';
+import { getImageOrThrow } from '../../data/images';
+
+interface Props {
+  name: 'rgb' | 'fieldlog';
+  poster: string;
+  fallback: string;
+  label: string;
+  class?: string;
+  style?: string;
+  muted?: boolean;
+  loop?: boolean;
+  controls?: boolean;
+}
+
+const sources = import.meta.glob<string>('../../assets/video/*.{mp4,webm}', { query: '?url', import: 'default', eager: true });
+const url = (file: string) => sources[`../../assets/video/${file}`];
+
+const { name, poster, fallback, label, class: className, style, muted = false, loop = false, controls = false } = Astro.props;
+const [posterImg, fallbackImg] = await Promise.all([
+  getImage({ src: getImageOrThrow(poster), width: 720, format: 'webp', quality: 70 }),
+  getImage({ src: getImageOrThrow(fallback), width: 960, format: 'webp', quality: 72 }),
+]);
+---
+<video
+  class={className}
+  style={style}
+  data-vid={name}
+  data-mp4={url(`${name}.mp4`)}
+  data-webm={url(`${name}.webm`)}
+  data-poster-src={posterImg.src}
+  data-fallback-src={fallbackImg.src}
+  aria-label={label}
+  muted={muted}
+  loop={loop}
+  controls={controls}
+  playsinline
+  preload="none"
+></video>

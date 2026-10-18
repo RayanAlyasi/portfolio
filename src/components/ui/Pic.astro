@@ -1,0 +1,32 @@
+---
+// Responsive, lazily hydrated picture.
+// Sources are emitted as data-srcset so nothing downloads until scripts/media.js
+// hydrates the slide or panel that contains it (every slide sits on screen at once,
+// so native lazy-loading would fetch them all).
+import { getImage } from 'astro:assets';
+import { getImageOrThrow, widthsFor } from '../../data/images';
+
+interface Props {
+  name: string;
+  alt: string;
+  sizes: string;
+  class?: string;
+  style?: string;
+}
+
+const { name, alt, sizes, class: className, style } = Astro.props;
+const src = getImageOrThrow(name);
+const widths = widthsFor(name).filter((w) => w <= src.width);
+if (!widths.length) widths.push(src.width);
+
+const [avif, webp, fallback] = await Promise.all([
+  getImage({ src, widths, format: 'avif', quality: 55 }),
+  getImage({ src, widths, format: 'webp', quality: 72 }),
+  getImage({ src, width: Math.min(src.width, 960), format: 'webp', quality: 72 }),
+]);
+---
+<picture>
+  <source type="image/avif" data-srcset={avif.srcSet.attribute} sizes={sizes} />
+  <source type="image/webp" data-srcset={webp.srcSet.attribute} sizes={sizes} />
+  <img class={className} style={style} alt={alt} data-img={name} data-src={fallback.src} width={src.width} height={src.height} decoding="async" />
+</picture>

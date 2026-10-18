@@ -1,0 +1,133 @@
+/* Exhibits: layout, photos, headlines, stats and per-exhibit entrances */
+.ex .inner{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,80px);align-items:stretch;padding-right:clamp(10px,3vw,40px)}
+.obj{display:flex;flex-direction:column;justify-content:space-between;gap:3vh;min-height:0;position:relative;z-index:2}
+.slide.seen .dotfield i{animation:none !important;opacity:.12}
+.slide.seen .dotfield i.keep{opacity:.85}
+.slide.seen .dotfield i.me{background:var(--red);opacity:1;transform:scale(1.6)}
+.conv{margin:14px 0 0;font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px}
+.conv i{width:10px;height:10px;border-radius:50%;background:var(--red)}
+.pics{position:relative;flex:1;min-height:0;max-height:38vh}
+.pics img{position:absolute;object-fit:cover;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.pics .p1{left:0;bottom:0;width:72%;height:82%}
+.pics .p2{right:0;top:0;width:44%;height:58%;border:5px solid currentColor}
+.bg-paper .pics .p2{border-color:var(--paper)}
+.bg-black .pics .p2{border-color:var(--black)}
+.bg-char .pics .p2{border-color:var(--char)}
+.pics .round{border-radius:50%}
+.evi{display:flex;flex-direction:column;justify-content:center;gap:clamp(12px,2.2vh,22px);min-height:0}
+.badge{display:inline-flex;align-items:center;gap:12px;font-weight:700;font-size:14px}
+.badge i{display:grid;place-items:center;width:40px;height:40px;font-style:normal;font-family:var(--display);font-weight:900;font-size:24px;background:currentColor}
+.badge i b{color:var(--paper)}
+.bg-black .badge i b,.bg-char .badge i b{color:var(--black)}
+.evi h2{margin:0;font-family:var(--display);font-weight:900;font-size:clamp(38px,min(5vw,8.4vh),92px);line-height:.88;text-transform:uppercase}
+.lead{margin:0;max-width:46ch;font-size:clamp(15px,min(1.35vw,2.3vh),19px);line-height:1.5;opacity:.88}
+.stats{display:flex;flex-wrap:wrap;gap:10px 34px;margin:0;padding:12px 0 0;border-top:2px solid currentColor;list-style:none}
+.stats li{display:flex;flex-direction:column;gap:2px;min-width:0}
+.stats b{font-family:var(--display);font-weight:900;font-size:clamp(30px,min(3.2vw,5.4vh),54px);line-height:.95}
+.stats span{font-size:13px;font-weight:500;opacity:.8}
+.read{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid currentColor;background:transparent;font-weight:700;font-size:15px;cursor:pointer;transition:background .2s ease,color .2s ease}
+.bg-paper .read:hover{background:var(--black);color:var(--paper)}
+.bg-black .read:hover,.bg-char .read:hover{background:var(--white);color:var(--black)}
+.read svg{width:16px;height:16px}
+.dotfield{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:5px;max-width:420px;align-self:flex-start;width:100%}
+.dotfield i{aspect-ratio:1;border-radius:50%;background:currentColor;opacity:.85}
+.slide.active .dotfield i{animation:dotout .6s ease forwards;animation-delay:calc(var(--t) - .3s + var(--d) * 1.2s)}
+.slide.active .dotfield i.keep{animation:none;opacity:.85}
+.slide.active .dotfield i.me{animation:dotme .6s var(--ease) forwards calc(var(--t) + 1.3s)}
+.dotcap{margin:10px 0 0;font-size:13px;font-weight:600;opacity:.8}
+.evtags{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px}
+.lg{display:inline-block;height:var(--lh,22px);background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;opacity:.9}
+.lg-tabby{--m:url('../assets/logos/tabby.png');aspect-ratio:189/96;--lh:26px}
+.lg-bcg{--m:url('../assets/logos/bcg.png');aspect-ratio:238/96;--lh:18px}
+.lg-kaust{--m:url('../assets/logos/kaust.png');aspect-ratio:190/96;--lh:24px}
+.lg-tcs{--m:url('../assets/logos/tcs.png');aspect-ratio:403/96;--lh:22px}
+.lg-lucidya{--m:url('../assets/logos/lucidya.png');aspect-ratio:615/96;--lh:17px}
+.lg-techhub{--m:url('../assets/logos/techhub.png');aspect-ratio:653/96;--lh:17px}
+.logostrip .lg{--lh:24px}
+.logostrip .lg-tcs{--lh:30px}
+.logostrip .lg-lucidya{--lh:22px}
+.logostrip .lg-bcg{--lh:24px}
+.logostrip .lg-tabby{--lh:34px}
+.logostrip .lg-kaust{--lh:32px}
+.logostrip .lg-techhub{--lh:20px}
+.vid{position:absolute;object-fit:cover;background:#000;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.pics .vid.p2{right:0;top:-4%;width:34%;height:96%;border:5px solid var(--paper)}
+.evh .wm{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .02em .07em;margin-bottom:-.07em}
+.evh .wi{display:inline-block;transform:translateY(110%)}
+.slide.active .evh .wi{animation:wordIn .75s cubic-bezier(.2,.9,.2,1) both;animation-delay:calc(var(--d) + var(--k) * 70ms)}
+.slide.active .pics.a{animation:none;opacity:1}
+.pics img,.pics .vid{opacity:0}
+.slide.active[data-photo="flash"] .pics .p1{animation:printIn .8s cubic-bezier(.2,.9,.25,1) both calc(var(--d) + .2s)}
+.slide.active[data-photo="flash"] .pics .p2{animation:pinIn .9s cubic-bezier(.3,1.4,.5,1) both calc(var(--d) + .55s)}
+.pics::after{content:"";position:absolute;inset:-6%;background:#FFF;opacity:0;pointer-events:none}
+.slide.active[data-photo="flash"] .pics::after{animation:flash .55s ease-out both calc(var(--d) + .18s)}
+.slide.active .stats.a{animation:none;opacity:1}
+.stats{position:relative;border-top:0 !important}
+.stats::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:0 50%}
+.slide.active .stats::before{animation:lineDraw .8s cubic-bezier(.65,0,.35,1) both var(--d)}
+.stats li{opacity:0}
+.slide.active .stats li{animation:rise .6s var(--ease) both;animation-delay:calc(var(--d) + .25s + var(--k,0) * 120ms)}
+.slide.active .evtags.a{animation:tagIn .55s cubic-bezier(.3,1.5,.5,1) both var(--d)}
+.slide.active .read.a{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d)}
+.read svg{transition:transform .25s var(--ease)}
+.read:hover svg{transform:translateX(4px)}
+.slide.seen .evh .wi,.slide.seen .pics img,.slide.seen .pics .vid,.slide.seen .stats li{animation:none !important;opacity:1;transform:none}
+.slide.seen .pics::after{animation:none !important;opacity:0}
+.slide.seen .stats::before{animation:none !important;transform:scaleX(1)}
+.slide.seen .read.a{clip-path:none}
+.slide.active[data-photo="develop"] .pics img{animation:fade 1.4s ease both calc(var(--d) + .1s)}
+.slide.active[data-photo="develop"] .pics .p2{animation-delay:calc(var(--d) + .45s)}
+.slide.active[data-photo="develop"] .pics::after{animation:developOv 1.6s ease-out both var(--d)}
+.slide.active[data-photo="film"] .pics .p1{animation:filmUp .9s cubic-bezier(.25,.8,.25,1) both calc(var(--d) + .1s)}
+.slide.active[data-photo="film"] .pics .p2{animation:filmDown .9s cubic-bezier(.25,.8,.25,1) both calc(var(--d) + .35s)}
+.slide.active[data-photo="drop"] .pics .p1{animation:tossIn .75s cubic-bezier(.25,1.25,.4,1) both calc(var(--d) + .1s)}
+.slide.active[data-photo="drop"] .pics .p2{animation:tossIn2 .75s cubic-bezier(.25,1.25,.4,1) both calc(var(--d) + .4s)}
+.slide.active[data-photo="iris"] .pics img{animation:irisIn 1s cubic-bezier(.65,0,.35,1) both calc(var(--d) + .1s)}
+.slide.active[data-photo="iris"] .pics .p2{animation-delay:calc(var(--d) + .4s)}
+.slide.active[data-photo="wipe"] .pics .p1{animation:wipeR .9s cubic-bezier(.65,0,.35,1) both calc(var(--d) + .1s)}
+.slide.active[data-photo="wipe"] .pics .p2{animation:wipeD .9s cubic-bezier(.65,0,.35,1) both calc(var(--d) + .4s)}
+.slide.seen .pics img,.slide.seen .pics .vid{clip-path:none !important;opacity:1 !important;transform:none !important;animation:none !important}
+.ex[data-hl="down"] .evh .wi{transform:translateY(-110%)}
+.ex[data-hl="left"] .evh .wi{transform:translateX(-105%)}
+.ex[data-hl="scale"] .evh .wi{transform:scale(.35);opacity:0}
+.ex[data-hl="scale"] .evh .wm{overflow:visible}
+.slide.active[data-hl="scale"] .evh .wi{animation-timing-function:cubic-bezier(.2,1.3,.4,1)}
+.ex[data-hl="flipx"] .evh .wm{perspective:400px}
+.ex[data-hl="flipx"] .evh .wi{transform:rotateX(-90deg);transform-origin:50% 100%;opacity:0;backface-visibility:hidden}
+.ex[data-hl="alt"] .evh .wm:nth-of-type(odd) .wi{transform:translateY(110%)}
+.ex[data-hl="alt"] .evh .wm:nth-of-type(even) .wi{transform:translateY(-110%)}
+.ex[data-hl="wipe"] .evh .wi{transform:none}
+.ex[data-hl="wipe"] .evh{clip-path:inset(0 100% 0 0)}
+.slide.active[data-hl="wipe"] .evh{animation:hlWipe .9s cubic-bezier(.65,0,.35,1) both var(--d)}
+.slide.seen .evh{animation:none !important;clip-path:none !important}
+.slide.seen .evh .wi{animation:none !important;opacity:1 !important;transform:none !important}
+.ex[data-hl="chars"] .evh .wi{transform:none}
+.ex[data-hl="chars"] .evh .ch2{display:inline-block;transform:translateY(110%)}
+.slide.active[data-hl="chars"] .evh .wi{animation:none}
+.slide.active[data-hl="chars"] .evh .ch2{animation:wordIn .5s cubic-bezier(.2,.9,.2,1) both;animation-delay:calc(var(--d) + var(--j) * 24ms)}
+.slide.seen .evh .ch2{animation:none !important;transform:none !important}
+.labshot{position:relative;flex:1;min-height:0;max-height:46vh;display:grid;grid-template-columns:auto minmax(0,1fr);gap:26px;align-items:center}
+.slide.active .labshot.a{animation:none;opacity:1}
+.lab-pc{position:relative;height:min(46vh,380px);aspect-ratio:720/971;margin:0;overflow:hidden;border:2px solid rgba(255,255,255,.22);box-shadow:0 24px 50px rgba(0,0,0,.5)}
+.lab-pc img{width:100%;height:100%;object-fit:cover;clip-path:inset(0 0 100% 0)}
+.scanbar{position:absolute;left:-4%;right:-4%;top:0;height:3px;background:#FFF;box-shadow:0 0 16px 4px rgba(255,255,255,.75);opacity:0}
+.slide.active .lab-pc img{animation:scanReveal 1.15s linear forwards calc(var(--d) + .1s)}
+.slide.active .scanbar{animation:scanDown 1.15s linear forwards calc(var(--d) + .1s)}
+.callouts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+.callouts li{position:relative;padding-left:14px;border-left:2px solid var(--red);opacity:0}
+.callouts li::before{content:"";position:absolute;left:-28px;top:50%;width:26px;height:2px;background:var(--red);transform:scaleX(0);transform-origin:0 50%}
+.slide.active .callouts li{animation:fromR .5s cubic-bezier(.2,.9,.2,1) both;animation-delay:calc(var(--d) + 1.25s + var(--k) * .18s)}
+.slide.active .callouts li::before{animation:lineDraw .4s ease both;animation-delay:calc(var(--d) + 1.2s + var(--k) * .18s)}
+.callouts b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(15px,1.5vw,20px);text-transform:uppercase;line-height:1.05}
+.callouts span{display:block;margin-top:3px;font-size:12.5px;opacity:.72}
+.slide.seen .lab-pc img{animation:none !important;clip-path:none}
+.slide.seen .scanbar{animation:none !important;opacity:0}
+.slide.seen .callouts li,.slide.seen .callouts li::before{animation:none !important;opacity:1;transform:none}
+.pcpic{object-position:50% 22%}
+@media (max-width:820px){
+  .labshot{display:none !important}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .labshot{display:none !important}
+}
+.mpic{display:none}

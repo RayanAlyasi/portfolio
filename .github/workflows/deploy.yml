@@ -1,0 +1,276 @@
+# Build once, check, publish an attested image and deploy it to staging. Pull requests into
+# staging build and check only. Production never rebuilds: promote.yml promotes this same image.
+#
+# Action versions are pinned to full commit SHAs (GitHub's recommendation for immutable releases);
+# Dependabot keeps them current and the comment shows the release.
+name: Deploy
+
+on:
+  push:
+    branches: [staging]
+  pull_request:
+    branches: [staging]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  # Superseded PR runs are cancelled; runs on staging finish, so a deploy is never cut off halfway.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # full history, so the secret scan covers every commit
+          persist-credentials: false
+
+      # Fails the run (and blocks deployment) if a credential is anywhere in the history.
+      - name: Scan for secrets (gitleaks 8.30.1, checksum-verified)
+        env:
+          GITLEAKS_VERSION: 8.30.1
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        run: |
+          cd "$RUNNER_TEMP"
+          curl -sSfL -o gitleaks.tar.gz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf gitleaks.tar.gz gitleaks
+          ./gitleaks git "$GITHUB_WORKSPACE" --no-banner --redact
+
+      # Catches workflow mistakes (bad expressions, unknown inputs, shell bugs) before they run.
+      - name: Lint workflows (actionlint 1.7.12, checksum-verified)
+        env:
+          ACTIONLINT_VERSION: 1.7.12
+          ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+        run: |
+          cd "$RUNNER_TEMP"
+          curl -sSfL -o actionlint.tar.gz "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          echo "${ACTIONLINT_SHA256}  actionlint.tar.gz" | sha256sum -c -
+          tar -xzf actionlint.tar.gz actionlint
+          cd "$GITHUB_WORKSPACE" && "$RUNNER_TEMP/actionlint" -color
+
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install (exact versions from the lockfile)
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1' # the browser is only needed for layout checks
+        run: npm ci
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      # Optimized images are cached between runs, so only new or changed images are re-encoded.
+      - name: Restore image cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules/.astro
+          key: astro-images-${{ hashFiles('src/assets/**', 'src/data/images.ts', 'src/components/ui/Pic.astro') }}
+          restore-keys: astro-images-
+
+      - name: Build
+        env:
+          PUBLIC_UMAMI_HOST: ${{ vars.UMAMI_HOST }}
+          PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
+        run: npm run build
+
+      - name: Sanity checks
+        run: |
+          test -f dist/index.html && test -f dist/404.html && test -f dist/_headers
+          test -f dist/robots.txt && test -f dist/llms.txt && test -f dist/sitemap-index.xml
+          test -f dist/cv/Rayan-Alyasi-CV.pdf
+          grep -q 'rel="canonical"' dist/index.html
+          # The security policy forbids inline JavaScript: fail if any slipped in.
+          ! grep -oE '<script(\s[^>]*)?>[^<]+</script>' dist/index.html | grep -v 'application/ld+json'
+
+      # The same checks as `npm run check`: lint, formatting, no inline JavaScript, no personal contact data,
+      # accurate wording, docs that match the code, and the speed budget.
+      - name: Site checks
+        run: node scripts/check.mjs --ci --only lint,format,csp,privacy,claims,docs,budget
+
+      # Record which commit this build is, and translate the security headers into nginx config.
+      - name: Prepare the image files
+        if: github.ref == 'refs/heads/staging' && github.event_name != 'pull_request'
+        run: |
+          printf '{"commit":"%s"}\n' "$GITHUB_SHA" > dist/version.json
+          node scripts/deploy/nginx-config.mjs dist/_headers deploy/nginx/site.conf
+
+      - name: Keep the build for the image job
+        if: github.ref == 'refs/heads/staging' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: site
+          path: |
+            dist
+            deploy/nginx/site.conf
+          retention-days: 1
+
+  # Packages exactly the checked files into the nginx image, tests the container, publishes it
+  # under an immutable commit tag, and signs build provenance for it.
+  image:
+    needs: build
+    if: github.ref == 'refs/heads/staging' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
+      id-token: write # to sign the provenance attestation
+      attestations: write
+    outputs:
+      image: ${{ steps.name.outputs.image }}
+      digest: ${{ steps.publish.outputs.digest }}
+    steps:
+      - name: Check out (Dockerfile and smoke test)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Get the build
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: site
+          path: .
+
+      - name: Set up Node (for the container test)
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Image name
+        id: name
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Build the image locally
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          load: true
+          tags: site:test
+
+      # The container must serve the site, with its security headers, before it is published.
+      - name: Test the container
+        run: |
+          docker run -d --name site -p 8080:8080 site:test
+          for _ in $(seq 1 20); do curl -fsS http://127.0.0.1:8080/healthz >/dev/null && break; sleep 1; done
+          node scripts/deploy/smoke.mjs --url http://127.0.0.1:8080 --commit "$GITHUB_SHA" --timeout 30
+          docker rm -f site
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish the image
+        id: publish
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          push: true
+          # The server is arm64; amd64 is the platform tested above. COPY-only, so no emulation.
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.name.outputs.image }}:sha-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+
+      # Signed proof that this image digest was built by this workflow from this commit.
+      # Verify with: gh attestation verify oci://<image>@<digest> --repo <owner>/<repo>
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ${{ steps.name.outputs.image }}
+          subject-digest: ${{ steps.publish.outputs.digest }}
+          push-to-registry: true
+
+  # Deploys the image to staging, then checks it: right commit, security headers, phone layouts.
+  # Its GitHub deployment succeeds only if every check passes; promote.yml requires that success
+  # before staging can be merged into main.
+  staging:
+    needs: image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: staging
+      url: ${{ vars.STAGING_URL }}
+    permissions:
+      contents: read
+      packages: write # to move the `staging` tag
+      id-token: write # to join the tailnet
+    concurrency:
+      group: staging
+      cancel-in-progress: false
+    env:
+      IMAGE: ${{ needs.image.outputs.image }}
+      DIGEST: ${{ needs.image.outputs.digest }}
+      STAGING_URL: ${{ vars.STAGING_URL }}
+      # Staging sits behind Cloudflare Access; the smoke and layout checks send this service token.
+      CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+      CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+    steps:
+      - name: Check out (checks only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      # The tag moves to the exact digest built above; nothing is rebuilt.
+      - name: Point `staging` at this build
+        run: docker buildx imagetools create --tag "$IMAGE:staging" "$IMAGE@$DIGEST"
+
+      # Coolify is reachable only on the tailnet: join it for the rest of this job as an
+      # ephemeral node tagged tag:ci, which the tailnet policy lets reach only Coolify.
+      # Workload identity federation: GitHub's OIDC token signs in, so no Tailscale secret exists.
+      # Tailscale accepts only this repository's staging and production environments.
+      - name: Join the tailnet
+        uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd # v4.2.0
+        with:
+          oauth-client-id: ${{ vars.TS_CLIENT_ID }}
+          audience: ${{ vars.TS_AUDIENCE }}
+          tags: tag:ci
+
+      - name: Ask Coolify to deploy staging
+        env:
+          COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+        run: node scripts/deploy/coolify.mjs
+
+      - name: Check staging serves this commit
+        run: node scripts/deploy/smoke.mjs --url "$STAGING_URL" --commit "$GITHUB_SHA" --timeout 300
+
+      - name: Install the layout-check browser
+        run: npm ci && npx --no-install playwright install --with-deps chromium
+
+      - name: Check every slide on six phone sizes
+        env:
+          QA_URL: ${{ vars.STAGING_URL }}
+        run: node scripts/qa/overflow.mjs
