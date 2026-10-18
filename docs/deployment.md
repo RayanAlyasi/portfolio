@@ -65,7 +65,7 @@ Every action is pinned to a full commit SHA (GitHub's guidance for immutable rel
 3. *Settings → Advanced*: **API Access** on. *Keys & Tokens*: a token with only the **deploy** permission, for CI.
 4. A project with `staging` and `production` environments, each with a **Docker Image** application:
    - image `ghcr.io/rayanalyasi/portfolio`, tag `staging` or `production`
-   - port **8080**, health check `/healthz`
+   - port **8080**, health check `/healthz` on host **`127.0.0.1`**. Coolify checks from inside the container with `wget`, and there `localhost` resolves to IPv6 `::1`, where nginx does not listen
    - domain `https://staging.alyasi.tech` or `https://alyasi.tech`, with **Redirect HTTP to HTTPS** off (the tunnel connects over HTTP, so the redirect would loop)
 5. Each application's deploy webhook is `http://<server MagicDNS name>:8000/api/v1/deploy?uuid=<app uuid>`, called with the deploy token. Use the full `*.ts.net` name, not the `100.x` address: Tailscale Serve routes by hostname and answers 404 to the bare address ([deploy webhooks](https://coolify.io/docs/applications/deployments/automatic-deployments)). The address stays out of this public repository; it lives only in the `COOLIFY_WEBHOOK` secrets.
 6. After the first staging build publishes the image, make the GHCR package public (it contains only the public site), so the server needs no registry login.
@@ -78,7 +78,7 @@ Every action is pinned to a full commit SHA (GitHub's guidance for immutable rel
    - `staging`: deployment branch **`staging`** only. Variables: `TS_CLIENT_ID`, `TS_AUDIENCE` (the staging Tailscale credential; not secrets). Secrets: `COOLIFY_WEBHOOK` (staging app), `COOLIFY_TOKEN`, and the Access service token as `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET`.
    - `production`: deployment branch **`main`** only. Variables: `TS_CLIENT_ID`, `TS_AUDIENCE` (the production Tailscale credential). Secrets: `COOLIFY_WEBHOOK` (production app), `COOLIFY_TOKEN`. Production is public, so it needs no Access token.
 5. *Settings → Secrets and variables → Actions → Variables*: `SITE_URL` (`https://alyasi.tech`), `STAGING_URL` (`https://staging.alyasi.tech`), and optionally `UMAMI_HOST`, `UMAMI_WEBSITE_ID`.
-6. *Settings → Advanced Security*: enable **secret scanning** with **push protection**, **Dependabot alerts** and **security updates**, **CodeQL (default setup)**, and **private vulnerability reporting**.
+6. *Settings → Advanced Security*: enable the **dependency graph** (the required `dependency-review` check fails on every PR without it), **secret scanning** with **push protection**, **Dependabot alerts** and **security updates**, **CodeQL (default setup)**, and **private vulnerability reporting**.
 
 **First push (new repository).** A pull request needs an existing base branch, so `main` starts at an empty commit and gets its content only through the first promotion:
 1. `git init -b staging`, commit an empty first commit (`git commit --allow-empty -m "Start"`), then commit the site, and push `staging`. This first push deploys staging.
