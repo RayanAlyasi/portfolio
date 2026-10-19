@@ -1,6 +1,7 @@
 /* Shared keyframes and registered properties */
 @keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 @keyframes pop{35%{transform:scale(1.9)}}
+@keyframes popin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes fromR{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}

@@ -10,7 +10,7 @@ Working on the site: commands, checks, content and conventions. The rules and co
 | `npm run dev` | Local dev server at http://localhost:4321 |
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serve the production build locally |
-| `npm run check` | All site checks: build, lint, formatting, security policy, privacy, wording, docs, speed budget, secrets |
+| `npm run check` | All site checks: build, lint, formatting, security policy, animations, privacy, wording, docs, speed budget, secrets |
 | `npm run lint` / `npm run format` | ESLint and Prettier on the JavaScript and JSON |
 | `npm run qa:overflow` | Every slide on six phone sizes (needs `npx playwright install chromium` once) |
 
@@ -32,6 +32,7 @@ The same checks run in CI on every pull request into `staging`, so passing local
 | build | The site does not build |
 | lint, format | ESLint finds a problem, or JavaScript and JSON are not formatted (`npm run format` fixes formatting) |
 | csp | Any inline script or event handler reaches the built pages |
+| anim | An element's entrance animation (`--an:`) names `@keyframes` that do not exist, which leaves it invisible |
 | privacy | A phone number, `tel:` link or private file appears in public files |
 | claims | Wording breaks a rule in `scripts/claims.json` |
 | docs | A doc mentions an `npm run` command, file or link that does not exist |

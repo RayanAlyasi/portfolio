@@ -23,7 +23,7 @@ The deck has 13 slides, in order: opening, the-jury, the-facts, exhibit-a (home 
 |---|---|
 | `npm run dev` | Local dev server |
 | `npm run build` | Production build into `dist/` |
-| `npm run check` | All site checks: build, lint, formatting, no inline JavaScript, no personal contact data, wording rules, docs match the code, speed budget, secrets |
+| `npm run check` | All site checks: build, lint, formatting, no inline JavaScript, no missing animations, no personal contact data, wording rules, docs match the code, speed budget, secrets |
 | `npm run lint` | ESLint on all JavaScript (`npm run lint -- --fix` fixes what it can) |
 | `npm run format` | Prettier on JavaScript and JSON |
 | `npm run qa:overflow` | Checks every slide on six phone sizes (needs `npx playwright install chromium` once) |
