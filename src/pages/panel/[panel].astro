@@ -1,0 +1,14 @@
+---
+// Every panel also has its own page (alyasi.tech/panel/b): the deck, opening with that panel open over its
+// slide. Umami's heatmap view shows these, so each panel gets its own heatmap (src/scripts/heatmap.js).
+// The ids come from the panel components themselves, so a new panel gets its page automatically.
+import Deck from '../../components/Deck.astro';
+
+export function getStaticPaths() {
+  const sources = Object.values(import.meta.glob('../../components/panels/*.astro', { query: '?raw', import: 'default', eager: true }));
+  return sources
+    .flatMap((source) => [...String(source).matchAll(/<(?:Drawer|dialog)\b[^>]*\bid="d-([\w-]+)"/g)].map((m) => m[1]))
+    .map((panel) => ({ params: { panel } }));
+}
+---
+<Deck />

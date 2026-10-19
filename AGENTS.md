@@ -31,7 +31,7 @@ The deck has 13 slides, in order: opening, the-jury, the-facts, exhibit-a (home 
 ## Repository map
 
 ```
-src/pages/            index.astro, [slide].astro (the same deck at /exhibit-b etc.), 404.astro
+src/pages/            index.astro, [slide].astro and panel/[panel].astro (the deck opening on a slide or panel, for Umami heatmaps), 404.astro
 src/layouts/          Base.astro: metadata, fonts, analytics, global styles
 src/components/
   Deck.astro          the whole page: chrome, slides and panels

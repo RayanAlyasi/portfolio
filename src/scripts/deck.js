@@ -5,6 +5,7 @@ import { setJury } from './jury.js';
 import { countUps } from './countups.js';
 import { buildRedaction, cancelSpeak, scramble, sizeMarks, speakIn, stopScramble } from './objections.js';
 import { playTransition } from './transitions.js';
+import { openPanel } from './panels.js';
 
 const dotsNav = $('.dots');
 const countEl = $('.count');
@@ -14,12 +15,6 @@ const visited = new Set();
 let shown = -1; // the slide currently active, -1 before the first one
 let dotButtons = [];
 const pad = (n) => String(n).padStart(2, '0');
-// Each slide after the opening also has its own page (src/pages/[slide].astro), for Umami's heatmap view.
-const pathOf = (i) => (i === 0 ? '/' : `/${state.slides[i].id}`);
-
-// Our patched Umami recorder (deploy/umami) files each heatmap click under this address instead of the
-// page's, so every slide gets its own heatmap while the visible address stays alyasi.tech/.
-window.umamiHeatmapUrl = () => location.origin + pathOf(state.cur);
 
 function updateChrome(i) {
   const slide = state.slides[i];
@@ -116,18 +111,6 @@ export function initDeck() {
   }
   dotButtons = $$('button', dotsNav);
   nextBtn.addEventListener('click', () => go(state.cur + 1));
-  // While a slide change covers the screen, taps have nothing useful to hit (Next, the dots and swipes
-  // already wait), so drop them before anything sees them. That includes Umami's recorder: the overlay is
-  // briefly larger than the screen then, and one such click would misalign that slide's whole heatmap.
-  addEventListener(
-    'click',
-    (e) => {
-      if (!state.busy) return;
-      e.stopPropagation();
-      e.preventDefault();
-    },
-    true,
-  );
   for (const b of $$('[data-go]')) b.addEventListener('click', () => go(+b.dataset.go));
 
   let resizeTimer = 0;
@@ -143,15 +126,22 @@ export function initDeck() {
   });
 }
 
-/** Open on the slide named in the address (/exhibit-b or /#exhibit-b), or the first one. Returns its index. */
+/**
+ * Open on what the address names: a slide (/exhibit-b or /#exhibit-b) or a panel (/panel/b, opened over the
+ * slide that holds its button). These pages exist mainly for Umami's heatmaps (heatmap.js).
+ * Returns true if the address named something, so the countdown is skipped.
+ */
 export function startDeck() {
   const name = location.hash.slice(1) || location.pathname.replace(/^\/|\.html$|\/$/g, '');
+  const panel = name.startsWith('panel/') ? document.getElementById(`d-${name.slice(6)}`) : null;
+  const slideName = panel ? $(`[data-open="${panel.id}"]`)?.closest('.slide')?.id : name;
   const start = Math.max(
     0,
-    state.slides.findIndex((s) => s.id === name),
+    state.slides.findIndex((s) => s.id === slideName),
   );
   // Read once, then drop it: the address stays alyasi.tech/ while moving through the deck.
   if (location.pathname !== '/' || location.hash) history.replaceState(null, '', `/${location.search}`);
   activate(start, false);
-  return start;
+  if (panel) openPanel(panel);
+  return start > 0 || Boolean(panel);
 }
