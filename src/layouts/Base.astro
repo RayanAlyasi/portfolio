@@ -42,6 +42,8 @@ const canonical = new URL('/', site.url).href;
     <meta name="twitter:title" content={site.shareTitle} />
     <meta name="twitter:description" content={site.shareDescription} />
     <meta name="twitter:image" content={`${site.url}/og-image.png`} />
+    {/* PNG first: Google Search does not accept SVG favicons and prefers ones larger than 48px. */}
+    <link rel="icon" href="/favicon-192.png" sizes="192x192" type="image/png" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
