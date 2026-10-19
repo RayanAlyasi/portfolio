@@ -1,6 +1,36 @@
 import { $, $$, track } from './core.js';
 import { hydrate } from './media.js';
 
+/**
+ * Close a dialog after its exit animation (the .closing rules in 13-panels.css). It stays open until then,
+ * so the deck stays locked and focus returns to the opener only once the panel has left.
+ */
+function closeAnimated(dialog) {
+  if (!dialog.open || dialog.classList.contains('closing')) return;
+  // Start the exit from the current position and opacity, in case the entrance is still running.
+  const now = getComputedStyle(dialog);
+  dialog.style.setProperty('--at', now.transform);
+  dialog.style.setProperty('--op', now.opacity);
+  dialog.classList.add('closing');
+  const exit = (dialog._exit = {});
+  Promise.allSettled(dialog.getAnimations().map((a) => a.finished)).then(() => {
+    if (dialog._exit === exit) dialog.close();
+  });
+}
+
+/** Every way of closing (button, backdrop, Escape) goes through closeAnimated. */
+function animateClosing(dialog) {
+  // Escape: browsers let a page delay it only once per user action; otherwise the dialog closes at once.
+  dialog.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    closeAnimated(dialog);
+  });
+  dialog.addEventListener('close', () => {
+    dialog._exit = null;
+    dialog.classList.remove('closing');
+  });
+}
+
 function initDrawers() {
   for (const button of $$('[data-open]')) {
     button.addEventListener('click', () => {
@@ -14,13 +44,14 @@ function initDrawers() {
     });
   }
   for (const dialog of $$('dialog.drawer')) {
-    $('.d-close', dialog).addEventListener('click', () => dialog.close());
+    animateClosing(dialog);
+    $('.d-close', dialog).addEventListener('click', () => closeAnimated(dialog));
     // Clicks on the backdrop also target the dialog, but so do clicks on its own empty space;
     // only the ones outside its box close it.
     dialog.addEventListener('click', (e) => {
       if (e.target !== dialog) return;
       const r = dialog.getBoundingClientRect();
-      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeAnimated(dialog);
     });
     dialog.addEventListener('close', () => {
       for (const v of $$('video', dialog)) v.pause();
@@ -117,7 +148,8 @@ function initLightbox() {
       () => {},
     );
   });
-  box.addEventListener('click', () => box.close());
+  animateClosing(box);
+  box.addEventListener('click', () => closeAnimated(box));
   box.addEventListener('close', () => {
     cancel(pending);
     pending = null;

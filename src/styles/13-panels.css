@@ -6,6 +6,10 @@
 dialog.drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(660px,100vw);height:100%;max-height:none;max-width:none;padding:0;border:0;background:var(--paper);color:var(--black);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 dialog.drawer::backdrop{background:rgba(0,0,0,.62)}
 dialog.drawer[open]{animation:slideIn .5s var(--ease)}
+dialog.drawer[open]::backdrop{animation:fade .5s var(--ease)}
+/* Closing (panels.js): a shorter exit that speeds up as it leaves; the panel ignores taps on its way out. */
+dialog.drawer.closing{animation:slideOut .32s cubic-bezier(.4,0,1,1) forwards;pointer-events:none}
+dialog.drawer.closing::backdrop{animation:fadeOut .32s ease forwards}
 .d-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 22px 12px;background:var(--black);color:var(--white)}
 .d-head span{font-weight:700;font-size:14px}
 .d-close{min-width:44px;min-height:44px;border:2px solid var(--white);background:transparent;color:var(--white);font-weight:700;cursor:pointer;padding:0 14px}
@@ -41,6 +45,8 @@ dialog.drawer[open]{animation:slideIn .5s var(--ease)}
 dialog.lightbox{position:fixed;inset:0;width:100vw;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:rgba(0,0,0,.95);overflow:auto;overscroll-behavior:contain}
 dialog.lightbox::backdrop{background:rgba(0,0,0,.8)}
 dialog.lightbox[open]{animation:fade .25s ease}
+dialog.lightbox.closing{animation:fadeOut .2s ease forwards;pointer-events:none}
+dialog.lightbox.closing::backdrop{animation:fadeOut .2s ease forwards}
 .lightbox img{display:block;width:100%;height:100%;object-fit:contain;touch-action:pinch-zoom;cursor:zoom-out}
 .lb-x{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;z-index:2;min-height:44px;padding:0 16px;border:2px solid #FFF;background:rgba(0,0,0,.6);color:#FFF;font-weight:700;cursor:pointer}
 dialog.drawer.cvview{width:min(940px,100vw);background:#2E2D2A}
