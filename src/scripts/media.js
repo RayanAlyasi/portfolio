@@ -37,6 +37,75 @@ export function hydrate(root) {
   }
 }
 
+const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+
+// The current frame as an image, shown as the poster while the source switches. Null if unavailable.
+function frameOf(video) {
+  try {
+    const canvas = Object.assign(document.createElement('canvas'), { width: video.videoWidth, height: video.videoHeight });
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    return canvas.toDataURL('image/jpeg', 0.85);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Switch a video that entered full screen to its HD file. The HD file loads in a hidden element from the
+ * current position; once it can play through, the visible video takes it over at the same time and play
+ * state, with the current frame held as the poster, so nothing restarts or flashes. Leaving full screen
+ * first cancels the load.
+ */
+function upgradeToHd(video) {
+  if (!video.dataset.hd || video.dataset.hdLoading || video.currentSrc.endsWith(video.dataset.hd)) return;
+  video.dataset.hdLoading = '1';
+  const prep = Object.assign(document.createElement('video'), { muted: true, preload: 'auto' });
+  const stop = () => {
+    document.removeEventListener('fullscreenchange', onExit);
+    document.removeEventListener('webkitfullscreenchange', onExit);
+    video.removeEventListener('webkitendfullscreen', onExit);
+    delete video.dataset.hdLoading;
+  };
+  const onExit = () => {
+    if (fullscreenElement() === video) return;
+    stop();
+    prep.removeAttribute('src');
+    prep.load();
+  };
+  prep.addEventListener(
+    'canplaythrough',
+    () => {
+      stop();
+      if (fullscreenElement() !== video && !video.webkitDisplayingFullscreen) return;
+      const time = video.currentTime;
+      const playing = !video.paused;
+      const poster = video.poster;
+      video.poster = frameOf(video) || poster;
+      video.src = video.dataset.hd;
+      video.currentTime = time;
+      video.addEventListener(time ? 'seeked' : 'loadeddata', () => (video.poster = poster), { once: true });
+      if (playing) video.play()?.catch(() => {});
+    },
+    { once: true },
+  );
+  document.addEventListener('fullscreenchange', onExit);
+  document.addEventListener('webkitfullscreenchange', onExit);
+  video.addEventListener('webkitendfullscreen', onExit);
+  prep.src = video.dataset.hd;
+  prep.currentTime = video.currentTime;
+}
+
+/** Videos with an HD file switch to it when they enter full screen (Safari on iPhone reports it on the video). */
+export function initHdOnFullscreen() {
+  const onEnter = () => {
+    const el = fullscreenElement();
+    if (el?.tagName === 'VIDEO') upgradeToHd(el);
+  };
+  document.addEventListener('fullscreenchange', onEnter);
+  document.addEventListener('webkitfullscreenchange', onEnter);
+  document.addEventListener('webkitbeginfullscreen', (e) => e.target.tagName === 'VIDEO' && upgradeToHd(e.target), true);
+}
+
 /** Play the muted loops on the active slide and pause every other video. */
 export function playVideos(active) {
   for (const video of $$('.slide video')) {

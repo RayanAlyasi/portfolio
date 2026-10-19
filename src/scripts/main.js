@@ -9,6 +9,7 @@ import { initRain } from './rain.js';
 import { initJuryTracker } from './jury.js';
 import { activate, initDeck, startDeck } from './deck.js';
 import { initPanels } from './panels.js';
+import { initHdOnFullscreen } from './media.js';
 import { initInput } from './input.js';
 import { initAnalytics } from './analytics.js';
 import { runLeader, startOpeningWithoutLeader } from './leader.js';
@@ -22,6 +23,7 @@ initRain();
 initJuryTracker();
 initDeck();
 initPanels();
+initHdOnFullscreen();
 initInput();
 initAnalytics();
 
