@@ -1,27 +1,10 @@
 import { track } from './core.js';
 
-/**
- * Umami's tracker counts a page view whenever the address changes, and the deck changes it on every slide.
- * Report the deck as one page, as before: the first page view only, every event on "/". (The recorder is
- * separate and still sees each slide's address, which is what splits the heatmaps.)
- */
-function reportDeckAsOnePage() {
-  let viewed = false;
-  let firstReferrer;
-  window.umamiBeforeSend = (type, payload) => {
-    if (type !== 'event' || !payload) return payload;
-    const isPageView = !payload.name;
-    if (isPageView && viewed) return null;
-    viewed ||= isPageView;
-    firstReferrer ??= payload.referrer;
-    const url = new URL(payload.url || '/', location.origin);
-    return { ...payload, url: `/${url.search}`, referrer: firstReferrer };
-  };
-}
-
 /** Page-wide events: tagged buttons, outbound links, video engagement and ?ref= tags. */
 export function initAnalytics() {
-  reportDeckAsOnePage();
+  // Umami's heatmap screen shows the site in a frame; viewing a heatmap is not a visit, so send nothing.
+  // (The recorder needs the session this would create, so it records nothing there either.)
+  if (window.self !== window.top) window.umamiBeforeSend = () => null;
   document.addEventListener('click', (e) => {
     const tagged = e.target.closest?.('[data-track]');
     if (tagged) track(tagged.dataset.track);
