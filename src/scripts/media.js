@@ -30,6 +30,9 @@ export function hydrate(root) {
     const mp4 = video.canPlayType('video/mp4; codecs="avc1.4D401E, mp4a.40.2"');
     const webm = video.canPlayType('video/webm; codecs="vp9, opus"');
     const useWebm = video.dataset.webm && mp4 !== 'probably' && (!mp4 || webm);
+    // Panels hydrate when opened: fetch just the duration and index, so the scrubber can seek
+    // before play. The markup keeps preload="none" so a closed panel costs nothing.
+    if (video.closest('dialog')) video.preload = 'metadata';
     video.src = useWebm ? video.dataset.webm : video.dataset.mp4;
   }
 }

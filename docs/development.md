@@ -51,6 +51,7 @@ The same checks run in CI on every pull request into `staging`, so passing local
 
 - **About 70 KB on first load:** HTML with all CSS inlined (no render-blocking stylesheet), a 7 KB script, two preloaded fonts. No framework runtime: Astro ships zero JavaScript of its own.
 - **Images:** every photo is generated in AVIF and WebP at several widths, so phones download small files. Images load only when their slide or panel is reached, and images hidden on the current screen size are never downloaded.
+- **Videos:** a panel's video downloads nothing until the panel opens, then only its length and index (about 160 KB for the FieldLog video), so it can be skipped through before playing. The rest streams when played. The muted loop on the Exhibit H slide loads on desktop only, from the slide before it.
 - **Animations** move only `transform` and `opacity`, so they run on the GPU. Revisited slides appear finished instead of replaying.
 - **Caching:** everything under `/_astro/` is content-hashed and cached for a year.
 
