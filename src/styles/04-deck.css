@@ -1,6 +1,7 @@
 /* Slide deck: layout, backgrounds and the entrance system */
 .deck{position:fixed;inset:0}
 .slide{position:absolute;inset:0;visibility:hidden;overflow:hidden;contain:layout paint}
+.slide:focus{outline:none}
 .slide.active{visibility:visible}
 .bg-paper{background:var(--paper);color:var(--black)}
 .bg-black{background:var(--black);color:var(--white)}

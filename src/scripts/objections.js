@@ -12,9 +12,11 @@ const el = (tag, className, text) => {
   return node;
 };
 
+// The split letters are hidden from screen readers, so a visually hidden copy reads the sentence whole.
+// (aria-label is not reliably announced on a paragraph.)
 function splitInto(q, text, makeWord) {
-  q.setAttribute('aria-label', text);
   const frag = document.createDocumentFragment();
+  frag.append(Object.assign(document.createElement('span'), { className: 'sr-only', textContent: text }));
   const words = text.split(' ');
   words.forEach((word, j) => {
     frag.append(makeWord(word, j));

@@ -79,6 +79,9 @@ export function go(target) {
   const ref = dir > 0 ? state.slides[i] : state.slides[state.cur];
   const kind = reduceMotion ? 'fade' : ref.dataset.fx || 'fade';
   const color = dir < 0 ? getComputedStyle(state.slides[i]).backgroundColor : ref.dataset.fxc || '#000';
+  // Focus inside the outgoing slide (e.g. on "Skip to the evidence") would fall back to <body> when that
+  // slide goes inert, so keyboard users would restart from the top; hand it to the incoming slide instead.
+  const hadFocus = state.slides[state.cur].contains(document.activeElement);
   hydrate(state.slides[i]);
   playTransition({
     kind,
@@ -88,6 +91,7 @@ export function go(target) {
     onCovered: () => activate(i, true),
     onDone: () => {
       state.busy = false;
+      if (hadFocus) state.slides[i].focus({ preventScroll: true });
       state.quietUntil = performance.now() + 380;
       state.needQuiet = true;
     },
@@ -96,6 +100,8 @@ export function go(target) {
 
 export function initDeck() {
   for (const [i, slide] of state.slides.entries()) {
+    slide.tabIndex = -1; // focusable from script only, see go()
+    slide.setAttribute('aria-label', slide.dataset.label);
     const button = Object.assign(document.createElement('button'), { type: 'button' });
     button.setAttribute('aria-label', slide.dataset.label);
     button.append(Object.assign(document.createElement('span'), { textContent: slide.dataset.label }));
