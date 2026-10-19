@@ -1,7 +1,6 @@
 /* Panels: exhibit drawers, case file, contact, CV viewer, lightbox */
 .cvbtn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;min-height:46px;padding:0 18px;border:0;background:var(--black);color:var(--paper);font:inherit;font-weight:700;font-size:15px;cursor:pointer}
 .cvbtn svg{width:16px;height:16px}
-.cvnote{min-height:1.2em;margin:-6px 0 0;font-size:13px;font-weight:600;color:#4A4741}
 .d-body video{width:100%;max-height:70vh;background:#000;display:block}
 .pc-f img{max-width:360px}
 dialog.drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(660px,100vw);height:100%;max-height:none;max-width:none;padding:0;border:0;background:var(--paper);color:var(--black);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
@@ -49,8 +48,6 @@ dialog.drawer.cvview{width:min(940px,100vw);background:#2E2D2A}
 .cv-dl{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:2px solid var(--red);background:var(--red);color:var(--black);font:inherit;font-weight:700;cursor:pointer}
 .cv-dl svg{width:16px;height:16px}
 .cv-dl:hover{background:var(--white);border-color:var(--white)}
-.cvview .cvnote{margin:0;padding:0 22px;min-height:0;color:#E9E5DD;font-size:13px;font-weight:600}
-.cvview .cvnote:not(:empty){padding:10px 22px 0}
 .cv-page{padding:18px 18px 40px}
 .cv-page img{display:block;width:100%;max-width:860px;height:auto;margin:0 auto 18px;background:#FFF;box-shadow:0 24px 60px rgba(0,0,0,.45);touch-action:pinch-zoom}
 @media (max-width:560px){

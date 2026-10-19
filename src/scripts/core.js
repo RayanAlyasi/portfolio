@@ -10,6 +10,8 @@ export const state = {
   cur: 0,
   busy: false,
   leaderOn: false,
+  quietUntil: 0, // after a slide change, wheel input is ignored until this time (ms)
+  needQuiet: false, // and until the wheel pauses once, so one long scroll moves one slide
 };
 
 /** Seconds after a slide activates when its objection gets rebutted. */

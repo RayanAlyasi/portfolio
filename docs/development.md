@@ -44,7 +44,7 @@ The same checks run in CI on every pull request into `staging`, so passing local
 - **Text:** edit the slide or panel component in `src/components/`.
 - **Images:** drop a high-resolution file into `src/assets/img/` and reference it by file name: `<Pic name="file-name" alt="…" sizes="…" />`. Make photos 2560 px wide where the original allows (never upscale), and strip all metadata (camera details, location) first; the repository is public.
 - **Videos:** put `name.mp4` (H.264 with `-movflags +faststart`, a light file for normal viewing) in `src/assets/video/`, and optionally `name-hd.mp4` at the original's full resolution for full screen. Strip metadata (`-map_metadata -1`).
-- **CV:** replace `public/cv/Rayan-Alyasi-CV.pdf` and `src/assets/img/cv.webp` (a render of the page for the viewer).
+- **CV:** replace `public/cv/Rayan-Alyasi-CV.pdf` and `src/assets/img/cv.webp` (a render of the page for the viewer). Use the public CV only: `npm run check` cannot read inside the PDF, so open it and confirm it has no phone number or address before committing.
 - **Automatic:** the university year, its progress bar and the home lab's days-running counter update themselves.
 - **Links to a slide:** `/#<slide-id>` opens that slide and skips the countdown, for example `alyasi.tech/#exhibit-e`. The ids are the slides' `id` attributes in `src/components/slides/`. The hash is removed once read, and moving between slides never changes the address.
 

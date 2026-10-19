@@ -4,7 +4,7 @@
 .speak{transform-origin:50% 50%;will-change:transform,opacity}
 .ex[data-style="stage"] .speak .who.a{opacity:1;animation:none !important}
 .slide.active.ex:not([data-style="stage"]) .speak .who.a{animation:fade .35s ease both .05s}
-.quote .w,.quote .c{display:inline-block;opacity:0}
+.quote .c{display:inline-block;opacity:0}
 .quote .wd{display:inline-block;white-space:nowrap}
 .slide.active[data-style="type"] .quote .c{animation:typeOn .01s steps(1) both;animation-delay:calc(.3s + var(--k) * 34ms)}
 .slide.active[data-style="type"] .quote::after{content:"";display:inline-block;width:.08em;height:.8em;margin-left:.05em;background:currentColor;vertical-align:-.05em;animation:caret .5s steps(1) 0s var(--blinks,4),caretOff .01s linear forwards calc(var(--t) + .1s)}
@@ -63,7 +63,7 @@
 .slide.seen .dbanner b{animation:none !important;clip-path:none}
 .slide.seen .a,.slide.seen .speak .who.a{animation:none !important;opacity:1 !important;transform:none !important}
 .slide.seen .quote{animation:none !important;opacity:.32}
-.slide.seen .quote .w,.slide.seen .quote .c{animation:none !important;opacity:1}
+.slide.seen .quote .c{animation:none !important;opacity:1}
 .slide.seen .quote::after{display:none}
 .slide.seen .strike{animation:none !important;transform:scaleX(1) rotate(-3deg)}
 .slide.seen .ostamp{animation:none !important;opacity:1;transform:translate(-50%,-50%) rotate(-9deg)}
