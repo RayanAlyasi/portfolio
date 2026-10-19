@@ -104,3 +104,11 @@ The site's tracking code is built in and switches on when the Umami variables ex
 4. Add the repository variables `UMAMI_HOST` (`https://stats.alyasi.tech`) and `UMAMI_WEBSITE_ID`, then re-run the staging deploy and promote it.
 
 To keep the dashboard private, put `stats.alyasi.tech` behind Cloudflare Access, but leave `/script.js`, `/recorder.js` and `/api/*` public, or tracking stops.
+
+### Patched image: one heatmap per slide
+
+Stock Umami files heatmap clicks by page path, and the whole deck is `/`, so every slide's clicks would land on one heatmap. The Umami service runs `ghcr.io/rayanalyasi/umami:3.4.0-heatmap.1` instead: stock Umami 3.4.0 with one change to its heatmap recorder (`recorder.js`). The recorder files each click under the address the page names in `window.umamiHeatmapUrl` (the deck names its current slide, e.g. `/exhibit-b`) and falls back to the real address, so other pages behave as before. The server, database and API are untouched.
+
+- **Build:** `deploy/umami/Dockerfile`, which checks the recorder byte for byte before and after the one-line patch. Pull requests that change it build it; *Actions → Umami image → Run workflow* on `main` publishes the tag. Make the `umami` GHCR package public once, so the server needs no registry login.
+- **Switch or undo:** change only the `image:` line of the Umami service's compose file in Coolify (`ghcr.io/umami-software/umami:3.4.0` ↔ the patched tag) and redeploy the service. Same version either way, so the database is unaffected.
+- **Upgrade Umami:** Dependabot proposes the new base image, and its build fails on the checksums by design. Pin the new digest, confirm the recorder's click line still reads `url:location.href`, update both checksums and `TAG` in `.github/workflows/umami.yml`, publish, then switch the image line.

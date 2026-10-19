@@ -50,6 +50,7 @@ docs/                 development.md (working on the site), deployment.md (hosti
 .claude/agents/       Explore (cheap code search) and judge (review on request), for Claude Code
 scripts/qa/           overflow.mjs
 scripts/deploy/       nginx-config.mjs, coolify.mjs, smoke.mjs (deploy pipeline)
+deploy/umami/         Dockerfile for the patched Umami image (one heatmap per slide; docs/deployment.md)
 .github/rulesets/     staging.json, main.json (branch rulesets, applied in GitHub settings)
 .github/              pull_request_template.md; workflows/pr-title.yml checks PR titles
 Dockerfile            nginx image for the built site
