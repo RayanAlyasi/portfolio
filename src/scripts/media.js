@@ -66,17 +66,21 @@ function upgradeToHd(video) {
     video.removeEventListener('webkitendfullscreen', onExit);
     delete video.dataset.hdLoading;
   };
+  // Drop the preloaded copy so its buffered HD video doesn't stay in memory.
+  const release = () => {
+    prep.removeAttribute('src');
+    prep.load();
+  };
   const onExit = () => {
     if (fullscreenElement() === video) return;
     stop();
-    prep.removeAttribute('src');
-    prep.load();
+    release();
   };
   prep.addEventListener(
     'canplaythrough',
     () => {
       stop();
-      if (fullscreenElement() !== video && !video.webkitDisplayingFullscreen) return;
+      if (fullscreenElement() !== video && !video.webkitDisplayingFullscreen) return release();
       const time = video.currentTime;
       const playing = !video.paused;
       const poster = video.poster;
@@ -85,6 +89,7 @@ function upgradeToHd(video) {
       video.currentTime = time;
       video.addEventListener(time ? 'seeked' : 'loadeddata', () => (video.poster = poster), { once: true });
       if (playing) video.play()?.catch(() => {});
+      release();
     },
     { once: true },
   );
