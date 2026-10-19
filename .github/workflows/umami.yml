@@ -1,5 +1,5 @@
-# Builds the patched Umami image (deploy/umami/Dockerfile: stock Umami with a heatmap recorder that files
-# each click under the slide it was on). Pull requests that change it build and check it; running this
+# Builds the patched Umami image (deploy/umami/Dockerfile: stock Umami with a heatmap recorder that lets
+# the page adjust each heatmap event, so every slide and panel gets its own, aligned heatmap). Pull requests that change it build and check it; running this
 # workflow by hand publishes it to GHCR, and the Umami service on the server is pointed at that tag.
 name: Umami image
 
@@ -76,7 +76,7 @@ jobs:
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.description=Umami 3.4.0 with a heatmap recorder that files clicks per slide
+            org.opencontainers.image.description=Umami 3.4.0 with a heatmap recorder hook for per-slide and per-panel heatmaps
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
