@@ -6,18 +6,23 @@ import { countUps } from './countups.js';
 import { buildRedaction, cancelSpeak, scramble, sizeMarks, speakIn, stopScramble } from './objections.js';
 import { playTransition } from './transitions.js';
 
-const root = document.documentElement;
 const dotsNav = $('.dots');
 const countEl = $('.count');
 const nextBtn = $('.next');
+const chrome = [$('.hdr'), $('.foot'), dotsNav];
 const visited = new Set();
+let shown = -1; // the slide currently active, -1 before the first one
 let dotButtons = [];
 const pad = (n) => String(n).padStart(2, '0');
 
 function updateChrome(i) {
   const slide = state.slides[i];
-  root.style.setProperty('--ink', slide.dataset.ink);
-  root.style.setProperty('--inkInv', slide.dataset.ink === '#000' ? '#ECE9E3' : '#000');
+  // Only the chrome reads --ink. Setting it on these three, not :root, keeps the restyle inside them
+  // instead of the whole page (about 1,000 elements) on every slide change.
+  for (const el of chrome) {
+    el.style.setProperty('--ink', slide.dataset.ink);
+    el.style.setProperty('--inkInv', slide.dataset.ink === '#000' ? '#ECE9E3' : '#000');
+  }
   dotButtons.forEach((b, j) => {
     b.classList.toggle('on', j === i);
     j === i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current');
@@ -36,13 +41,16 @@ export function activate(i, animate) {
   }
   slide.classList.toggle('seen', seen);
   if (seen) animate = false;
-  state.slides.forEach((s, j) => {
+  // Every slide on the first call, then only the outgoing and incoming ones.
+  for (const [j, s] of state.slides.entries()) {
+    if (shown >= 0 && j !== shown && j !== i) continue;
     const on = j === i;
     s.classList.toggle('active', on);
     on
       ? (s.removeAttribute('inert'), s.removeAttribute('aria-hidden'))
       : (s.setAttribute('inert', ''), s.setAttribute('aria-hidden', 'true'));
-  });
+  }
+  shown = i;
   hydrate(slide);
   hydrate(state.slides[i + 1]);
   dealOffsets(slide);
