@@ -31,8 +31,8 @@ The portfolio at https://alyasi.tech/ is an interactive site inspired by the fil
 ## Leadership and community
 
 - AI Team Lead, KAU Engineering Day: led 10 developers to ship 4 products.
-- Vice Lead of Technology, Oracle Student Club: leads 14 members; deployed the club website on Oracle Cloud; taught a two-day cloud bootcamp to 55+ students.
-- Technical Consultant, Programming Club: runs the club's cloud deployments.
+- Technical Consultant, Oracle Student Club: runs the club's deployments, cloud infrastructure and automations. Previously Vice Lead of Technology: led 14 members, deployed the club website on Oracle Cloud, and taught a two-day cloud bootcamp to 55+ students.
+- Technical Consultant, Programming Club: runs the club's cloud deployments, infrastructure and automations.
 - Volunteer AI Solutions Developer, Synapse (non-profit under SDAIA), Oct 2025 – Mar 2026.
 
 ## Selection and awards
