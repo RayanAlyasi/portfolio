@@ -31,17 +31,19 @@ function animateClosing(dialog) {
   });
 }
 
+/** Open a panel: load its media, start at the top, and count it. */
+export function openPanel(dialog) {
+  if (!dialog?.showModal) return;
+  hydrate(dialog);
+  dialog.showModal();
+  dialog.scrollTop = 0;
+  dialog._openedAt = Date.now();
+  track(`open-${dialog.id.replace(/^d-/, '')}`);
+}
+
 function initDrawers() {
   for (const button of $$('[data-open]')) {
-    button.addEventListener('click', () => {
-      const dialog = document.getElementById(button.dataset.open);
-      if (!dialog?.showModal) return;
-      hydrate(dialog);
-      dialog.showModal();
-      dialog.scrollTop = 0;
-      dialog._openedAt = Date.now();
-      track(`open-${dialog.id.replace(/^d-/, '')}`);
-    });
+    button.addEventListener('click', () => openPanel(document.getElementById(button.dataset.open)));
   }
   for (const dialog of $$('dialog.drawer')) {
     animateClosing(dialog);

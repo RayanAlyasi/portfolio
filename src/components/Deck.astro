@@ -1,0 +1,71 @@
+---
+// The whole case: chrome, the 13 slides and their panels. Rendered at / and at every slide's own address.
+import Base from '../layouts/Base.astro';
+import Grain from './chrome/Grain.astro';
+import Leader from './chrome/Leader.astro';
+import Header from './chrome/Header.astro';
+import SectionDots from './chrome/SectionDots.astro';
+import TransitionOverlay from './chrome/TransitionOverlay.astro';
+import Footer from './chrome/Footer.astro';
+import Opening from './slides/Opening.astro';
+import TheJury from './slides/TheJury.astro';
+import TheFacts from './slides/TheFacts.astro';
+import ExhibitA from './slides/ExhibitA.astro';
+import ExhibitB from './slides/ExhibitB.astro';
+import ExhibitC from './slides/ExhibitC.astro';
+import ExhibitD from './slides/ExhibitD.astro';
+import ExhibitE from './slides/ExhibitE.astro';
+import ExhibitF from './slides/ExhibitF.astro';
+import ExhibitG from './slides/ExhibitG.astro';
+import ExhibitH from './slides/ExhibitH.astro';
+import Verdict from './slides/Verdict.astro';
+import Credits from './slides/Credits.astro';
+import Lightbox from './panels/Lightbox.astro';
+import PanelA from './panels/PanelA.astro';
+import PanelB from './panels/PanelB.astro';
+import PanelC from './panels/PanelC.astro';
+import PanelD from './panels/PanelD.astro';
+import PanelE from './panels/PanelE.astro';
+import PanelF from './panels/PanelF.astro';
+import PanelG from './panels/PanelG.astro';
+import PanelH from './panels/PanelH.astro';
+import Contact from './panels/Contact.astro';
+import CvViewer from './panels/CvViewer.astro';
+import CaseFile from './panels/CaseFile.astro';
+---
+<Base>
+  <Grain />
+  <Leader />
+  <Header />
+  <SectionDots />
+  <main class="deck" id="deck">
+    <Opening />
+    <TheJury />
+    <TheFacts />
+    <ExhibitA />
+    <ExhibitB />
+    <ExhibitC />
+    <ExhibitD />
+    <ExhibitE />
+    <ExhibitF />
+    <ExhibitG />
+    <ExhibitH />
+    <Verdict />
+    <Credits />
+  </main>
+  <TransitionOverlay />
+  <Lightbox />
+  <Footer />
+  <PanelA />
+  <PanelB />
+  <PanelC />
+  <PanelD />
+  <PanelE />
+  <PanelF />
+  <PanelG />
+  <PanelH />
+  <Contact />
+  <CvViewer />
+  <CaseFile />
+  <script src="../scripts/main.js"></script>
+</Base>

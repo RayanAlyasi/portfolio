@@ -28,3 +28,10 @@ updates:
     schedule: { interval: weekly }
     commit-message: { prefix: 'chore(deps)' }
     cooldown: { default-days: 14 }
+  # The patched Umami image: its build fails on a new version until the patch is redone (docs/deployment.md).
+  - package-ecosystem: docker
+    directory: /deploy/umami
+    target-branch: staging
+    schedule: { interval: weekly }
+    commit-message: { prefix: 'chore(deps)' }
+    cooldown: { default-days: 14 }

@@ -31,9 +31,10 @@ The deck has 13 slides, in order: opening, the-jury, the-facts, exhibit-a (home 
 ## Repository map
 
 ```
-src/pages/            index.astro, 404.astro
+src/pages/            index.astro, [slide].astro and panel/[panel].astro (the deck opening on a slide or panel, for Umami heatmaps), 404.astro
 src/layouts/          Base.astro: metadata, fonts, analytics, global styles
 src/components/
+  Deck.astro          the whole page: chrome, slides and panels
   chrome/             header, footer, section dots, transitions
   slides/             one component per slide (Opening, TheJury, TheFacts, ExhibitA–H, Verdict, Credits)
   panels/             Drawer shell + PanelA–H, Contact, CvViewer, CaseFile, Lightbox
@@ -50,6 +51,7 @@ docs/                 development.md (working on the site), deployment.md (hosti
 .claude/agents/       Explore (cheap code search) and judge (review on request), for Claude Code
 scripts/qa/           overflow.mjs
 scripts/deploy/       nginx-config.mjs, coolify.mjs, smoke.mjs (deploy pipeline)
+deploy/umami/         Dockerfile for the patched Umami image (one heatmap per slide; docs/deployment.md)
 .github/rulesets/     staging.json, main.json (branch rulesets, applied in GitHub settings)
 .github/              pull_request_template.md; workflows/pr-title.yml checks PR titles
 Dockerfile            nginx image for the built site
