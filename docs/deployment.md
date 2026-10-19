@@ -5,9 +5,9 @@ How alyasi.tech is hosted, deployed and operated.
 Self-hosted with [Coolify](https://coolify.io) on my own server, behind Cloudflare. Every change goes through staging before production, and production runs the exact image that passed staging:
 
 ```
-feature branch ─▶ PR into staging ─▶ build + checks
+feature branch ─▶ PR into staging ─▶ build + checks, every slide on six phone sizes
 merge          ─▶ nginx image built once: tested, published as sha-<commit>, provenance signed
-               ─▶ staging.alyasi.tech: that image deployed, smoke test + six phone sizes checked
+               ─▶ staging.alyasi.tech: that image deployed, smoke test
 PR staging ─▶ main ─▶ "promotion" check: source is staging, and staging passed for this commit
 merge          ─▶ alyasi.tech: the SAME image promoted (nothing rebuilt), smoke test
 visitors ─▶ Cloudflare (HTTPS, caching, attack protection) ─▶ Cloudflare Tunnel ─▶ Coolify proxy ─▶ nginx
@@ -32,7 +32,7 @@ GitHub has no fast-forward merge: every merge method creates a new commit ([merg
 
 | Workflow | When | What it does |
 |---|---|---|
-| `deploy.yml` | PRs into `staging`, merges to `staging` | Secret scan, workflow lint, build, site checks (`build` check). On merge: image, staging deploy, smoke test, six phone sizes |
+| `deploy.yml` | PRs into `staging`, merges to `staging` | Secret scan, workflow lint, build, site checks, every slide on six phone sizes (all in the `build` check). On merge: image, staging deploy, smoke test |
 | `promote.yml` | PRs into `main`, merges to `main` | `promotion` check on the PR; on merge, promotes the tested image to production and smoke-tests it |
 | `dependency-review.yml` | Every PR | Fails if the PR adds a dependency with a known vulnerability |
 | `pr-title.yml` | Every PR | Fails unless the title follows Conventional Commits (rules in `AGENTS.md`) |
@@ -47,7 +47,7 @@ Every action is pinned to a full commit SHA (GitHub's guidance for immutable rel
 **Cloudflare** (dashboard)
 1. Add the domain to Cloudflare (free plan) and switch its nameservers. For AI crawlers choose **Do not block** (otherwise Cloudflare blocks them regardless of `robots.txt`). Turn on DNSSEC and 2FA.
 2. Create a tunnel (*Networking → Tunnels*, Docker option) and keep its token. Add three **Published Application** routes, each to `http://localhost:80` (the Coolify proxy): `alyasi.tech`, `staging.alyasi.tech` and `stats.alyasi.tech`. No wildcard, and no route to Coolify ([Coolify: tunnel all resources](https://coolify.io/docs/integrations/networking/cloudflare/tunnels/all-resource)).
-3. In Zero Trust, create a **service token** for CI and an **Access** application for `staging.alyasi.tech` with an **Allow** policy for your email and a **Service Auth** policy for that token. Search engines then cannot index a duplicate of the site, and CI's smoke and layout checks still get through.
+3. In Zero Trust, create a **service token** for CI and an **Access** application for `staging.alyasi.tech` with an **Allow** policy for your email and a **Service Auth** policy for that token. Search engines then cannot index a duplicate of the site, and CI's smoke test still gets through.
 
 **Tailscale** (how CI reaches Coolify)
 1. Install Tailscale on the server ([Ubuntu packages](https://pkgs.tailscale.com/stable/#ubuntu-noble)), run `sudo tailscale up`, approve the device, and turn off its key expiry in the admin console.

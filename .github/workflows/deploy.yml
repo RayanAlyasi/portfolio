@@ -63,7 +63,7 @@ jobs:
 
       - name: Install (exact versions from the lockfile)
         env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1' # the browser is only needed for layout checks
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1' # the layout check installs only the headless shell, below
         run: npm ci
 
       - name: Audit production dependencies
@@ -92,10 +92,18 @@ jobs:
           # The security policy forbids inline JavaScript: fail if any slipped in.
           ! grep -oE '<script(\s[^>]*)?>[^<]+</script>' dist/index.html | grep -v 'application/ld+json'
 
-      # The same checks as `npm run check`: lint, formatting, no inline JavaScript, no personal contact data,
-      # accurate wording, docs that match the code, and the speed budget.
+      # The same checks as `npm run check`: lint, formatting, no inline JavaScript, no missing animations,
+      # no personal contact data, accurate wording, docs that match the code, and the speed budget.
       - name: Site checks
-        run: node scripts/check.mjs --ci --only lint,format,csp,privacy,claims,docs,budget
+        run: node scripts/check.mjs --ci --only lint,format,csp,anim,privacy,claims,docs,budget
+
+      # Every slide must fit six phone sizes (AGENTS.md rule 3), checked against this build before merge.
+      # Headless shell only, not cached: Playwright advises a fresh install, which is as fast as a cache restore.
+      - name: Install the layout-check browser
+        run: npx --no-install playwright install --with-deps --only-shell chromium
+
+      - name: Check every slide on six phone sizes
+        run: node scripts/qa/overflow.mjs
 
       # Record which commit this build is, and translate the security headers into nginx config.
       - name: Prepare the image files
@@ -197,7 +205,8 @@ jobs:
           subject-digest: ${{ steps.publish.outputs.digest }}
           push-to-registry: true
 
-  # Deploys the image to staging, then checks it: right commit, security headers, phone layouts.
+  # Deploys the image to staging, then checks it: right commit, pages and security headers.
+  # Phone layouts were already checked on this exact build, in the build job.
   # Its GitHub deployment succeeds only if every check passes; promote.yml requires that success
   # before staging can be merged into main.
   staging:
@@ -231,7 +240,6 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
-          cache: npm
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
@@ -266,11 +274,3 @@ jobs:
 
       - name: Check staging serves this commit
         run: node scripts/deploy/smoke.mjs --url "$STAGING_URL" --commit "$GITHUB_SHA" --timeout 300
-
-      - name: Install the layout-check browser
-        run: npm ci && npx --no-install playwright install --with-deps chromium
-
-      - name: Check every slide on six phone sizes
-        env:
-          QA_URL: ${{ vars.STAGING_URL }}
-        run: node scripts/qa/overflow.mjs
