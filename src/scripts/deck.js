@@ -14,14 +14,12 @@ const visited = new Set();
 let shown = -1; // the slide currently active, -1 before the first one
 let dotButtons = [];
 const pad = (n) => String(n).padStart(2, '0');
-// Each slide after the opening has its own address (src/pages/[slide].astro).
+// Each slide after the opening also has its own page (src/pages/[slide].astro), for Umami's heatmap view.
 const pathOf = (i) => (i === 0 ? '/' : `/${state.slides[i].id}`);
 
-/** Keep the address on the current slide, so Umami's recorder files each click (and heatmap) under it. */
-function syncAddress(i) {
-  if (location.pathname === pathOf(i) && !location.hash) return;
-  history.replaceState(history.state, '', pathOf(i) + location.search);
-}
+// Our patched Umami recorder (deploy/umami) files each heatmap click under this address instead of the
+// page's, so every slide gets its own heatmap while the visible address stays alyasi.tech/.
+window.umamiHeatmapUrl = () => location.origin + pathOf(state.cur);
 
 function updateChrome(i) {
   const slide = state.slides[i];
@@ -72,7 +70,6 @@ export function activate(i, animate) {
     speakIn(slide);
   }
   updateChrome(i);
-  syncAddress(i);
   setJury(i, animate);
   countUps(slide, seen);
   playVideos(slide);
@@ -146,13 +143,15 @@ export function initDeck() {
   });
 }
 
-/** Open on the slide named in the address (/exhibit-b, or an older /#exhibit-b link), or the first one. Returns its index. */
+/** Open on the slide named in the address (/exhibit-b or /#exhibit-b), or the first one. Returns its index. */
 export function startDeck() {
   const name = location.hash.slice(1) || location.pathname.replace(/^\/|\.html$|\/$/g, '');
   const start = Math.max(
     0,
     state.slides.findIndex((s) => s.id === name),
   );
+  // Read once, then drop it: the address stays alyasi.tech/ while moving through the deck.
+  if (location.pathname !== '/' || location.hash) history.replaceState(null, '', `/${location.search}`);
   activate(start, false);
   return start;
 }
