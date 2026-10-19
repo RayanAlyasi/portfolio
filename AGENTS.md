@@ -61,7 +61,7 @@ Each rule exists because breaking it broke something real.
 
 1. **No inline JavaScript and no inline event handlers.** The CSP is `default-src 'self'` with no `unsafe-inline`, so inline code silently stops working on the live site, and CI fails on it. Put behavior in a module under `src/scripts/` and wire it from `main.js`.
 2. **Images and video only through `<Pic>` / `<Vid>` and the registry in `src/data/images.ts`.** They produce AVIF and WebP at several widths and load lazily when a slide or panel opens. Walking the whole site on a phone downloads about 76 KB of images; a plain `<img>` can cost more than that alone.
-3. **Every slide must fit six phone sizes** (375×667, 390×844, 412×915, 360×640, and landscape 844×390, 667×375). Run `npm run qa:overflow` after any change to slide text or layout. If content cannot fit, shorten it or move detail into the panel; do not shrink type below the existing scale.
+3. **Every slide must fit six phone sizes** (375×667, 390×844, 412×915, 360×640, and landscape 844×390, 667×375). Run `npm run qa:overflow` after any change to slide text or layout; CI runs it on every pull request as part of the required `build` check. If content cannot fit, shorten it or move detail into the panel; do not shrink type below the existing scale.
 4. **Styles go in the matching `src/styles/NN-*.css` feature file.** No CSS frameworks.
 5. **Dependencies:** none added without the owner's approval. Pin exact versions, at least 14 days old (newly published releases are a supply-chain risk). Dependabot applies the same 14-day cooldown.
 6. **Keep the first load small** (about 70 KB today) and keep accessibility intact: alt text on every image, visible focus, reduced-motion support.
