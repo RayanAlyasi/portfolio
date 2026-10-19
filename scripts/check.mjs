@@ -100,7 +100,8 @@ const gates = {
         if (e.isDirectory()) return walk(p);
         if (!e.name.endsWith('.html')) return;
         const html = fs.readFileSync(p, 'utf8');
-        for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+        // Browsers also end a script at </script > or </script foo>, so the closing tag allows attributes too.
+        for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\b[^>]*>/gi)) {
           const attrs = m[1];
           if (/\bsrc\s*=/.test(attrs) || /application\/ld\+json/i.test(attrs) || !m[2].trim()) continue;
           problems.push(`${path.relative(ROOT, p)}: inline <script>`);

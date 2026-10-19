@@ -14,7 +14,7 @@ The deck has 13 slides, in order: opening, the-jury, the-facts, exhibit-a (home 
 
 - Astro 7.3.5, fully static output, no server runtime. Node 22.12+ (`.nvmrc`).
 - Served by nginx in a container on the owner's Coolify server (arm64), behind Cloudflare (Tunnel). Coolify has no public hostname: CI reaches its deploy webhook over Tailscale, joining the tailnet only for each deploy job.
-- Staging first: `staging` (default branch) deploys to staging.alyasi.tech, `main` to alyasi.tech. `.github/workflows/deploy.yml` builds, checks and publishes the image on every merge to `staging`, deploys it to staging and checks it there. `.github/workflows/promote.yml` lets only `staging` merge into `main`, then promotes that same image to production, never a rebuild. Pull requests build and check but never deploy. See `docs/deployment.md`.
+- Staging first: `staging` deploys to staging.alyasi.tech, `main` (the default branch) to alyasi.tech. `.github/workflows/deploy.yml` builds, checks and publishes the image on every merge to `staging`, deploys it to staging and checks it there. `.github/workflows/promote.yml` lets only `staging` merge into `main`, then promotes that same image to production, never a rebuild. Pull requests build and check but never deploy. See `docs/deployment.md`.
 - Security headers, including a strict Content-Security-Policy, are generated at build time by `integrations/security-headers.mjs`.
 
 ## Commands
@@ -117,7 +117,7 @@ Commit messages and PR titles follow [Conventional Commits 1.0.0](https://www.co
 ## Workflow
 
 - Run `npm run check` (and `npm run qa:overflow` after slide changes) before pushing. All checks must pass.
-- Never push to `staging` or `main` directly; rulesets block it. Branch from `staging` and open a PR into `staging` (squash merge). Releasing is a PR from `staging` into `main` (merge commit), which the owner merges.
+- Never push to `staging` or `main` directly; rulesets block it. Branch from `staging` and open a PR into `staging` (squash merge); `main` is the default branch, so set the base explicitly (`gh pr create --base staging`). Releasing is a PR from `staging` into `main` (merge commit), which the owner merges.
 - Keep each change to what was asked. If you see a better approach, say so in one sentence and still deliver the request as asked.
 
 ## Planned change
