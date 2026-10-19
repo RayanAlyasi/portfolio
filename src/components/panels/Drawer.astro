@@ -1,0 +1,12 @@
+---
+// Shared shell for every slide-in panel: sticky header with a close button, then the body.
+interface Props {
+  id: string;
+  label: string;
+}
+const { id, label } = Astro.props;
+---
+<dialog class="drawer" id={id} aria-labelledby={`${id}-h`}>
+  <div class="d-head"><span>{label}</span><button class="d-close" type="button">Close</button></div>
+  <div class="d-body"><slot /></div>
+</dialog>

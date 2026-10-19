@@ -1,0 +1,30 @@
+# Dependencies and build output
+node_modules
+dist/
+.astro/
+deploy/nginx/site.conf
+
+# Secrets and environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Private, per-person files (never published)
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+scripts/claims.local.json
+
+# Private documents never belong in this public repository (documents only, so
+# harness files that merely mention "private" in their name are still published)
+*-private.pdf
+*-private.docx
+*-private.html
+
+# Editors and OS
+.DS_Store
+.vscode/
+.idea/
+*.log

@@ -1,0 +1,19 @@
+---
+// Panel: Exhibit H.
+import Pic from '../ui/Pic.astro';
+import Vid from '../ui/Vid.astro';
+import Drawer from './Drawer.astro';
+---
+<Drawer id="d-h" label="Exhibit H">
+    <h2 id="d-h-h">Built for fun</h2>
+    <h3>Cleanrr</h3>
+    <p>An open-source Telegram bot that sits next to a home media server and lets friends and family fix their own issues, like a stuck download or a missing show, instead of messaging the admin. It reasons over the stack with Claude, asks for confirmation before anything destructive, and ships as one Docker container with CI and automated releases.</p>
+    <div class="gal"><Pic name="cleanrr" alt="The Cleanrr logo" class="wide shot" sizes="(max-width: 680px) 92vw, 610px" /><Pic name="cleanrrShot" alt="A recreated Cleanrr conversation fixing a stuck show" class="wide shot" sizes="(max-width: 680px) 92vw, 610px" /></div>
+    <a class="ext" href="https://github.com/RayanAlyasi/cleanrr" target="_blank" rel="noopener">See Cleanrr on GitHub</a>
+    <h3>RGB Guardian</h3>
+    <p>An arcade shooter on a glowing LED strip, built from scratch with an Arduino, three arcade buttons and a buzzer. Enemies race down the strip in red, green or blue, and you fire the matching color before they reach you. It drew crowds at the Oracle booth at Engineering Day and TechHub.</p>
+    <Vid name="rgb" poster="rgbPoster" fallback="arduino" label="RGB Guardian being played" loop controls />
+    <div class="gal"><Pic name="arduino" alt="RGB Guardian on the workbench" sizes="(max-width: 680px) 46vw, 300px" /></div>
+    <h3>Early days</h3>
+    <p>Writing code since 14, starting with Minecraft server plugins, which later became a freelance business on Fiverr.</p>
+</Drawer>

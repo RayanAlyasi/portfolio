@@ -1,0 +1,12 @@
+/* Film-leader countdown */
+.leader{position:fixed;inset:0;z-index:80;display:none;place-items:center;background:#1B1A18;color:#ECE9E3;transition:opacity .45s ease}
+.leader.on{display:grid}
+.leader.out{opacity:0}
+.leader::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 70% at 50% 50%,transparent 55%,rgba(0,0,0,.65));animation:flick .14s steps(2) infinite}
+.ring{position:relative;width:min(60vmin,440px);aspect-ratio:1;border-radius:50%;border:3px solid currentColor;box-shadow:inset 0 0 0 14px #1B1A18,inset 0 0 0 17px currentColor;display:grid;place-items:center;overflow:hidden}
+.sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(rgba(236,233,227,.22) var(--sw),transparent var(--sw));animation:sweep .75s linear infinite}
+.cross{position:absolute;inset:0;background:linear-gradient(currentColor,currentColor) 50% 0/2px 100% no-repeat,linear-gradient(currentColor,currentColor) 0 50%/100% 2px no-repeat;opacity:.55}
+.lnum{position:relative;font-family:var(--display);font-weight:900;font-size:min(34vmin,250px);line-height:1;animation:lpop .75s steps(1) infinite}
+.lskip{position:absolute;right:clamp(16px,3.6vw,44px);bottom:calc(22px + env(safe-area-inset-bottom,0px));min-height:44px;padding:0 16px;border:2px solid currentColor;background:transparent;color:inherit;font-weight:700;cursor:pointer}
+.slide.active .omark.cross path:nth-child(1){animation:draw .45s cubic-bezier(.6,0,.4,1) forwards var(--t)}
+.slide.active .omark.cross path:nth-child(2){animation:draw .45s cubic-bezier(.6,0,.4,1) forwards calc(var(--t) + .3s)}

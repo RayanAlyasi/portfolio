@@ -1,0 +1,25 @@
+---
+// Exhibit H: the objection, its rebuttal and the evidence.
+import Pic from '../ui/Pic.astro';
+import Vid from '../ui/Vid.astro';
+---
+<section class="slide bg-paper ex" id="exhibit-h" data-photo="wipe" data-hl="alt" data-style="scramble" data-mark="dismiss" data-ink="#000" data-label="Exhibit H · For fun" data-fx="slab" data-fxc="#ECE9E3" data-flip="2">
+  <div class="inner">
+    <div class="obj">
+      <div class="speak">
+        <span class="who a" style="--d:.05s">Juror 2 objects</span>
+        <div class="quote-wrap"><p class="big quote">“Does he only build when someone’s grading?”</p><i class="strike" aria-hidden="true"></i></div>
+        <p class="conv a" style="--d:calc(var(--t) + 1s)"><i></i>Juror 2 is convinced. That’s all twelve.</p>
+      </div>
+      <div class="pics a" style="--d:calc(var(--t) + .1s);--an:fade"><Pic name="cleanrr" alt="The Cleanrr logo, a jellyfish next to the wordmark" class="p1" sizes="(max-width: 820px) 1px, 30vw" /><Vid name="rgb" poster="rgbPoster" fallback="arduino" class="vid p2" label="RGB Guardian being played: LEDs race along the strip as buttons are pressed" muted loop /></div>
+    </div>
+    <div class="evi">
+      <span class="badge a" style="--d:calc(var(--t) + .1s)"><i><b>H</b></i>Exhibit H</span>
+      <h2 class="evh" style="--d:calc(var(--t) + .25s)">He builds when nobody’s asking.</h2>
+      <p class="lead a" style="--d:calc(var(--t) + .45s)">RGB Guardian, an arcade game he built from an Arduino and an LED strip: match each enemy’s color before it reaches you. And Cleanrr, an open-source Telegram bot he wrote to keep his home server’s 1 TB under control.</p>
+      <Pic name="arduino" alt="RGB Guardian on the workbench" class="mpic a" style="--d:calc(var(--t) + .5s)" sizes="(max-width: 820px) 92vw, 1px" />
+      <ul class="stats a" style="--d:calc(var(--t) + .6s)"><li><b>Age 14</b><span>first line of code</span></li><li><b>1 TB</b><span>kept tidy by Cleanrr</span></li><li><b>Open</b><span>source on GitHub</span></li></ul>
+      <button class="read a" style="--d:calc(var(--t) + .8s)" type="button" data-open="d-h">Read exhibit H <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,11 @@
+{
+  "name": "Rayan Alyasi · Not Just a Student",
+  "short_name": "Rayan Alyasi",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone"
+}

@@ -1,0 +1,19 @@
+---
+// Panel: Exhibit E.
+import Pic from '../ui/Pic.astro';
+import Drawer from './Drawer.astro';
+---
+<Drawer id="d-e" label="Exhibit E">
+    <h2 id="d-e-h">The Engineering Day bot</h2>
+    <p>KAU’s largest annual event needed one place where 8,000+ students could ask anything, in Arabic or English, on the app they already use. I built it on WhatsApp’s web protocol, so the real risk wasn’t traffic: it was WhatsApp banning the number in the middle of the event.</p>
+    <div class="facts"><div><b>8,000+</b><span>people served</span></div><div><b>0</b><span>minutes of downtime</span></div></div>
+    <h3>The decisions that mattered</h3>
+    <ul>
+      <li><b>Pace like a human.</b> One outbound queue, read receipts, typing indicators and random gaps, so traffic never arrived in bursts.</li>
+      <li><b>Ask the model last.</b> Fuzzy FAQ matching, then a cache, then Gemini, then a human. Most questions never reached the AI.</li>
+      <li><b>Never guess.</b> If a fact wasn’t in the event data, the question went to an organizer instead.</li>
+      <li><b>Learn from people.</b> Organizers answered by replying in WhatsApp, and the bot saved the answer for the next student, with a one-word undo.</li>
+      <li><b>Know when not to ship.</b> I built a bulk broadcast feature, then switched it off before launch: it was the fastest way to get banned.</li>
+    </ul>
+    <div class="gal"><Pic name="wa0" alt="Students asking the bot about the event" class="wide shot" sizes="(max-width: 680px) 92vw, 610px" /><Pic name="wa1" alt="The bot handing a question to organizers" class="wide shot" sizes="(max-width: 680px) 92vw, 610px" /><Pic name="wa2" alt="Organizers teaching the bot a new answer" class="wide shot" sizes="(max-width: 680px) 92vw, 610px" /></div>
+</Drawer>

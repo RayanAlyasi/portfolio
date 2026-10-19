@@ -1,0 +1,19 @@
+/* Tokens, reset and base elements */
+:root{
+  --black:#000000; --char:#161616; --paper:#ECE9E3; --white:#FFFFFF; --smoke:#8F8C86; --line:#2B2B2B;
+  --red:#E5481E;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Libre Franklin","Franklin Gothic Medium","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1); --snap:cubic-bezier(.7,0,.3,1);
+  --hh:64px; --fh:72px;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:var(--black);color:var(--white);font-family:var(--body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+button{font:inherit;color:inherit}
+img{display:block;max-width:100%}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+picture{display:contents}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+picture>source{display:none}

@@ -1,0 +1,135 @@
+# Promotes to production the exact image that passed staging. Nothing is rebuilt.
+#
+# Pull requests into main: the `promotion` check (required by the main ruleset) fails unless the
+# pull request comes from this repository's staging branch, and staging deployed and passed every
+# check for that exact commit. Merging it (the ruleset allows merge commits only) deploys.
+#
+# GitHub has no fast-forward merge, so main's commit differs from the staging commit it promotes.
+# The merge's second parent is that staging commit, and the production job refuses to deploy
+# unless the merge's files are identical to it.
+name: Promote
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  promotion:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      deployments: read # to confirm staging passed
+    env:
+      GH_TOKEN: ${{ github.token }}
+      HEAD_REF: ${{ github.event.pull_request.head.ref }}
+      HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      # The repository check stops a fork whose branch happens to be called staging.
+      - name: Only staging may be merged into main
+        run: |
+          if [ "$HEAD_REF" != staging ] || [ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]; then
+            echo "::error::Only this repository's staging branch can be merged into main (this is $HEAD_REPO:$HEAD_REF)."
+            exit 1
+          fi
+
+      # Every deploy.yml staging job records a GitHub deployment; it ends in success only if
+      # the smoke test and the phone-layout check passed.
+      - name: Staging passed for this exact commit
+        run: |
+          id=$(gh api "repos/$GITHUB_REPOSITORY/deployments?environment=staging&sha=$HEAD_SHA&per_page=1" --jq '.[0].id // empty')
+          state=none
+          if [ -n "$id" ]; then
+            state=$(gh api "repos/$GITHUB_REPOSITORY/deployments/$id/statuses?per_page=1" --jq '.[0].state // "none"')
+          fi
+          if [ "$state" != success ]; then
+            echo "::error::Staging has not passed for ${HEAD_SHA:0:12} (latest state: $state). Wait for its deploy to finish, then re-run this check."
+            exit 1
+          fi
+
+  # Skipped when main is first created (bootstrap); every later push to main is a promotion merge.
+  production:
+    if: github.event_name == 'push' && !github.event.created
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL }}
+    permissions:
+      contents: read
+      packages: write # to move the `production` tag
+      id-token: write # to join the tailnet
+    concurrency:
+      group: production
+      cancel-in-progress: false
+    env:
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - name: Check out (the merge and its parents)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Find the staging commit this merge promotes
+        id: promoted
+        run: |
+          if ! staging_sha=$(git rev-parse --verify --quiet 'HEAD^2'); then
+            echo "::error::$GITHUB_SHA is not a merge commit. main only accepts promotion merges from staging."
+            exit 1
+          fi
+          if [ "$(git rev-parse 'HEAD^{tree}')" != "$(git rev-parse 'HEAD^2^{tree}')" ]; then
+            echo "::error::The merge's files differ from staging ${staging_sha:0:12}, so they were never tested. Nothing was deployed."
+            exit 1
+          fi
+          echo "sha=$staging_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false # installs nothing, so no cache to restore (or poison)
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # A carbon copy of the staging image's index: same digest, same provenance attestation.
+      - name: Point `production` at the image that passed staging
+        env:
+          STAGING_SHA: ${{ steps.promoted.outputs.sha }}
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker buildx imagetools inspect "$image:sha-$STAGING_SHA" >/dev/null || { echo "::error::No published image for $STAGING_SHA."; exit 1; }
+          docker buildx imagetools create --tag "$image:production" "$image:sha-$STAGING_SHA"
+
+      # Coolify is reachable only on the tailnet: join it for the rest of this job as an
+      # ephemeral node tagged tag:ci, which the tailnet policy lets reach only Coolify.
+      # Workload identity federation: GitHub's OIDC token signs in, so no Tailscale secret exists.
+      # Tailscale accepts only this repository's staging and production environments.
+      - name: Join the tailnet
+        uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd # v4.2.0
+        with:
+          oauth-client-id: ${{ vars.TS_CLIENT_ID }}
+          audience: ${{ vars.TS_AUDIENCE }}
+          tags: tag:ci
+
+      - name: Ask Coolify to deploy production
+        env:
+          COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+        run: node scripts/deploy/coolify.mjs
+
+      - name: Check production serves the promoted commit
+        env:
+          STAGING_SHA: ${{ steps.promoted.outputs.sha }}
+        run: node scripts/deploy/smoke.mjs --url "$SITE_URL" --commit "$STAGING_SHA" --timeout 300

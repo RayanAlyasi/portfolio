@@ -1,0 +1,29 @@
+{
+  "_about": "Wording rules for public site copy (src/ and public/llms.txt). Each rule exists because the wording was wrong once. Add a private scripts/claims.local.json (gitignored) for rules that should not be public.",
+  "rules": [
+    {
+      "id": "wa-guardian-not-production",
+      "pattern": "(wa-guardian|anti-spam (bot|service))[^.\\n]{0,120}\\bproduction\\b|\\bproduction\\b[^.\\n]{0,120}(wa-guardian|anti-spam (bot|service))",
+      "flags": "i",
+      "reason": "wa-guardian is a live service on a GitOps proof of concept, not part of Tabby's production systems. Say 'live'."
+    },
+    {
+      "id": "team-name-unconfirmed",
+      "pattern": "\\bplatform team\\b",
+      "flags": "i",
+      "reason": "The owner has not confirmed a team name. Use 'DevOps engineering intern at Tabby'."
+    },
+    {
+      "id": "onboarding-is-measured",
+      "pattern": "\\b(one|1) manifest and (one|1) values file\\b",
+      "flags": "i",
+      "reason": "Measured today: a new service is a 3-file change, Healthy under 2 minutes after merge. Change this rule only after the proof of concept changes and is re-measured."
+    },
+    {
+      "id": "no-vague-idioms",
+      "pattern": "\\b(the real thing|next level|rockstar|ninja|10x engineer)\\b",
+      "flags": "i",
+      "reason": "Vague idiom. Say concretely what is meant (e.g. 'already an engineer')."
+    }
+  ]
+}

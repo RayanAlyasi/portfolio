@@ -1,0 +1,53 @@
+---
+// Panel: Exhibit A.
+import Pic from '../ui/Pic.astro';
+import Drawer from './Drawer.astro';
+---
+<Drawer id="d-a" label="Exhibit A">
+    <h2 id="d-a-h">The home lab</h2>
+    <p>In September 2021, still in high school, I bought a new PC and turned my old one into the home server I’d always wanted. I switched it to headless Ubuntu Server and started learning everything from scratch: Linux, the terminal, automation. The first thing I ran was my own media server, then Minecraft servers, then my personal projects. Friends and family still stream from it every day.</p>
+    <div class="facts"><div><b class="since-f">1,500+</b><span>days running, since 2021</span></div><div><b>25</b><span>containers in ~20 Compose stacks</span></div><div><b>15</b><span>people with streaming accounts</span></div><div><b>1 TB</b><span>on a single disk, managed tightly</span></div></div>
+    <h3>No AI. Just docs and debugging.</h3>
+    <p>This was before AI could set anything up for me. Every piece came from reading documentation, breaking things and tracing why: Docker networking problems, learning to port-forward correctly and safely, knowing when to use TCP and when UDP, and wiring DNS and domains so services resolve to my own hostnames.</p>
+    <h3>The architecture</h3>
+    <figure class="shot-f"><Pic name="labArch" alt="Diagram of the home lab: users, the router, Cloudflare and Tailscale at the edge, and the server running streaming, game hosting, media automation and operations" sizes="(max-width: 680px) 92vw, 610px" /><figcaption>The full setup: how friends, game players, browser users and my own devices reach the server, and everything running on it. Tap to enlarge.</figcaption></figure>
+    <h3>The machine</h3>
+    <figure class="shot-f pc-f"><Pic name="labPc" alt="The 2015 HP Pavilion desktop that runs the home lab" sizes="(max-width: 680px) 92vw, 360px" /><figcaption>The machine itself: a 2015 HP Pavilion that used to be my everyday PC.</figcaption></figure>
+    <p>A 2015 HP desktop: an Intel Core i7-4790S, 12 GB of DDR3 and one 1 TB spinning disk. Its integrated GPU handles hardware video transcoding, so friends can stream to smart TVs and consoles from a ten-year-old box. Most of the engineering here comes from working around those limits instead of buying more hardware. I rebuilt it on Ubuntu 24.04 LTS in 2024.</p>
+    <figure class="shot-f"><Pic name="labMotd" alt="Ubuntu login screen from January 2025 showing the disk 91% full" sizes="(max-width: 680px) 92vw, 610px" /><figcaption>January 2025: the disk hit 91%. Retention rules and Cleanrr brought it back down to 59%.</figcaption></figure>
+    <h3>What runs on it</h3>
+    <ul>
+      <li>Docker Compose stacks managed through Portainer, behind Nginx Proxy Manager.</li>
+      <li>Plex and Jellyfin, with automated media library management and retention rules that clean the library on a schedule, so 1 TB stays enough.</li>
+      <li>A Pterodactyl game-server panel, currently hosting a Valheim server.</li>
+      <li>n8n automations, Cleanrr, and one Telegram bot carrying alerts from 8+ services.</li>
+      <li>Update policy as code: non-critical containers auto-update nightly, critical ones are pinned with update alerts, and OS security patches apply automatically.</li>
+    </ul>
+    <figure class="shot-f"><Pic name="labPort" alt="Portainer showing media, request and game-server containers running" sizes="(max-width: 680px) 92vw, 610px" /><figcaption>Part of the container list in Portainer, from an earlier snapshot.</figcaption></figure>
+    <figure class="shot-f"><Pic name="labCron" alt="Terminal listing the cron jobs that automate the server" sizes="(max-width: 680px) 92vw, 610px" /><figcaption>The scheduled jobs that keep it self-healing: the home-IP watchdog, stalled-download cleanup, a weekly image prune, and the boot-time fix for the GPU driver cache.</figcaption></figure>
+    <h3>Networking</h3>
+    <ul>
+      <li>Admin and web interfaces sit behind a Cloudflare Tunnel, so they need no open inbound ports. Some also sit behind Cloudflare Access.</li>
+      <li>Only the media server uses a direct port-forward, on purpose: friends’ TVs and consoles can’t run a VPN, and Cloudflare’s terms don’t allow streaming video through the tunnel.</li>
+      <li>Tailscale connects my own devices for admin access.</li>
+      <li>A custom watchdog script tracks the home IP from five sources every 15 minutes and alerts me after three failures in a row.</li>
+      <li>Kernel and disk tuning: BBR congestion control, an fq qdisc, the BFQ disk scheduler, and transcodes written to RAM.</li>
+    </ul>
+    <h3>Security</h3>
+    <ul>
+      <li>Key-only SSH with root login disabled, and fail2ban watching it.</li>
+      <li>A UFW firewall that denies inbound traffic by default. Only the services that must be public are reachable; admin tools stay on the LAN or localhost.</li>
+      <li>Least-privilege mounts: internet-facing containers can’t see other services’ configs, and personal data is never mounted into a container.</li>
+    </ul>
+    <figure class="shot-f"><Pic name="labSec" alt="Terminal showing SSH root login and passwords disabled, the firewall enabled, and security services active" sizes="(max-width: 680px) 92vw, 610px" /><figcaption>Proof, not promises: password and root login off, the firewall on, every hardening service active, and BBR tuning in place.</figcaption></figure>
+    <h3>Things that broke</h3>
+    <p><b>4K streams buffering for friends.</b> Tautulli showed subtitles being burned in: the PS5 app forces that for external subtitle files, which forces a transcode the 2015 CPU can’t do for 4K. The fix was muxing the subtitles into the files. The first attempt loaded a 20.9 GB file into RAM and got killed, so I moved the job into a memory-capped, low-priority container with a nightly queue that only runs when nobody is watching and verifies each file before deleting the backup.</p>
+    <p><b>A storage migration with silent failures.</b> Moving to a hardlink layout stopped imports from secretly copying files (404 GB written in five weeks). It also quietly broke three other services. One failed silently for 11 days; I caught it by querying its database for its last success, because its logs looked fine. The lesson: after moving files, list every service that touches them or tells another service where they live.</p>
+    <p><b>A kernel update broke hardware transcoding.</b> After an automatic kernel update, transcoding failed to initialise. Permissions were fine; the cause was a stale driver cache built for the old kernel. I proved it with a two-second test transcode, then added a job that clears the cache on every boot so it heals itself.</p>
+    <h3>Built it, measured it, switched it off</h3>
+    <p>In mid-2026 I built a full observability stack: Prometheus, Grafana with four dashboards, Loki with Alloy for logs, and Alertmanager sending to Telegram. Then I measured what it cost: about 3.7 GB of RAM, roughly 30% of the machine, plus heavy disk writes. On this hardware it wasn’t worth it, so I decommissioned it.</p>
+    <h3>Next on the list</h3>
+    <p>Nightly off-disk backups of every service’s configuration, so the server can be rebuilt quickly even if its single disk fails.</p>
+    <h3>Why it matters</h3>
+    <p>When my Tabby interview turned to projects, this was the first thing that came up. Setting up the services and infrastructure by hand, and being able to troubleshoot Docker, Linux, networking and security without a guide, is what sold them. It’s where I learned the fundamentals I use at work every day.</p>
+</Drawer>

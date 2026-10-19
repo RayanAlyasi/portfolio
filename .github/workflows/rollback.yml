@@ -1,0 +1,81 @@
+# Puts a previously deployed version back live: points `production` at its image and redeploys.
+# Run it from the Actions tab, on the main branch, with the full commit SHA of a version that was
+# deployed before (the commit /version.json showed). It uses the production environment's secrets.
+name: Roll back
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Full commit SHA to put back live
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  rollback:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL }}
+    permissions:
+      contents: read
+      packages: write # to move the production tag
+      id-token: write # to join the tailnet
+    env:
+      COMMIT: ${{ inputs.commit }}
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - name: Check the input
+        run: '[[ "$COMMIT" =~ ^[0-9a-f]{40}$ ]] || { echo "Give the full 40-character commit SHA."; exit 1; }'
+
+      - name: Check out (smoke test only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false # installs nothing, so no cache to restore (or poison)
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Point `production` at the chosen version
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker buildx imagetools inspect "$image:sha-$COMMIT" >/dev/null || { echo "No published image for $COMMIT."; exit 1; }
+          docker buildx imagetools create --tag "$image:production" "$image:sha-$COMMIT"
+
+      # Coolify is reachable only on the tailnet: join it for the rest of this job as an
+      # ephemeral node tagged tag:ci, which the tailnet policy lets reach only Coolify.
+      # Workload identity federation: GitHub's OIDC token signs in, so no Tailscale secret exists.
+      # Tailscale accepts only this repository's staging and production environments.
+      - name: Join the tailnet
+        uses: tailscale/github-action@d1b6cd204f8dceda5b3eaad7f1f767be390056cd # v4.2.0
+        with:
+          oauth-client-id: ${{ vars.TS_CLIENT_ID }}
+          audience: ${{ vars.TS_AUDIENCE }}
+          tags: tag:ci
+
+      - name: Ask Coolify to deploy production
+        env:
+          COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+        run: node scripts/deploy/coolify.mjs
+
+      - name: Check production serves that commit
+        run: node scripts/deploy/smoke.mjs --url "$SITE_URL" --commit "$COMMIT" --timeout 300

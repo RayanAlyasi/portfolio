@@ -1,0 +1,24 @@
+---
+// Exhibit E: the objection, its rebuttal and the evidence.
+import Pic from '../ui/Pic.astro';
+---
+<section class="slide bg-black ex" id="exhibit-e" data-photo="film" data-hl="wipe" data-style="spot" data-mark="scribble" data-ink="#FFF" data-label="Exhibit E · 8,000 users" data-fx="iris" data-fxc="#000000" data-flip="4,11">
+  <div class="inner">
+    <div class="obj">
+      <div class="speak">
+        <span class="who a" style="--d:.05s">Juror 4 objects</span>
+        <div class="quote-wrap"><p class="big quote">“Has anything he built survived real people?”</p><i class="strike" aria-hidden="true"></i></div>
+        <p class="conv a" style="--d:calc(var(--t) + 1s)"><i></i>Jurors 4 and 11 are convinced.</p>
+      </div>
+      <div class="pics a" style="--d:calc(var(--t) + .1s);--an:fade"><Pic name="wa0" alt="The Engineering Day bot answering event questions on WhatsApp" class="p1" sizes="(max-width: 820px) 1px, 30vw" /><Pic name="wa2" alt="Organizers teaching the bot a new answer" class="p2" sizes="(max-width: 820px) 1px, 20vw" /></div>
+    </div>
+    <div class="evi">
+      <span class="badge a" style="--d:calc(var(--t) + .1s)"><i><b>E</b></i>Exhibit E</span>
+      <h2 class="evh" style="--d:calc(var(--t) + .25s)">8,000 people. Zero downtime.</h2>
+      <p class="lead a" style="--d:calc(var(--t) + .45s)">He designed the WhatsApp AI bot for KAU’s Engineering Day to pace itself like a human, answer most questions without the AI, never guess, and learn from organizers. It never went down, and its number never got banned.</p>
+      <Pic name="wa0" alt="" class="mpic a" style="--d:calc(var(--t) + .5s)" sizes="(max-width: 820px) 92vw, 1px" />
+      <ul class="stats a" style="--d:calc(var(--t) + .6s)"><li><b data-count="8000" data-suffix="+">8,000+</b><span>people served</span></li><li><b data-count="1000" data-suffix="+">1,000+</b><span>at the same time</span></li><li><b>0</b><span>minutes down</span></li></ul>
+      <button class="read a" style="--d:calc(var(--t) + .8s)" type="button" data-open="d-e">Read exhibit E <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>
+  </div>
+</section>

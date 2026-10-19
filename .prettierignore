@@ -1,0 +1,9 @@
+# Prettier formats JavaScript and JSON. Astro templates and CSS are excluded on purpose:
+# whitespace in templates can change layout, and the CSS uses a deliberate compact style.
+dist/
+.astro/
+node_modules/
+package-lock.json
+public/
+src/assets/
+deploy/nginx/site.conf
