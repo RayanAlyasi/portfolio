@@ -75,7 +75,9 @@
 @keyframes shake{10%,90%{transform:translate3d(-2px,1px,0)}20%,80%{transform:translate3d(4px,-2px,0)}30%,50%,70%{transform:translate3d(-7px,3px,0)}40%,60%{transform:translate3d(7px,-3px,0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes litc{to{fill:var(--red);stroke:var(--red)}}
-@keyframes fall{to{transform:translate3d(-30px,130vh,0)}}
+/* Just far enough for the drops (which start 20% above the top) to leave the screen: further would make Umami's
+   recorder see a page taller than the screen and misplace heatmap clicks on the verdict and credits. */
+@keyframes fall{to{transform:translate3d(-30px,120vh,0)}}
 @keyframes slideIn{from{transform:translateX(100%)}to{transform:none}}
 /* Exits start from wherever the element is (set from script), so closing mid-entrance doesn't jump. */
 @keyframes slideOut{from{transform:var(--at,none)}to{transform:translateX(100%)}}

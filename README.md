@@ -18,9 +18,9 @@ npm run check           # everything CI checks; run it before pushing
 
 ```
 src/
-  pages/          index.astro (the deck), 404.astro
+  pages/          index.astro, [slide].astro (each slide's own address), 404.astro
   layouts/        Base.astro: metadata, structured data, fonts, analytics
-  components/     slides/, panels/, chrome/, ui/ (Pic and Vid for media)
+  components/     Deck.astro (the whole page), slides/, panels/, chrome/, ui/ (Pic and Vid)
   scripts/        one ES module per feature, wired up in main.js
   styles/         one stylesheet per area, imported by index.css
   data/           site.ts (profile), images.ts (image registry)

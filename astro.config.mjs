@@ -11,10 +11,13 @@ export default defineConfig({
   build: {
     // One page: inlining all CSS removes a render-blocking request from the first paint.
     inlineStylesheets: 'always',
+    // Slide pages as exhibit-b.html, so /exhibit-b is served as is (nginx tries $uri.html) with no redirect.
+    format: 'file',
   },
   image: {
     service: { entrypoint: 'astro/assets/services/sharp', config: { avif: { effort: 4 }, webp: { effort: 5 } } },
   },
-  integrations: [sitemap({ filter: (page) => !page.includes('/404') }), securityHeaders()],
+  // Only the home page: the slide pages (src/pages/[slide].astro) name it as their canonical page.
+  integrations: [sitemap({ filter: (page) => new URL(page).pathname === '/' }), securityHeaders()],
   devToolbar: { enabled: false },
 });

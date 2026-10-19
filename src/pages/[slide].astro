@@ -1,0 +1,15 @@
+---
+// Every slide after the opening also has its own address (alyasi.tech/exhibit-b): the same page, opening on
+// that slide. The deck moves the address as you go, so each slide gets its own Umami heatmap and is shareable.
+// The ids come from the slide components themselves, so a new slide gets its page automatically.
+import Deck from '../components/Deck.astro';
+
+export function getStaticPaths() {
+  const sources = Object.values(import.meta.glob('../components/slides/*.astro', { query: '?raw', import: 'default', eager: true }));
+  return sources
+    .flatMap((source) => [...String(source).matchAll(/<section class="slide\b[^"]*" id="([\w-]+)"/g)].map((m) => m[1]))
+    .filter((id) => id !== 'opening')
+    .map((slide) => ({ params: { slide } }));
+}
+---
+<Deck />
