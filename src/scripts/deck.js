@@ -59,7 +59,6 @@ export function activate(i, animate) {
   setJury(i, animate);
   countUps(slide, seen);
   playVideos(slide);
-  history.replaceState?.(null, '', `#${slide.id}`);
   state.cur = i;
 }
 
@@ -112,13 +111,15 @@ export function initDeck() {
   });
 }
 
-/** Open on the slide named in the URL hash, or the first one. Returns its index. */
+/** Open on the slide named in the URL hash (a deep link), or the first one. Returns its index. */
 export function startDeck() {
   const hash = location.hash.slice(1);
   const start = Math.max(
     0,
     state.slides.findIndex((s) => s.id === hash),
   );
+  // Read once, then drop it: the address stays clean while moving through the deck.
+  if (hash) history.replaceState(null, '', location.pathname + location.search);
   activate(start, false);
   return start;
 }

@@ -45,6 +45,7 @@ The same checks run in CI on every pull request into `staging`, so passing local
 - **Images:** drop a high-resolution file into `src/assets/img/` and reference it by file name: `<Pic name="file-name" alt="…" sizes="…" />`.
 - **CV:** replace `public/cv/Rayan-Alyasi-CV.pdf` and `src/assets/img/cv.webp` (a render of the page for the viewer).
 - **Automatic:** the university year, its progress bar and the home lab's days-running counter update themselves.
+- **Links to a slide:** `/#<slide-id>` opens that slide and skips the countdown, for example `alyasi.tech/#exhibit-e`. The ids are the slides' `id` attributes in `src/components/slides/`. The hash is removed once read, and moving between slides never changes the address.
 
 ## How it stays fast
 
