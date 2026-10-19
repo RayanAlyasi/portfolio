@@ -24,6 +24,8 @@ const get = async (path) => {
   return fetch(`${base}${path}${sep}smoke=${Date.now()}`, {
     redirect: 'manual',
     headers: { 'user-agent': 'rayanalyasi-smoke-test', ...access },
+    // A request that hangs would otherwise outlive --timeout (fetch waits up to 5 minutes for headers).
+    signal: AbortSignal.timeout(15_000),
   });
 };
 
