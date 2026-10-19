@@ -5,6 +5,7 @@ import { setJury } from './jury.js';
 import { countUps } from './countups.js';
 import { buildRedaction, cancelSpeak, scramble, sizeMarks, speakIn, stopScramble } from './objections.js';
 import { playTransition } from './transitions.js';
+import { openPanel } from './panels.js';
 
 const dotsNav = $('.dots');
 const countEl = $('.count');
@@ -125,15 +126,22 @@ export function initDeck() {
   });
 }
 
-/** Open on the slide named in the URL hash (a deep link), or the first one. Returns its index. */
+/**
+ * Open on what the address names: a slide (/exhibit-b or /#exhibit-b) or a panel (/panel/b, opened over the
+ * slide that holds its button). These pages exist mainly for Umami's heatmaps (heatmap.js).
+ * Returns true if the address named something, so the countdown is skipped.
+ */
 export function startDeck() {
-  const hash = location.hash.slice(1);
+  const name = location.hash.slice(1) || location.pathname.replace(/^\/|\.html$|\/$/g, '');
+  const panel = name.startsWith('panel/') ? document.getElementById(`d-${name.slice(6)}`) : null;
+  const slideName = panel ? $(`[data-open="${panel.id}"]`)?.closest('.slide')?.id : name;
   const start = Math.max(
     0,
-    state.slides.findIndex((s) => s.id === hash),
+    state.slides.findIndex((s) => s.id === slideName),
   );
-  // Read once, then drop it: the address stays clean while moving through the deck.
-  if (hash) history.replaceState(null, '', location.pathname + location.search);
+  // Read once, then drop it: the address stays alyasi.tech/ while moving through the deck.
+  if (location.pathname !== '/' || location.hash) history.replaceState(null, '', `/${location.search}`);
   activate(start, false);
-  return start;
+  if (panel) openPanel(panel);
+  return start > 0 || Boolean(panel);
 }

@@ -2,6 +2,9 @@ import { track } from './core.js';
 
 /** Page-wide events: tagged buttons, outbound links, video engagement and ?ref= tags. */
 export function initAnalytics() {
+  // Umami's heatmap screen shows the site in a frame; viewing a heatmap is not a visit, so send nothing.
+  // (The recorder needs the session this would create, so it records nothing there either.)
+  if (window.self !== window.top) window.umamiBeforeSend = () => null;
   document.addEventListener('click', (e) => {
     const tagged = e.target.closest?.('[data-track]');
     if (tagged) track(tagged.dataset.track);

@@ -12,6 +12,7 @@ import { initPanels } from './panels.js';
 import { initHdOnFullscreen } from './media.js';
 import { initInput } from './input.js';
 import { initAnalytics } from './analytics.js';
+import { initHeatmap } from './heatmap.js';
 import { runLeader, startOpeningWithoutLeader } from './leader.js';
 
 initYear();
@@ -26,9 +27,10 @@ initPanels();
 initHdOnFullscreen();
 initInput();
 initAnalytics();
+initHeatmap();
 
-if (startDeck() === 0) runLeader();
-else startOpeningWithoutLeader();
+if (startDeck()) startOpeningWithoutLeader();
+else runLeader();
 
 // Test hook for automated checks, only with ?qa in the URL.
 if (new URLSearchParams(location.search).has('qa')) {
