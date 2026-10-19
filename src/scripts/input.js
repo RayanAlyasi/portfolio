@@ -19,7 +19,7 @@ export function initInput() {
       const now = performance.now(),
         gap = now - lastWheel;
       lastWheel = now;
-      if (state.busy || now < (state.quietUntil || 0)) return;
+      if (state.busy || now < state.quietUntil) return;
       if (state.needQuiet) {
         if (gap < 140) return;
         state.needQuiet = false;

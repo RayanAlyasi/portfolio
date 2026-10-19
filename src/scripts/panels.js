@@ -1,8 +1,6 @@
 import { $, $$, track } from './core.js';
 import { hydrate } from './media.js';
 
-const EMAIL = 'rayanalyasi@gmail.com';
-
 function initDrawers() {
   for (const button of $$('[data-open]')) {
     button.addEventListener('click', () => {
@@ -55,7 +53,7 @@ function initCopyEmail() {
     status.textContent = 'Select the address above to copy it.';
   };
   button.addEventListener('click', () => {
-    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(EMAIL).then(ok, selectInstead);
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText($('.addr').textContent).then(ok, selectInstead);
     else selectInstead();
   });
 }

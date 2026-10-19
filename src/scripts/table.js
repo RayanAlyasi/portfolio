@@ -53,7 +53,6 @@ function buildTable(root, withBallots) {
     const order = n === 8 ? 11 : n < 8 ? n - 1 : n - 2;
     ballot.style.setProperty('--x', bx / 10);
     ballot.style.setProperty('--y', by / 3.86);
-    ballot.style.setProperty('--i', n);
     ballot.style.setProperty('--di', n);
     ballot.style.setProperty('--rv', `${(2.75 + order * 0.11 + (n === 8 ? 0.3 : 0)).toFixed(2)}s`);
     ballot.style.setProperty('--spin', `${((n * 53) % 40) - 20}deg`);

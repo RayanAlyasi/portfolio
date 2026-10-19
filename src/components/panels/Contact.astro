@@ -1,14 +1,15 @@
 ---
 // Panel: Get in touch.
 import Drawer from './Drawer.astro';
+import { site } from '../../data/site';
 ---
 <Drawer id="d-contact" label="Get in touch">
     <h2 id="d-contact-h">Say hello</h2>
     <p>Hiring for DevOps, platform, cloud or ML/AIOps work, want to talk about a project, or just liked the film reference? Email is the fastest way to reach me.</p>
-    <div class="mailbox"><span class="addr">rayanalyasi@gmail.com</span><button class="copy" type="button">Copy email</button></div>
+    <div class="mailbox"><span class="addr">{site.email}</span><button class="copy" type="button">Copy email</button></div>
     <p class="copied" role="status" aria-live="polite"></p>
     <div class="clinks">
-      <a class="cbtn solid" href="mailto:rayanalyasi@gmail.com" target="_blank" rel="noopener" data-track="email-app">Open in my email app</a>
+      <a class="cbtn solid" href={`mailto:${site.email}`} target="_blank" rel="noopener" data-track="email-app">Open in my email app</a>
       <a class="cbtn" href="https://www.linkedin.com/in/rayanalyasi" target="_blank" rel="noopener">LinkedIn</a>
       <a class="cbtn" href="https://github.com/RayanAlyasi" target="_blank" rel="noopener">GitHub</a>
       <button class="cbtn" type="button" data-open="d-cv">View CV</button>
