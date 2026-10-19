@@ -1,6 +1,7 @@
 ---
 // Lazily hydrated video. scripts/media.js picks MP4 or WebM, sets the poster,
-// and swaps in the fallback image if the browser can't play either.
+// and swaps in the fallback image if the browser can't play either. A `<name>-hd.mp4` next to the video
+// becomes data-hd, which media.js switches to in full screen.
 import { getImage } from 'astro:assets';
 import { getImageOrThrow } from '../../data/images';
 
@@ -20,8 +21,10 @@ const sources = import.meta.glob<string>('../../assets/video/*.{mp4,webm}', { qu
 const url = (file: string) => sources[`../../assets/video/${file}`];
 
 const { name, poster, fallback, label, class: className, style, muted = false, loop = false, controls = false } = Astro.props;
+const posterSrc = getImageOrThrow(poster);
 const [posterImg, fallbackImg] = await Promise.all([
-  getImage({ src: getImageOrThrow(poster), width: 720, format: 'webp', quality: 70 }),
+  // The poster is one file for every screen, including full screen, so it keeps the source's width (max 2560).
+  getImage({ src: posterSrc, width: Math.min(posterSrc.width, 2560), format: 'webp', quality: 70 }),
   getImage({ src: getImageOrThrow(fallback), width: 960, format: 'webp', quality: 72 }),
 ]);
 ---
@@ -31,6 +34,7 @@ const [posterImg, fallbackImg] = await Promise.all([
   data-vid={name}
   data-mp4={url(`${name}.mp4`)}
   data-webm={url(`${name}.webm`)}
+  data-hd={url(`${name}-hd.mp4`)}
   data-poster-src={posterImg.src}
   data-fallback-src={fallbackImg.src}
   aria-label={label}
