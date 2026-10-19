@@ -77,3 +77,6 @@
 @keyframes litc{to{fill:var(--red);stroke:var(--red)}}
 @keyframes fall{to{transform:translate3d(-30px,130vh,0)}}
 @keyframes slideIn{from{transform:translateX(100%)}to{transform:none}}
+/* Exits start from wherever the element is (set from script), so closing mid-entrance doesn't jump. */
+@keyframes slideOut{from{transform:var(--at,none)}to{transform:translateX(100%)}}
+@keyframes fadeOut{from{opacity:var(--op,1)}to{opacity:0}}
