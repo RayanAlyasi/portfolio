@@ -46,7 +46,7 @@ The same checks run in CI on every pull request into `staging`, so passing local
 - **Videos:** put `name.mp4` (H.264 with `-movflags +faststart`, a light file for normal viewing) in `src/assets/video/`, and optionally `name-hd.mp4` at the original's full resolution for full screen. Strip metadata (`-map_metadata -1`).
 - **CV:** replace `public/cv/Rayan-Alyasi-CV.pdf` and `src/assets/img/cv.webp` (a render of the page for the viewer). Use the public CV only: `npm run check` cannot read inside the PDF, so open it and confirm it has no phone number or address before committing.
 - **Automatic:** the university year, its progress bar and the home lab's days-running counter update themselves.
-- **Links to a slide:** `/#<slide-id>` opens that slide and skips the countdown, for example `alyasi.tech/#exhibit-e`. The ids are the slides' `id` attributes in `src/components/slides/`. The hash is removed once read, and moving between slides never changes the address.
+- **Links to a slide:** every slide after the opening has its own address, `/<slide-id>`, for example `alyasi.tech/exhibit-e`; it opens that slide and skips the countdown. The address follows the visitor through the deck (without adding Back-button steps), and older `/#exhibit-e` links still work. The pages come from the slides' `id` attributes in `src/components/slides/` (`src/pages/[slide].astro`), so a new slide gets its address automatically. They all name `/` as the canonical page, and only `/` is in the sitemap.
 
 ## How it stays fast
 
@@ -77,6 +77,10 @@ The same checks run in CI on every pull request into `staging`, so passing local
 | `video-play` / `video-progress` | Video engagement at 25/50/75/100% |
 | `image-zoom` | A panel image opened full screen |
 | `ref` | Visits tagged `?ref=…` (Umami also reads `utm_source`) |
+
+Although the address changes per slide, Umami still counts **one page view per visit** and reports every event on `/` (`umamiBeforeSend` in `src/scripts/analytics.js`), so visits, bounce rate and page views mean what they always did; slide reach is in the `reach-<section>` events.
+
+**Heatmaps.** Umami files heatmap clicks by address, so each slide has its own heatmap, drawn over that slide. Umami sizes the heatmap to the tallest page any click on it reported, so a few things keep the page from measuring taller than the screen: taps during a slide change are ignored, the transition overlay shrinks back after each change, and the rain stays near the screen. Clicks inside an open panel are filed under the slide behind it and measure as a long page, so a slide whose panel was used shows a misaligned heatmap; use the panel events for those. Umami records heatmaps for 15% of visits by default (*Websites → this site → Settings → Replays & Heatmaps*).
 
 ## Working with Claude Code
 

@@ -61,6 +61,10 @@ export function playTransition({ kind, color, dir, quick, onCovered, onDone }) {
     const a2 = overlay.animate(uncover, { duration: quick ? 120 : 560, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
     a2.onfinish = () => {
       overlay.style.visibility = 'hidden';
+      // Hidden elements still have a size, and the iris and square shapes are larger than the screen.
+      // Umami's recorder measures the page from every element's box, so a leftover large overlay would
+      // make each later click look like it came from a taller page and skew that slide's heatmap.
+      Object.assign(overlay.style, { width: '0px', height: '0px' });
       a1.cancel();
       a2.cancel();
       onDone();

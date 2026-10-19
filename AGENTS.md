@@ -31,9 +31,10 @@ The deck has 13 slides, in order: opening, the-jury, the-facts, exhibit-a (home 
 ## Repository map
 
 ```
-src/pages/            index.astro, 404.astro
+src/pages/            index.astro, [slide].astro (the same deck at /exhibit-b etc.), 404.astro
 src/layouts/          Base.astro: metadata, fonts, analytics, global styles
 src/components/
+  Deck.astro          the whole page: chrome, slides and panels
   chrome/             header, footer, section dots, transitions
   slides/             one component per slide (Opening, TheJury, TheFacts, ExhibitA–H, Verdict, Credits)
   panels/             Drawer shell + PanelA–H, Contact, CvViewer, CaseFile, Lightbox

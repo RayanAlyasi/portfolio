@@ -13,7 +13,8 @@ import { site, structuredData } from '../data/site';
 
 const umamiHost = import.meta.env.PUBLIC_UMAMI_HOST?.replace(/\/$/, '');
 const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
-const canonical = new URL(Astro.url.pathname, site.url).href;
+// Every slide's address shows the same page, so all of them name the home page as the original for search engines.
+const canonical = new URL('/', site.url).href;
 ---
 <!doctype html>
 <html lang="en">
@@ -51,7 +52,7 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     {umamiHost && umamiId && (
       <>
-        <script defer src={`${umamiHost}/script.js`} data-website-id={umamiId} data-domains="alyasi.tech" data-exclude-hash="true" />
+        <script defer src={`${umamiHost}/script.js`} data-website-id={umamiId} data-domains="alyasi.tech" data-exclude-hash="true" data-before-send="umamiBeforeSend" />
         <script defer src={`${umamiHost}/recorder.js`} data-website-id={umamiId} />
       </>
     )}

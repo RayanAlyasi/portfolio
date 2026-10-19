@@ -14,6 +14,14 @@ const visited = new Set();
 let shown = -1; // the slide currently active, -1 before the first one
 let dotButtons = [];
 const pad = (n) => String(n).padStart(2, '0');
+// Each slide after the opening has its own address (src/pages/[slide].astro).
+const pathOf = (i) => (i === 0 ? '/' : `/${state.slides[i].id}`);
+
+/** Keep the address on the current slide, so Umami's recorder files each click (and heatmap) under it. */
+function syncAddress(i) {
+  if (location.pathname === pathOf(i) && !location.hash) return;
+  history.replaceState(history.state, '', pathOf(i) + location.search);
+}
 
 function updateChrome(i) {
   const slide = state.slides[i];
@@ -64,6 +72,7 @@ export function activate(i, animate) {
     speakIn(slide);
   }
   updateChrome(i);
+  syncAddress(i);
   setJury(i, animate);
   countUps(slide, seen);
   playVideos(slide);
@@ -110,6 +119,18 @@ export function initDeck() {
   }
   dotButtons = $$('button', dotsNav);
   nextBtn.addEventListener('click', () => go(state.cur + 1));
+  // While a slide change covers the screen, taps have nothing useful to hit (Next, the dots and swipes
+  // already wait), so drop them before anything sees them. That includes Umami's recorder: the overlay is
+  // briefly larger than the screen then, and one such click would misalign that slide's whole heatmap.
+  addEventListener(
+    'click',
+    (e) => {
+      if (!state.busy) return;
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    true,
+  );
   for (const b of $$('[data-go]')) b.addEventListener('click', () => go(+b.dataset.go));
 
   let resizeTimer = 0;
@@ -125,15 +146,13 @@ export function initDeck() {
   });
 }
 
-/** Open on the slide named in the URL hash (a deep link), or the first one. Returns its index. */
+/** Open on the slide named in the address (/exhibit-b, or an older /#exhibit-b link), or the first one. Returns its index. */
 export function startDeck() {
-  const hash = location.hash.slice(1);
+  const name = location.hash.slice(1) || location.pathname.replace(/^\/|\.html$|\/$/g, '');
   const start = Math.max(
     0,
-    state.slides.findIndex((s) => s.id === hash),
+    state.slides.findIndex((s) => s.id === name),
   );
-  // Read once, then drop it: the address stays clean while moving through the deck.
-  if (hash) history.replaceState(null, '', location.pathname + location.search);
   activate(start, false);
   return start;
 }
