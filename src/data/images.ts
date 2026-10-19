@@ -13,7 +13,8 @@ const DETAILED = new Set(['argoApp', 'labArch', 'labCron', 'labSec', 'labPort', 
 export function widthsFor(name: string): number[] {
   if (name === 'cv') return [800, 1200, 1571];
   if (DETAILED.has(name)) return [800, 1200, 1600, 2400];
-  return [400, 640, 960, 1280];
+  // 1920 and 2560 serve the full-screen viewer; panels' sizes never ask for them.
+  return [400, 640, 960, 1280, 1920, 2560];
 }
 
 export function getImageOrThrow(name: string): ImageMetadata {

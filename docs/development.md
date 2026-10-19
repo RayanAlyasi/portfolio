@@ -42,7 +42,7 @@ The same checks run in CI on every pull request into `staging`, so passing local
 ## Updating content
 
 - **Text:** edit the slide or panel component in `src/components/`.
-- **Images:** drop a high-resolution file into `src/assets/img/` and reference it by file name: `<Pic name="file-name" alt="…" sizes="…" />`.
+- **Images:** drop a high-resolution file into `src/assets/img/` and reference it by file name: `<Pic name="file-name" alt="…" sizes="…" />`. Make photos 2560 px wide where the original allows (never upscale), and strip all metadata (camera details, location) first; the repository is public.
 - **CV:** replace `public/cv/Rayan-Alyasi-CV.pdf` and `src/assets/img/cv.webp` (a render of the page for the viewer).
 - **Automatic:** the university year, its progress bar and the home lab's days-running counter update themselves.
 - **Links to a slide:** `/#<slide-id>` opens that slide and skips the countdown, for example `alyasi.tech/#exhibit-e`. The ids are the slides' `id` attributes in `src/components/slides/`. The hash is removed once read, and moving between slides never changes the address.
@@ -51,6 +51,7 @@ The same checks run in CI on every pull request into `staging`, so passing local
 
 - **About 70 KB on first load:** HTML with all CSS inlined (no render-blocking stylesheet), a 7 KB script, two preloaded fonts. No framework runtime: Astro ships zero JavaScript of its own.
 - **Images:** every photo is generated in AVIF and WebP at several widths, so phones download small files. Images load only when their slide or panel is reached, and images hidden on the current screen size are never downloaded.
+- **Full screen:** tapping a panel photo shows the copy already on screen at once, then swaps in a sharper one (up to 2560 px) once it has fully loaded. Those large sizes are never downloaded while browsing.
 - **Videos:** a panel's video downloads nothing until the panel opens, then only its length and index (about 160 KB for the FieldLog video), so it can be skipped through before playing. The rest streams when played. The muted loop on the Exhibit H slide loads on desktop only, from the slide before it.
 - **Animations** move only `transform` and `opacity`, so they run on the GPU. Revisited slides appear finished instead of replaying.
 - **Caching:** everything under `/_astro/` is content-hashed and cached for a year.

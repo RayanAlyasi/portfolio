@@ -56,23 +56,70 @@ function initCopyEmail() {
   });
 }
 
-/** Tap a panel image to see it full screen, at the best resolution for the screen. */
+/**
+ * Tap a panel image to see it full screen. The copy already on the page shows at once; a sharper one
+ * for the screen loads alongside and replaces it only once decoded, and only if that photo is still open.
+ */
 function initLightbox() {
   const box = document.getElementById('lightbox');
   if (!box?.showModal) return;
-  const view = $('img', box);
+  let view = $('img', box);
+  let pending = null; // sharper copy loading for the open photo
+  let early = null; // copy started on mouse press, before the click lands
+
+  // Same format the browser chose for the page (AVIF or WebP), at full-screen widths.
+  const sharperCopy = (img) => {
+    const copy = new Image();
+    const type = /\.avif(\?|$)/.test(img.currentSrc) ? 'image/avif' : 'image/webp';
+    const source = img.closest('picture')?.querySelector(`source[type="${type}"]`);
+    copy.sizes = '100vw';
+    if (source) copy.srcset = source.srcset;
+    copy.src = img.currentSrc || img.src;
+    copy.alt = img.alt || '';
+    return copy;
+  };
+  // Emptying the sources stops the download; its decode() then rejects.
+  const cancel = (copy) => {
+    copy?.removeAttribute('srcset');
+    if (copy) copy.src = '';
+  };
+
+  // Touch presses usually start a scroll, so only a mouse press gets the head start.
+  document.addEventListener('pointerdown', (e) => {
+    const img = e.pointerType === 'mouse' && e.target.closest?.('.d-body img');
+    if (!img || early?.img === img) return;
+    cancel(early?.copy);
+    early = { img, copy: sharperCopy(img) };
+  });
   document.addEventListener('click', (e) => {
     const img = e.target.closest?.('.d-body img');
     if (!img) return;
-    const webp = img.closest('picture')?.querySelector('source[type="image/webp"]');
-    view.srcset = webp?.srcset || '';
-    view.sizes = '100vw';
+    cancel(pending);
+    const copy = early?.img === img ? early.copy : sharperCopy(img);
+    if (early?.img !== img) cancel(early?.copy);
+    early = null;
+    pending = copy;
+    view.removeAttribute('srcset');
+    view.removeAttribute('sizes');
     view.src = img.currentSrc || img.src;
     view.alt = img.alt || '';
     box.showModal();
     track('image-zoom', { image: img.dataset.img || '' });
+    copy.decode().then(
+      () => {
+        if (pending !== copy || !box.open) return;
+        view.replaceWith(copy);
+        view = copy;
+        pending = null;
+      },
+      () => {},
+    );
   });
   box.addEventListener('click', () => box.close());
+  box.addEventListener('close', () => {
+    cancel(pending);
+    pending = null;
+  });
 }
 
 export function initPanels() {
