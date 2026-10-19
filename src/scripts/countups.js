@@ -19,6 +19,8 @@ export function countUps(slide, instant) {
     const step = (ts) => {
       if (slide._countToken !== token) return;
       start ||= ts + delay;
+      // Nothing changes until the count starts; writing "0" every frame would re-lay out the slide mid-entrance.
+      if (ts < start && slide.classList.contains('active')) return void requestAnimationFrame(step);
       const t = Math.min(1, Math.max(0, (ts - start) / duration));
       el.textContent = fmt(to * (1 - (1 - t) ** 3));
       if (t < 1 && slide.classList.contains('active')) requestAnimationFrame(step);
