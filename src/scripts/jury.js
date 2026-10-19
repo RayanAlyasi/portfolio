@@ -36,7 +36,8 @@ export function setJury(i, animate) {
       seats[n].classList.toggle('on', !!on[n]);
       if (on[n]) count++;
     }
-    counter.textContent = `${count} of 12`;
+    const text = `${count} of 12`;
+    if (counter.textContent !== text) counter.textContent = text; // rewriting the same count re-announces it
   };
   paint();
   if (pending.length) {

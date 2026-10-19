@@ -32,8 +32,7 @@ export function runLeader() {
     timer = setTimeout(tick, 750);
   };
   tick();
-  $('.lskip', leader).addEventListener('click', () => endLeader());
-  leader.addEventListener('click', () => endLeader());
+  leader.addEventListener('click', () => endLeader()); // anywhere, including the Skip intro button
 }
 
 export const startOpeningWithoutLeader = () => opening.classList.add('go');
