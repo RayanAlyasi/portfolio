@@ -93,6 +93,7 @@ Every action is pinned to a full commit SHA (GitHub's guidance for immutable rel
 - To release, open a PR from `staging` into `main` titled `chore(release): promote staging to production`. When `promotion` passes, merge it (merge commit): production gets the same image. If `promotion` fails because staging is still deploying, re-run it when that finishes.
 - To verify an image's provenance: `gh attestation verify oci://ghcr.io/rayanalyasi/portfolio:production --repo RayanAlyasi/portfolio`.
 - To roll back: *Actions → Roll back → Run workflow*, choose the **main** branch, and give the full commit SHA (the one `/version.json` showed).
+- Each deploy is a rolling update: Coolify starts the new container, waits for its health check, then removes the old one. Coolify's proxy (Traefik) applies container changes at most every 2 seconds, so for about that long a request can still reach the removed container and fail (502). The smoke test retries a 5xx or failed request up to 3 times, 3 seconds apart, so this switch-over does not fail the deploy; a real outage still does.
 
 ## Analytics (Umami)
 
