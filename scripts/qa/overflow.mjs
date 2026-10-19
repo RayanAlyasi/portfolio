@@ -1,5 +1,5 @@
 // Fails if any slide's content overflows on the six reference phone sizes.
-//   npm run qa:overflow            (builds first if dist/ is missing)
+//   npm run qa:overflow            (builds first, so it checks the current code; in CI it reuses the job's build)
 //   QA_URL=https://staging.example npm run qa:overflow   (checks a deployed copy instead)
 // For a staging site behind Cloudflare Access, set CF_ACCESS_CLIENT_ID and CF_ACCESS_CLIENT_SECRET.
 // Uses Playwright's Chromium: run `npx playwright install chromium` once (scripts/setup.sh does this).
@@ -29,25 +29,20 @@ const SKIP = [
   'ostamp',
   'rbar',
   'rlabel',
-  'leds',
   'spot',
   'half',
   'echo',
   'ghostq',
-  'fling',
-  'grade',
   'rain',
   'bars',
   'bar',
   'fan',
   'tablebox',
-  'seat',
   'you',
   'lnum',
   'wm',
   'wi',
   'c',
-  'w',
   'wd',
   'sc',
   'ltk',
@@ -60,7 +55,8 @@ const ACCESS =
     ? { 'CF-Access-Client-Id': process.env.CF_ACCESS_CLIENT_ID, 'CF-Access-Client-Secret': process.env.CF_ACCESS_CLIENT_SECRET }
     : {};
 
-if (!REMOTE && !fs.existsSync('dist/index.html')) {
+// A leftover dist/ from an older checkout would pass or fail the wrong code, so build unless CI just did.
+if (!REMOTE && (!process.env.CI || !fs.existsSync('dist/index.html'))) {
   const b = spawnSync('npm', ['run', 'build'], { stdio: 'inherit', shell: process.platform === 'win32' });
   if (b.status !== 0) process.exit(1);
 }
@@ -182,7 +178,8 @@ function inspect({ i, skip }) {
     return { l, t, r: rt, b, w: rt - l, h: b - t };
   };
   const issues = [];
-  s.querySelectorAll('.inner *').forEach((el) => {
+  // .inner holds each slide's content; the Opening slide uses .open-title instead.
+  s.querySelectorAll('.inner *, .open-title *').forEach((el) => {
     const cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('svg')) return;
     if (skipSel && el.closest(skipSel)) return;
@@ -211,7 +208,6 @@ async function checkSize(browser, [tag, width, height]) {
   const errors = [];
   const problems = [];
   page.on('pageerror', (e) => errors.push(String(e)));
-  await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
   await page.goto(`${BASE}/?qa`);
   await page.waitForTimeout(500);
   await page.evaluate(() => document.querySelector('.lskip')?.click());
