@@ -18,9 +18,11 @@ The image is nginx (unprivileged, port 8080) serving the built site; its config 
 
 ## Branches
 
-- **`staging`** is the default branch and deploys to https://staging.alyasi.tech. **`main`** deploys to https://alyasi.tech.
+- **`main`** is the default branch and deploys to https://alyasi.tech. **`staging`** deploys to https://staging.alyasi.tech.
 - Nothing is pushed to either directly; rulesets block it. Work on a branch from `staging`, open a PR into `staging` (squash merge), then promote with a PR from `staging` into `main` (merge commit).
 - Only `staging` can be merged into `main`: the required **promotion** check fails for any other source branch.
+- GitHub reads scheduled workflows (`uptime.yml`) and `.github/dependabot.yml` from the default branch, so changes to them take effect once promoted to `main`.
+- Dependabot security updates always open against the default branch (`target-branch` does not apply to them), so the promotion check blocks them on `main`. Close one and make the same update in a PR into `staging`.
 
 ## Build once, promote the same image
 
@@ -40,7 +42,7 @@ GitHub has no fast-forward merge: every merge method creates a new commit ([merg
 | `rollback.yml` | Manually, on `main` | Points production at an earlier version |
 | CodeQL (GitHub default setup) | Every PR and push | Code scanning, configured in settings, no workflow file |
 
-Every action is pinned to a full commit SHA (GitHub's guidance for immutable releases) and zizmor checks each pin against its tag, tokens get the least permissions each job needs, jobs that publish or deploy never restore a dependency cache, and deploy secrets live only in the `staging` and `production` environments, so pull request builds can never read them. Dependabot keeps actions, npm packages and the nginx image current, and opens its PRs against `staging`, titled `chore(deps): …`.
+Every action is pinned to a full commit SHA (GitHub's guidance for immutable releases) and zizmor checks each pin against its tag, tokens get the least permissions each job needs, jobs that publish or deploy never restore a dependency cache, and deploy secrets live only in the `staging` and `production` environments, so pull request builds can never read them. Dependabot keeps actions, npm packages and the nginx image current, and opens its version-update PRs against `staging` (`target-branch`), titled `chore(deps): …`.
 
 ## One-time setup
 
@@ -72,7 +74,7 @@ Every action is pinned to a full commit SHA (GitHub's guidance for immutable rel
 
 **GitHub repository settings** (the rulesets are in `.github/rulesets/`)
 1. *Settings → Actions → General*: workflow permissions **Read repository contents and packages permissions**; untick **Allow GitHub Actions to create and approve pull requests**; turn on **Require actions to be pinned to a full-length commit SHA**.
-2. Default branch `staging`; allow **squash** and **merge commits**, not rebase; **automatically delete head branches** (the rulesets keep `staging` and `main` from deletion). Both merge methods default to the **pull request title and description** as the commit message (`squash_merge_commit_title=PR_TITLE`, `squash_merge_commit_message=PR_BODY`, `merge_commit_title=PR_TITLE`, `merge_commit_message=PR_BODY`).
+2. Default branch `main`; allow **squash** and **merge commits**, not rebase; **automatically delete head branches** (the rulesets keep `staging` and `main` from deletion). Both merge methods default to the **pull request title and description** as the commit message (`squash_merge_commit_title=PR_TITLE`, `squash_merge_commit_message=PR_BODY`, `merge_commit_title=PR_TITLE`, `merge_commit_message=PR_BODY`).
 3. *Settings → Rules → Rulesets*: import `.github/rulesets/staging.json` and `.github/rulesets/main.json`, or create them with `gh api repos/RayanAlyasi/portfolio/rulesets --input .github/rulesets/<branch>.json`. Both require a pull request, block force pushes and deletion, and have no bypass. Required checks: `build`, `dependency-review` and `pr-title` on `staging`; `promotion`, `dependency-review` and `pr-title` on `main`.
 4. *Settings → Environments*, each with no required reviewers (merging the promotion PR is the approval):
    - `staging`: deployment branch **`staging`** only. Variables: `TS_CLIENT_ID`, `TS_AUDIENCE` (the staging Tailscale credential; not secrets). Secrets: `COOLIFY_WEBHOOK` (staging app), `COOLIFY_TOKEN`, and the Access service token as `CF_ACCESS_CLIENT_ID` / `CF_ACCESS_CLIENT_SECRET`.
