@@ -17,8 +17,12 @@ function initDrawers() {
   }
   for (const dialog of $$('dialog.drawer')) {
     $('.d-close', dialog).addEventListener('click', () => dialog.close());
+    // Clicks on the backdrop also target the dialog, but so do clicks on its own empty space;
+    // only the ones outside its box close it.
     dialog.addEventListener('click', (e) => {
-      if (e.target === dialog) dialog.close();
+      if (e.target !== dialog) return;
+      const r = dialog.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close();
     });
     dialog.addEventListener('close', () => {
       for (const v of $$('video', dialog)) v.pause();
