@@ -16,7 +16,8 @@ let res;
 for (let attempt = 1; !res; attempt++) {
   try {
     // POST: Coolify 4.4 answers GET on /api/v1/deploy with 405; it still reads uuid from the query string.
-    res = await fetch(url, { method: 'POST', headers: { authorization: `Bearer ${token}` } });
+    // A stalled connection counts as a failed attempt instead of hanging the job.
+    res = await fetch(url, { method: 'POST', headers: { authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(30_000) });
   } catch (e) {
     if (attempt === 6) {
       console.error(`Coolify did not answer over the tailnet (${e.cause?.code || e.message}).`);
