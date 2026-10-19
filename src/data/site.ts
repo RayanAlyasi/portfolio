@@ -10,7 +10,7 @@ export const site = {
   email: 'rayanalyasi@gmail.com',
   linkedin: 'https://www.linkedin.com/in/rayanalyasi',
   github: 'https://github.com/RayanAlyasi',
-  updated: '2026-10-11',
+  updated: '2026-10-11T00:00:00+03:00', // ISO 8601 date and time (Jeddah): Google rejects a bare date for dateModified
 };
 
 export const structuredData = {
