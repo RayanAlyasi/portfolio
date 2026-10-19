@@ -16,9 +16,9 @@ Working on the site: commands, checks, content and conventions. The rules and co
 
 ## Branches
 
-`staging` is the default branch; `main` is production. Nothing is pushed to either directly:
+`main` is production and the default branch; all work lands on `staging` first. Nothing is pushed to either directly:
 
-1. Branch from `staging`, then open a PR into `staging`. Merge (squash) when `build` and `dependency-review` pass; staging deploys and checks itself.
+1. Branch from `staging`, then open a PR into `staging` (pick it as the base; GitHub suggests `main`, and `gh pr create --base staging` sets it). Merge (squash) when `build` and `dependency-review` pass; staging deploys and checks itself.
 2. To release, open a PR from `staging` into `main` and merge it (merge commit) when `promotion` passes. Production gets the exact image staging tested.
 
 Commit messages and PR titles follow Conventional Commits (`type(scope): summary`); the rules and examples are in [AGENTS.md](../AGENTS.md#commits-and-pull-requests). Details of the branch flow, and why it works this way, are in [Deployment](deployment.md).

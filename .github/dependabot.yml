@@ -1,8 +1,11 @@
 version: 2
 # Every PR is titled "chore(deps): ..." so it passes the PR-title check (Conventional Commits).
+# Version updates target staging, like all work; main (the default branch) only takes promotions.
+# Security updates ignore target-branch and open against main: redo those on staging (docs/deployment.md).
 updates:
   - package-ecosystem: npm
     directory: /
+    target-branch: staging
     schedule: { interval: weekly }
     commit-message: { prefix: 'chore(deps)' }
     # Wait two weeks before proposing a new release, so problems are caught upstream first.
@@ -13,6 +16,7 @@ updates:
       code-quality: { patterns: ['eslint', '@eslint/*', 'globals', 'prettier'] }
   - package-ecosystem: github-actions
     directory: /
+    target-branch: staging
     schedule: { interval: weekly }
     commit-message: { prefix: 'chore(deps)' }
     cooldown: { default-days: 14 }
@@ -20,6 +24,7 @@ updates:
       actions: { patterns: ['*'] } # one weekly PR for all action updates
   - package-ecosystem: docker
     directory: /
+    target-branch: staging
     schedule: { interval: weekly }
     commit-message: { prefix: 'chore(deps)' }
     cooldown: { default-days: 14 }
