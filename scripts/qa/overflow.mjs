@@ -198,46 +198,50 @@ function inspect({ i, skip }) {
   return { id: s.id, issues };
 }
 
+/** Every slide at one phone size, in its own browser context. Returns the problems found, in slide order. */
+async function checkSize(browser, [tag, width, height]) {
+  const ctx = await browser.newContext({
+    viewport: { width, height },
+    isMobile: true,
+    hasTouch: true,
+    deviceScaleFactor: 2,
+    extraHTTPHeaders: ACCESS,
+  });
+  const page = await ctx.newPage();
+  const errors = [];
+  const problems = [];
+  page.on('pageerror', (e) => errors.push(String(e)));
+  await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
+  await page.goto(`${BASE}/?qa`);
+  await page.waitForTimeout(500);
+  await page.evaluate(() => document.querySelector('.lskip')?.click());
+  await page.waitForTimeout(600);
+  const count = await page.evaluate(() => document.querySelectorAll('.slide').length);
+  for (let i = 0; i < count; i++) {
+    await page.evaluate((n) => window.__go(n), i);
+    await page.waitForTimeout(80);
+    await page.evaluate((n) => window.__go(n), i);
+    await page.waitForTimeout(250);
+    // page.evaluate takes one argument; a check that cannot inspect a slide must fail, never pass.
+    const r = await page
+      .evaluate(inspect, { i, skip: SKIP })
+      .catch((e) => ({ id: `slide ${i}`, issues: [`could not inspect: ${e.message.split('\n')[0]}`] }));
+    if (r.issues.length) problems.push(`FAIL ${tag} ${width}x${height} #${r.id}: ${r.issues.slice(0, 3).join('; ')}`);
+  }
+  if (errors.length) problems.push(`FAIL ${tag}: page errors: ${errors.slice(0, 2).join(' | ')}`);
+  await ctx.close();
+  return problems;
+}
+
 let failures = 0;
 try {
   await waitForServer();
   const browser = await chromium.launch(process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {});
-  for (const [tag, width, height] of SIZES) {
-    const ctx = await browser.newContext({
-      viewport: { width, height },
-      isMobile: true,
-      hasTouch: true,
-      deviceScaleFactor: 2,
-      extraHTTPHeaders: ACCESS,
-    });
-    const page = await ctx.newPage();
-    const errors = [];
-    page.on('pageerror', (e) => errors.push(String(e)));
-    await page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
-    await page.goto(`${BASE}/?qa`);
-    await page.waitForTimeout(500);
-    await page.evaluate(() => document.querySelector('.lskip')?.click());
-    await page.waitForTimeout(600);
-    const count = await page.evaluate(() => document.querySelectorAll('.slide').length);
-    for (let i = 0; i < count; i++) {
-      await page.evaluate((n) => window.__go(n), i);
-      await page.waitForTimeout(80);
-      await page.evaluate((n) => window.__go(n), i);
-      await page.waitForTimeout(250);
-      // page.evaluate takes one argument; a check that cannot inspect a slide must fail, never pass.
-      const r = await page
-        .evaluate(inspect, { i, skip: SKIP })
-        .catch((e) => ({ id: `slide ${i}`, issues: [`could not inspect: ${e.message.split('\n')[0]}`] }));
-      if (r.issues.length) {
-        failures++;
-        console.log(`FAIL ${tag} ${width}x${height} #${r.id}: ${r.issues.slice(0, 3).join('; ')}`);
-      }
-    }
-    if (errors.length) {
-      failures++;
-      console.log(`FAIL ${tag}: page errors: ${errors.slice(0, 2).join(' | ')}`);
-    }
-    await ctx.close();
+  // The six sizes are independent, so they run at once; results print in the fixed SIZES order.
+  const results = await Promise.all(SIZES.map((size) => checkSize(browser, size)));
+  for (const line of results.flat()) {
+    failures++;
+    console.log(line);
   }
   await browser.close();
 } catch (e) {

@@ -32,7 +32,7 @@ GitHub has no fast-forward merge: every merge method creates a new commit ([merg
 
 | Workflow | When | What it does |
 |---|---|---|
-| `deploy.yml` | PRs into `staging`, merges to `staging` | Secret scan, workflow lint, build, site checks, every slide on six phone sizes (all in the `build` check). On merge: image, staging deploy, smoke test |
+| `deploy.yml` | PRs into `staging`, merges to `staging` | Secret scan (gitleaks), workflow lint (actionlint) and security audit (zizmor), dependency audit and signature check, build, site checks, every slide on six phone sizes (all in the `build` check). On merge: image, staging deploy, smoke test |
 | `promote.yml` | PRs into `main`, merges to `main` | `promotion` check on the PR; on merge, promotes the tested image to production and smoke-tests it |
 | `dependency-review.yml` | Every PR | Fails if the PR adds a dependency with a known vulnerability |
 | `pr-title.yml` | Every PR | Fails unless the title follows Conventional Commits (rules in `AGENTS.md`) |
@@ -40,7 +40,7 @@ GitHub has no fast-forward merge: every merge method creates a new commit ([merg
 | `rollback.yml` | Manually, on `main` | Points production at an earlier version |
 | CodeQL (GitHub default setup) | Every PR and push | Code scanning, configured in settings, no workflow file |
 
-Every action is pinned to a full commit SHA (GitHub's guidance for immutable releases), tokens get the least permissions each job needs, and deploy secrets live only in the `staging` and `production` environments, so pull request builds can never read them. Dependabot keeps actions, npm packages and the nginx image current, and opens its PRs against `staging`, titled `chore(deps): …`.
+Every action is pinned to a full commit SHA (GitHub's guidance for immutable releases) and zizmor checks each pin against its tag, tokens get the least permissions each job needs, jobs that publish or deploy never restore a dependency cache, and deploy secrets live only in the `staging` and `production` environments, so pull request builds can never read them. Dependabot keeps actions, npm packages and the nginx image current, and opens its PRs against `staging`, titled `chore(deps): …`.
 
 ## One-time setup
 
