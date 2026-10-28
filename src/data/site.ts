@@ -3,8 +3,9 @@ export const site = {
   url: 'https://alyasi.tech',
   name: 'Rayan Alyasi',
   title: 'Rayan Alyasi · DevOps Engineer',
-  // Search result snippet: kept under about 130 characters so Google shows it whole on phones too.
-  description: 'Portfolio of Rayan Alyasi, a DevOps engineering intern at Tabby and Information Systems student at King Abdulaziz University.',
+  // Search result snippet. It starts with the name because Google starts the snippet at the words searched for
+  // (it dropped a leading "Portfolio of"), and it is about 150 characters so Google shows it whole without padding it with page text.
+  description: "Rayan Alyasi's portfolio: DevOps engineering intern at Tabby, BCG Jeel Tamooh Fellow and Information Systems student at King Abdulaziz University.",
   shareTitle: 'Rayan Alyasi · Not Just a Student',
   shareDescription: 'DevOps engineering intern at Tabby, BCG Jeel Tamooh Fellow, 2× hackathon winner. Eight exhibits, twelve jurors, one verdict.',
   email: 'rayanalyasi@gmail.com',
