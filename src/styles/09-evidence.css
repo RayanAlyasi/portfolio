@@ -25,10 +25,14 @@
 .stats li{display:flex;flex-direction:column;gap:2px;min-width:0}
 .stats b{font-family:var(--display);font-weight:900;font-size:clamp(30px,min(3.2vw,5.4vh),54px);line-height:.95}
 .stats span{font-size:13px;font-weight:500;opacity:.8}
-.read{position:relative;isolation:isolate;overflow:hidden;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;transition:border-color .35s ease,color .35s ease}
+.read{position:relative;isolation:isolate;overflow:hidden;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;box-shadow:5px 5px 0 var(--red);transition:border-color .35s ease,color .35s ease,box-shadow .2s ease,translate .2s var(--ease)}
 .bg-paper .read{background:var(--black);border-color:var(--black);color:var(--paper)}
 .bg-black .read,.bg-char .read{background:var(--white);border-color:var(--white);color:var(--black)}
-.read:hover{border-color:var(--red);color:var(--black)}
+/* translate, not transform: revisited slides pin transform on their entrances (10-objections.css). */
+.read:hover{border-color:var(--red);color:var(--black);translate:-2px -2px}
+.bg-paper .read:hover{box-shadow:7px 7px 0 var(--black)}
+.bg-black .read:hover,.bg-char .read:hover{box-shadow:7px 7px 0 var(--white)}
+.read:active{translate:4px 4px;box-shadow:0 0 0 transparent}
 /* Red fills the button from the left on hover (::before), and passes through it as its cue (::after). */
 .read::before,.read::after{content:"";position:absolute;inset:0;z-index:-1;background:var(--red);pointer-events:none}
 .read::before{transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease)}

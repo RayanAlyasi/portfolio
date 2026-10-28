@@ -1,5 +1,5 @@
 /* Shared keyframes and registered properties */
-@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 @keyframes nudgeR{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 /* Read exhibit's cue, a quarter of each cycle then rest: a red band passes through, the arrow leaves and comes back. */
 @keyframes pass{0%{transform:translateX(-101%)}25%,100%{transform:translateX(101%)}}
@@ -60,7 +60,7 @@
 @keyframes flash{0%{opacity:0}12%{opacity:.9}100%{opacity:0}}
 @keyframes lineDraw{to{transform:scaleX(1)}}
 @keyframes tagIn{from{opacity:0;transform:scale(1.5) rotate(-5deg)}to{opacity:1;transform:none}}
-@keyframes readIn{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+@keyframes readIn{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(-12px)}}
 @keyframes developOv{0%{opacity:0}10%{opacity:1}100%{opacity:0}}
 @keyframes filmUp{from{opacity:0;transform:translateY(90px)}30%{opacity:1}to{opacity:1;transform:none}}
 @keyframes filmDown{from{opacity:0;transform:translateY(-90px)}30%{opacity:1}to{opacity:1;transform:none}}
