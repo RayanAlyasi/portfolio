@@ -25,20 +25,16 @@
 .stats li{display:flex;flex-direction:column;gap:2px;min-width:0}
 .stats b{font-family:var(--display);font-weight:900;font-size:clamp(30px,min(3.2vw,5.4vh),54px);line-height:.95}
 .stats span{font-size:13px;font-weight:500;opacity:.8}
-.read{position:relative;isolation:isolate;overflow:hidden;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;box-shadow:5px 5px 0 var(--red);transition:border-color .35s ease,color .35s ease,box-shadow .2s ease,translate .2s var(--ease)}
-.bg-paper .read{background:var(--black);border-color:var(--black);color:var(--paper)}
-.bg-black .read,.bg-char .read{background:var(--white);border-color:var(--white);color:var(--black)}
-/* translate, not transform: revisited slides pin transform on their entrances (10-objections.css). */
-.read:hover{border-color:var(--red);color:var(--black);translate:-2px -2px}
-.bg-paper .read:hover{box-shadow:7px 7px 0 var(--black)}
-.bg-black .read:hover,.bg-char .read:hover{box-shadow:7px 7px 0 var(--white)}
-.read:active{translate:4px 4px;box-shadow:0 0 0 transparent}
-/* Red fills the button from the left on hover (::before), and passes through it as its cue (::after). */
-.read::before,.read::after{content:"";position:absolute;inset:0;z-index:-1;background:var(--red);pointer-events:none}
-.read::before{transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease)}
+.read{position:relative;isolation:isolate;overflow:hidden;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid var(--red);background:var(--red);color:var(--black);font-weight:700;font-size:15px;cursor:pointer;box-shadow:5px 5px 0 var(--sh);transition:border-color .35s ease,color .35s ease,box-shadow .2s ease,translate .2s var(--ease)}
+.bg-paper .read{--sh:var(--black);--fill:var(--black);--on:var(--paper)}
+.bg-black .read,.bg-char .read{--sh:var(--white);--fill:var(--white);--on:var(--black)}
+/* Hover: the slide's ink wipes in from the left and the button lifts on a red shadow. translate, not transform:
+   revisited slides pin transform on their entrances (10-objections.css). */
+.read::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--fill);transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease);pointer-events:none}
+.read:hover{border-color:var(--fill);color:var(--on);translate:-2px -2px;box-shadow:7px 7px 0 var(--red)}
 .read:hover::before{transform:none}
-.read::after{transform:translateX(-101%)}
-.read svg{width:16px;height:16px;animation:nudgeR 1.8s var(--ease) infinite}
+.read:active{translate:4px 4px;box-shadow:0 0 0 transparent}
+.read svg{width:16px;height:16px;animation:nudgeR 1.6s var(--ease) infinite}
 .read:hover svg{animation:none;transform:translateX(4px)}
 .dotfield{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:5px;max-width:420px;align-self:flex-start;width:100%}
 .dotfield i{aspect-ratio:1;border-radius:50%;background:currentColor;opacity:.85}
@@ -79,9 +75,9 @@
 .stats li{opacity:0}
 .slide.active .stats li{animation:rise .6s var(--ease) both;animation-delay:calc(var(--d) + .25s + var(--k,0) * 120ms)}
 .slide.active .evtags.a{animation:tagIn .55s cubic-bezier(.3,1.5,.5,1) both var(--d)}
-.slide.active .read.a{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d)}
-.slide.active .read::after{animation:pass 4s var(--snap) calc(var(--d) + 1s) 3}
-.slide.active .read svg path{animation:exitR 4s var(--snap) calc(var(--d) + 1s) 3}
+/* Once in, it presses itself into its shadow twice every 4 seconds; hovering stops that so the lift shows. */
+.slide.active .read.a{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d),press 4s var(--ease) calc(var(--d) + 1s) infinite}
+.slide.active .read.a:hover{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d)}
 .slide.seen .evh .wi,.slide.seen .pics img,.slide.seen .pics .vid,.slide.seen .stats li{animation:none !important;opacity:1;transform:none}
 .slide.seen .pics::after{animation:none !important;opacity:0}
 .slide.seen .stats::before{animation:none !important;transform:scaleX(1)}

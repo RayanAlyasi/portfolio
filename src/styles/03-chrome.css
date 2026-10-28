@@ -19,7 +19,10 @@
 .hint i{display:block;font-style:normal;transform:translateY(110%);animation:hint 5s var(--ease) 5s infinite}
 body:has(.s-open:not(.go)) .hint i{animation-play-state:paused}
 .next:hover .hint i{animation:none;transform:none}
-.next svg{width:24px;height:24px;stroke-width:2.5;animation:nudge 1.6s var(--ease) infinite}
+.chev{display:flex;flex-direction:column;align-items:center}
+.chev svg{width:22px;height:11px;stroke-width:3;opacity:.2;animation:wave 1.4s ease infinite}
+.chev svg:nth-child(2){animation-delay:.18s}
+.chev svg:nth-child(3){animation-delay:.36s}
 .count{font-family:var(--display);font-weight:900;font-size:20px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .dots{position:fixed;right:clamp(14px,2.2vw,30px);top:50%;z-index:60;display:flex;flex-direction:column;gap:12px;transform:translateY(-50%);color:var(--ink,#000);transition:color .5s ease}
 .dots button{position:relative;width:12px;height:12px;padding:0;border:2px solid currentColor;background:transparent;border-radius:50%;cursor:pointer;transition:background .3s ease,transform .3s var(--ease)}
