@@ -25,8 +25,7 @@
 .stats li{display:flex;flex-direction:column;gap:2px;min-width:0}
 .stats b{font-family:var(--display);font-weight:900;font-size:clamp(30px,min(3.2vw,5.4vh),54px);line-height:.95}
 .stats span{font-size:13px;font-weight:500;opacity:.8}
-.readrow{align-self:flex-start;display:flex;align-items:center;gap:18px}
-.read{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;box-shadow:5px 5px 0 var(--red);transition:border-color .35s ease,color .35s ease,box-shadow .2s ease,translate .2s var(--ease)}
+.read{position:relative;isolation:isolate;overflow:hidden;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;box-shadow:5px 5px 0 var(--red);transition:border-color .35s ease,color .35s ease,box-shadow .2s ease,translate .2s var(--ease)}
 .bg-paper .read{background:var(--black);border-color:var(--black);color:var(--paper)}
 .bg-black .read,.bg-char .read{background:var(--white);border-color:var(--white);color:var(--black)}
 /* translate, not transform: revisited slides pin transform on their entrances (10-objections.css). */
@@ -39,13 +38,6 @@
 .read::before{transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease)}
 .read:hover::before{transform:none}
 .read::after{transform:translateX(-101%)}
-/* "Click to open" ("Tap" on touch screens) rises beside the button 3 seconds after it appears, then every 5 seconds, like SCROLL. */
-.tap{overflow:hidden;color:var(--red);font-family:var(--display);font-weight:900;font-size:18px;line-height:1.15;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
-.tap i{display:flex;align-items:center;gap:6px;font-style:normal;transform:translateY(110%)}
-.tap i::before{content:"";width:16px;height:16px;background:currentColor;-webkit-mask:var(--larr) center/contain no-repeat;mask:var(--larr) center/contain no-repeat;--larr:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='2.5'%3E%3Cpath d='M14 8H3M7 3.5 2.5 8 7 12.5'/%3E%3C/svg%3E")}
-.tap i::after{content:"Click to open"}
-@media (hover:none){.tap i::after{content:"Tap to open"}}
-.slide.active .tap i{animation:hint 5s var(--ease) calc(var(--d) + 3s) infinite}
 .read svg{width:16px;height:16px;animation:nudgeR 1.8s var(--ease) infinite}
 .read:hover svg{animation:none;transform:translateX(4px)}
 .dotfield{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:5px;max-width:420px;align-self:flex-start;width:100%}
