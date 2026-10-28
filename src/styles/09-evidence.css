@@ -25,16 +25,12 @@
 .stats li{display:flex;flex-direction:column;gap:2px;min-width:0}
 .stats b{font-family:var(--display);font-weight:900;font-size:clamp(30px,min(3.2vw,5.4vh),54px);line-height:.95}
 .stats span{font-size:13px;font-weight:500;opacity:.8}
-.read{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.read{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;transition:border-color .35s ease,color .35s ease}
 .bg-paper .read{background:var(--black);border-color:var(--black);color:var(--paper)}
 .bg-black .read,.bg-char .read{background:var(--white);border-color:var(--white);color:var(--black)}
+.read:hover{border-color:var(--red);color:var(--black)}
 .read svg{width:16px;height:16px;animation:nudgeR 1.8s var(--ease) infinite}
-/* The exhibit's evidence opens its panel too (panels.js); hovering it lights the button. */
-.opens{cursor:pointer}
-@media (hover:hover){
-  .read:hover,.ex:has(.opens:hover) .read{background:var(--red);border-color:var(--red);color:var(--black)}
-  .read:hover svg,.ex:has(.opens:hover) .read svg{animation:none;transform:translateX(4px)}
-}
+.read:hover svg{animation:none;transform:translateX(4px)}
 .dotfield{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:5px;max-width:420px;align-self:flex-start;width:100%}
 .dotfield i{aspect-ratio:1;border-radius:50%;background:currentColor;opacity:.85}
 .slide.active .dotfield i{animation:dotout .6s ease forwards;animation-delay:calc(var(--t) - .3s + var(--d) * 1.2s)}
@@ -74,7 +70,9 @@
 .stats li{opacity:0}
 .slide.active .stats li{animation:rise .6s var(--ease) both;animation-delay:calc(var(--d) + .25s + var(--k,0) * 120ms)}
 .slide.active .evtags.a{animation:tagIn .55s cubic-bezier(.3,1.5,.5,1) both var(--d)}
-.slide.active .read.a{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d),knock 4s var(--ease) calc(var(--d) + 1.2s) 3}
+.slide.active .read.a{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d)}
+.slide.active .read::after{animation:pass 4s var(--snap) calc(var(--d) + 1s) 3}
+.slide.active .read svg path{animation:exitR 4s var(--snap) calc(var(--d) + 1s) 3}
 .slide.seen .evh .wi,.slide.seen .pics img,.slide.seen .pics .vid,.slide.seen .stats li{animation:none !important;opacity:1;transform:none}
 .slide.seen .pics::after{animation:none !important;opacity:0}
 .slide.seen .stats::before{animation:none !important;transform:scaleX(1)}

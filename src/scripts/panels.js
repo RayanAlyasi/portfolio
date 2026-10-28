@@ -65,23 +65,6 @@ function initDrawers() {
   }
 }
 
-/**
- * An exhibit's evidence (headline, story, numbers, photos) opens its panel like its button does: visitors
- * tapped those expecting more, and missed the button. The button stays the way in for keyboards and screen readers.
- */
-function initEvidenceAreas() {
-  for (const button of $$('.ex .read[data-open]')) {
-    for (const area of $$('.evi, .pics, .labshot', button.closest('.ex'))) {
-      area.classList.add('opens');
-      area.addEventListener('click', (e) => {
-        // Links and buttons do their own thing, and selecting text to copy it shouldn't open anything.
-        if (e.target.closest('a, button') || getSelection().toString()) return;
-        button.click();
-      });
-    }
-  }
-}
-
 function initCopyEmail() {
   const button = $('.copy'),
     status = $('.copied');
@@ -177,7 +160,6 @@ function initLightbox() {
 
 export function initPanels() {
   initDrawers();
-  initEvidenceAreas();
   initCopyEmail();
   initLightbox();
 }
