@@ -12,7 +12,9 @@
 .sm-only{display:none}
 .foot{position:fixed;inset:auto 0 0 0;z-index:60;height:calc(var(--fh) + env(safe-area-inset-bottom,0px));padding:0 clamp(16px,3.6vw,44px) env(safe-area-inset-bottom,0px);display:flex;align-items:center;justify-content:space-between;color:var(--ink,#000);transition:color .5s ease;pointer-events:none}
 .foot > *{pointer-events:auto}
-.next{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 4px;background:none;border:0;color:var(--red);cursor:pointer}
+.next{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 4px;background:none;border:0;color:var(--red);cursor:pointer;transition:color .5s ease}
+/* Red stands out on paper and black slides; on a red slide it takes the slide's ink, like the rest of the footer. */
+body:has(.bg-orange.active) .next{color:var(--ink,#000)}
 /* "Scroll" rises into view after 5 seconds on a slide (deck.js restarts the wait on each one), then every 5 seconds,
    and scrolls away upward the way the page moves. It waits out the countdown like the opening titles. */
 .hint{display:block;overflow:hidden;font-family:var(--display);font-weight:900;font-size:21px;line-height:1.15;letter-spacing:.08em;text-transform:uppercase}
