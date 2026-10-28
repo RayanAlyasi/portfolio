@@ -1,5 +1,9 @@
 /* Shared keyframes and registered properties */
 @keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@keyframes nudgeR{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+/* Attention cues that play once per cycle, then rest: Read exhibit knocks twice, Next dips twice. */
+@keyframes knock{0%,24%,100%{transform:none}4%,16%{transform:scale(.94)}8%,20%{transform:scale(1.05)}12%{transform:none}}
+@keyframes call{0%,24%,100%{transform:none}6%{transform:translateY(6px)}12%{transform:none}18%{transform:translateY(3px)}}
 @keyframes pop{35%{transform:scale(1.9)}}
 @keyframes popin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}

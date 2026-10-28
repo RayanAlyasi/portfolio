@@ -42,7 +42,6 @@
   .jury{padding:5px 9px 5px 6px;gap:7px}
   .jury b{font-size:16px}
   .jury span{font-size:10.5px}
-  .next span{display:none}
   .bf{font-size:0;width:16px;height:11px;padding:0}
   .ballot.me .bf{font-size:8px;line-height:1.05;width:58px;height:auto;padding:3px 4px;white-space:normal;text-align:center}
   .stats li{flex:1 1 30%}
@@ -92,7 +91,7 @@
   .sm-only{display:inline}
   .dots{display:none}
   .count{font-size:16px}
-  .next span{display:none}
+  .next{min-height:32px;padding:0 9px 0 11px;font-size:13px}
   .jury svg{width:40px;height:23px}
   .jury{padding:3px 8px 3px 5px;gap:6px}
   .jury b{font-size:14px}
