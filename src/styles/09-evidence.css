@@ -25,10 +25,15 @@
 .stats li{display:flex;flex-direction:column;gap:2px;min-width:0}
 .stats b{font-family:var(--display);font-weight:900;font-size:clamp(30px,min(3.2vw,5.4vh),54px);line-height:.95}
 .stats span{font-size:13px;font-weight:500;opacity:.8}
-.read{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;transition:border-color .35s ease,color .35s ease}
+.read{position:relative;isolation:isolate;overflow:hidden;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid;font-weight:700;font-size:15px;cursor:pointer;transition:border-color .35s ease,color .35s ease}
 .bg-paper .read{background:var(--black);border-color:var(--black);color:var(--paper)}
 .bg-black .read,.bg-char .read{background:var(--white);border-color:var(--white);color:var(--black)}
 .read:hover{border-color:var(--red);color:var(--black)}
+/* Red fills the button from the left on hover (::before), and passes through it as its cue (::after). */
+.read::before,.read::after{content:"";position:absolute;inset:0;z-index:-1;background:var(--red);pointer-events:none}
+.read::before{transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease)}
+.read:hover::before{transform:none}
+.read::after{transform:translateX(-101%)}
 .read svg{width:16px;height:16px;animation:nudgeR 1.8s var(--ease) infinite}
 .read:hover svg{animation:none;transform:translateX(4px)}
 .dotfield{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:5px;max-width:420px;align-self:flex-start;width:100%}

@@ -91,7 +91,7 @@
   .sm-only{display:inline}
   .dots{display:none}
   .count{font-size:16px}
-  .next{min-height:32px;padding:0 9px 0 11px;font-size:13px}
+  .hint{font-size:15px}
   .jury svg{width:40px;height:23px}
   .jury{padding:3px 8px 3px 5px;gap:6px}
   .jury b{font-size:14px}
@@ -164,4 +164,5 @@
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-delay:0s !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
   .rain{display:none}
+  .hint i{animation:none;transform:none}
 }

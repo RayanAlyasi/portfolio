@@ -1,10 +1,10 @@
 /* Shared keyframes and registered properties */
 @keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 @keyframes nudgeR{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
-/* Button cues, a quarter of each cycle then rest: a red band passes through, the arrow leaves and comes back. */
+/* Read exhibit's cue, a quarter of each cycle then rest: a red band passes through, the arrow leaves and comes back. */
 @keyframes pass{0%{transform:translateX(-101%)}25%,100%{transform:translateX(101%)}}
 @keyframes exitR{0%,25%,100%{transform:none}12%{transform:translateX(16px)}12.01%{transform:translateX(-16px)}}
-@keyframes exitD{0%,25%,100%{transform:none}12%{transform:translateY(16px)}12.01%{transform:translateY(-16px)}}
+@keyframes hint{0%{transform:translateY(110%)}12%,60%{transform:none}72%,100%{transform:translateY(-110%)}}
 @keyframes pop{35%{transform:scale(1.9)}}
 @keyframes popin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
