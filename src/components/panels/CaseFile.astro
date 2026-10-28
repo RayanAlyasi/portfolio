@@ -1,11 +1,12 @@
 ---
 // Panel: Full case file.
+// The opening line is data-nosnippet, like the facts slide's, so Google doesn't quote it as the search description.
 import Drawer from './Drawer.astro';
 ---
 <Drawer id="d-file" label="Full case file">
     <h2 id="d-file-h">Rayan Alyasi</h2>
     <button class="cvbtn" type="button" data-open="d-cv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 8s2.6-5 7-5 7 5 7 5-2.6 5-7 5-7-5-7-5Z"/><circle cx="8" cy="8" r="2"/></svg> View CV</button>
-    <p><span data-yr="cap">Second</span>-year Information Systems student at King Abdulaziz University, Jeddah. DevOps engineering intern at Tabby. Writing code since 14.</p>
+    <p><span data-nosnippet><span data-yr="cap">Second</span>-year Information Systems student at King Abdulaziz University, Jeddah. DevOps engineering intern at Tabby. Writing code since 14.</span></p>
     <h3>Experience</h3>
     <ul>
       <li><b>Tabby</b>, DevOps engineering intern, Mar 2026 to now: built a GitOps proof of concept on GKE and runs a live anti-spam service on it for Tabby’s developer communities</li>
