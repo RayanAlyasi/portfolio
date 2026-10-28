@@ -25,10 +25,17 @@
 .stats li{display:flex;flex-direction:column;gap:2px;min-width:0}
 .stats b{font-family:var(--display);font-weight:900;font-size:clamp(30px,min(3.2vw,5.4vh),54px);line-height:.95}
 .stats span{font-size:13px;font-weight:500;opacity:.8}
-.read{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid currentColor;background:transparent;font-weight:700;font-size:15px;cursor:pointer;transition:background .2s ease,color .2s ease}
-.bg-paper .read:hover{background:var(--black);color:var(--paper)}
-.bg-black .read:hover,.bg-char .read:hover{background:var(--white);color:var(--black)}
-.read svg{width:16px;height:16px}
+.read{position:relative;isolation:isolate;overflow:hidden;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:2.5px solid var(--red);background:var(--red);color:var(--black);font-weight:700;font-size:15px;cursor:pointer;box-shadow:5px 5px 0 var(--sh);transition:border-color .35s ease,color .35s ease,box-shadow .2s ease,translate .2s var(--ease)}
+.bg-paper .read{--sh:var(--black);--fill:var(--black);--on:var(--paper)}
+.bg-black .read,.bg-char .read{--sh:var(--white);--fill:var(--white);--on:var(--black)}
+/* Hover: the slide's ink wipes in from the left and the button lifts on a red shadow. translate, not transform:
+   revisited slides pin transform on their entrances (10-objections.css). */
+.read::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--fill);transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--ease);pointer-events:none}
+.read:hover{border-color:var(--fill);color:var(--on);translate:-2px -2px;box-shadow:7px 7px 0 var(--red)}
+.read:hover::before{transform:none}
+.read:active{translate:4px 4px;box-shadow:0 0 0 transparent}
+.read svg{width:16px;height:16px;animation:nudgeR 1.6s var(--ease) infinite}
+.read:hover svg{animation:none;transform:translateX(4px)}
 .dotfield{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:5px;max-width:420px;align-self:flex-start;width:100%}
 .dotfield i{aspect-ratio:1;border-radius:50%;background:currentColor;opacity:.85}
 .slide.active .dotfield i{animation:dotout .6s ease forwards;animation-delay:calc(var(--t) - .3s + var(--d) * 1.2s)}
@@ -68,9 +75,9 @@
 .stats li{opacity:0}
 .slide.active .stats li{animation:rise .6s var(--ease) both;animation-delay:calc(var(--d) + .25s + var(--k,0) * 120ms)}
 .slide.active .evtags.a{animation:tagIn .55s cubic-bezier(.3,1.5,.5,1) both var(--d)}
-.slide.active .read.a{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d)}
-.read svg{transition:transform .25s var(--ease)}
-.read:hover svg{transform:translateX(4px)}
+/* Once in, it presses itself into its shadow twice every 4 seconds; hovering stops that so the lift shows. */
+.slide.active .read.a{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d),press 4s var(--ease) calc(var(--d) + 1s) infinite}
+.slide.active .read.a:hover{animation:readIn .6s cubic-bezier(.2,.9,.2,1) both var(--d)}
 .slide.seen .evh .wi,.slide.seen .pics img,.slide.seen .pics .vid,.slide.seen .stats li{animation:none !important;opacity:1;transform:none}
 .slide.seen .pics::after{animation:none !important;opacity:0}
 .slide.seen .stats::before{animation:none !important;transform:scaleX(1)}

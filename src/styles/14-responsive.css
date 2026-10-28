@@ -42,10 +42,11 @@
   .jury{padding:5px 9px 5px 6px;gap:7px}
   .jury b{font-size:16px}
   .jury span{font-size:10.5px}
-  .next span{display:none}
   .bf{font-size:0;width:16px;height:11px;padding:0}
   .ballot.me .bf{font-size:8px;line-height:1.05;width:58px;height:auto;padding:3px 4px;white-space:normal;text-align:center}
   .stats li{flex:1 1 30%}
+  .hint{font-size:18px}
+  .chev svg{width:20px;height:10px}
 }
 @media (max-width:820px) and (max-height:700px){
   .f-list li:nth-child(n+5){display:none}
@@ -92,7 +93,8 @@
   .sm-only{display:inline}
   .dots{display:none}
   .count{font-size:16px}
-  .next span{display:none}
+  .hint{font-size:16px}
+  .chev svg{width:18px;height:9px}
   .jury svg{width:40px;height:23px}
   .jury{padding:3px 8px 3px 5px;gap:6px}
   .jury b{font-size:14px}
@@ -165,4 +167,6 @@
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-delay:0s !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
   .rain{display:none}
+  .hint i{animation:none;transform:none}
+  .chev svg{animation:none;opacity:1}
 }

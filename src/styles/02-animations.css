@@ -1,5 +1,8 @@
 /* Shared keyframes and registered properties */
-@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@keyframes nudgeR{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+@keyframes press{0%,34%,100%{translate:0 0;box-shadow:5px 5px 0 var(--sh)}8%,24%{translate:5px 5px;box-shadow:0 0 0 var(--sh)}16%{translate:0 0;box-shadow:5px 5px 0 var(--sh)}}
+@keyframes wave{0%,100%{opacity:.2}30%{opacity:1}}
+@keyframes hint{0%{transform:translateY(110%)}12%,60%{transform:none}72%,100%{transform:translateY(-110%)}}
 @keyframes pop{35%{transform:scale(1.9)}}
 @keyframes popin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
@@ -55,7 +58,7 @@
 @keyframes flash{0%{opacity:0}12%{opacity:.9}100%{opacity:0}}
 @keyframes lineDraw{to{transform:scaleX(1)}}
 @keyframes tagIn{from{opacity:0;transform:scale(1.5) rotate(-5deg)}to{opacity:1;transform:none}}
-@keyframes readIn{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+@keyframes readIn{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(-12px)}}
 @keyframes developOv{0%{opacity:0}10%{opacity:1}100%{opacity:0}}
 @keyframes filmUp{from{opacity:0;transform:translateY(90px)}30%{opacity:1}to{opacity:1;transform:none}}
 @keyframes filmDown{from{opacity:0;transform:translateY(-90px)}30%{opacity:1}to{opacity:1;transform:none}}

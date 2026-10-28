@@ -30,6 +30,7 @@ function updateChrome(i) {
   });
   countEl.textContent = `${pad(i + 1)} / ${pad(state.slides.length)}`;
   nextBtn.style.visibility = i === state.slides.length - 1 ? 'hidden' : 'visible';
+  for (const a of nextBtn.getAnimations({ subtree: true })) a.currentTime = 0; // SCROLL waits again on each slide
 }
 
 /** Make slide i current. Revisited slides appear already finished. */
