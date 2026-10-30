@@ -17,7 +17,7 @@ export default defineConfig({
   image: {
     service: { entrypoint: 'astro/assets/services/sharp', config: { avif: { effort: 4 }, webp: { effort: 5 } } },
   },
-  // Only the home page: the slide pages (src/pages/[slide].astro) name it as their canonical page.
-  integrations: [sitemap({ filter: (page) => new URL(page).pathname === '/' }), securityHeaders()],
+  // Only the home page and the Arabic page: the slide pages (src/pages/[slide].astro) name the home page as their canonical page.
+  integrations: [sitemap({ filter: (page) => ['/', '/ar'].includes(new URL(page).pathname) }), securityHeaders()],
   devToolbar: { enabled: false },
 });

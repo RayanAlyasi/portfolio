@@ -31,10 +31,11 @@ The deck has 13 slides, in order: opening, the-jury, the-facts, exhibit-a (home 
 ## Repository map
 
 ```
-src/pages/            index.astro, [slide].astro and panel/[panel].astro (the deck opening on a slide or panel, for Umami heatmaps), 404.astro
-src/layouts/          Base.astro: metadata, fonts, analytics, global styles
+src/pages/            index.astro, [slide].astro and panel/[panel].astro (the deck opening on a slide or panel, for Umami heatmaps), ar.astro (Arabic summary for searches on the name in Arabic), 404.astro
+src/layouts/          Base.astro: fonts, global styles and the no-script fallback for the deck
 src/components/
   Deck.astro          the whole page: chrome, slides and panels
+  PageHead.astro      metadata, structured data and analytics, shared by the deck and the Arabic page
   chrome/             header, footer, section dots, transitions
   slides/             one component per slide (Opening, TheJury, TheFacts, ExhibitA–H, Verdict, Credits)
   panels/             Drawer shell + PanelA–H, Contact, CvViewer, CaseFile, Lightbox
