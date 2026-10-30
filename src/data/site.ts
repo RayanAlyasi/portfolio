@@ -21,7 +21,7 @@ export const arabic = {
   name: 'ريان الياسي',
   title: 'ريان الياسي · DevOps Engineer',
   // Starts with the name, for the same reason as site.description.
-  description: 'ريان الياسي: معرض أعمال متدرب في هندسة DevOps لدى تابي، وزميل برنامج جيل طموح من BCG، وطالب نظم معلومات في جامعة الملك عبدالعزيز.',
+  description: 'ريان الياسي: معرض أعمال متدرب DevOps في تابي، ومشارك في برنامج جيل طموح من BCG، وطالب نظم معلومات في جامعة الملك عبدالعزيز.',
 };
 
 const person = {
