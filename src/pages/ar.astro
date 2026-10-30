@@ -1,0 +1,54 @@
+---
+// Arabic summary: where a search for the name in Arabic lands. A standalone page with no deck script, like the 404.
+// The site's fonts only cover Latin letters, so the Arabic text uses each device's own Arabic font.
+import '@fontsource/libre-franklin/latin-400';
+import '@fontsource/libre-franklin/latin-700';
+import PageHead from '../components/PageHead.astro';
+import { arabic, arabicStructuredData, site } from '../data/site';
+---
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <PageHead path={arabic.path} title={arabic.title} description={arabic.description} shareTitle={arabic.title} shareDescription={arabic.description} data={arabicStructuredData} />
+  </head>
+  <body>
+    <main>
+      <p class="latin" lang="en" dir="ltr">{site.name}</p>
+      <h1>{arabic.name}</h1>
+      <p class="lead">أنا متدرب في هندسة DevOps لدى تابي، وزميل برنامج جيل طموح من BCG، وطالب نظم معلومات في جامعة الملك عبدالعزيز.</p>
+      <ul>
+        <li>فزت بالمركز الأول في هاكاثونين عام 2026: TCS Sustainathon Saudi Arabia وTechHub Innovation Startup Challenge.</li>
+        <li>بنيت بوت واتساب بالذكاء الاصطناعي خدم أكثر من 8,000 شخص في يوم الهندسة بجامعة الملك عبدالعزيز، دون أي توقف.</li>
+        <li>حوّلت جهازي القديم من عام 2015 إلى خادم منزلي يشغّل 25 حاوية Docker.</li>
+      </ul>
+      <p>الموقع الكامل باللغة الإنجليزية، ويعرض أعمالي على شكل قضية أمام هيئة محلفين، مستوحاة من فيلمي المفضل <span lang="en" dir="ltr">12 Angry Men</span>.</p>
+      <a class="go" href="/" hreflang="en">افتح الموقع الكامل <span aria-hidden="true">←</span></a>
+      <nav aria-label="روابط">
+        <a href="/cv/Rayan-Alyasi-CV.pdf">السيرة الذاتية</a>
+        <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+        <a href={site.github} target="_blank" rel="noopener">GitHub</a>
+        <a href={site.x} target="_blank" rel="noopener">X</a>
+        <a href={`mailto:${site.email}`}>البريد الإلكتروني</a>
+      </nav>
+    </main>
+  </body>
+</html>
+<style is:global>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:#ECE9E3;color:#000;font-family:'Libre Franklin',system-ui,-apple-system,'Segoe UI','Noto Sans Arabic',Tahoma,sans-serif}
+  main{max-width:760px;margin-inline:auto;display:flex;flex-direction:column;gap:22px;padding:clamp(40px,10vh,96px) clamp(20px,6vw,40px)}
+  p{margin:0;font-size:clamp(17px,2vw,19px);line-height:1.75}
+  .latin{align-self:flex-start;padding:4px 10px;border:2px solid currentColor;font-weight:700;font-size:14px}
+  h1{margin:0;font-weight:800;font-size:clamp(60px,13vw,124px);line-height:1.15}
+  .lead{font-weight:700;font-size:clamp(20px,2.6vw,25px);line-height:1.7}
+  ul{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
+  li{padding-inline-start:16px;border-inline-start:4px solid #E5481E;font-size:clamp(17px,2vw,19px);line-height:1.75}
+  a:focus-visible{outline:3px solid #E5481E;outline-offset:3px}
+  .go{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:0 22px;border:2.5px solid #E5481E;background:#E5481E;color:#000;font-weight:700;font-size:17px;text-decoration:none;box-shadow:-5px 5px 0 #000;transition:translate .2s ease,box-shadow .2s ease}
+  .go:hover{translate:2px -2px;box-shadow:-7px 7px 0 #000}
+  .go:active{translate:-5px 5px;box-shadow:0 0 0 #000}
+  nav{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:6px}
+  nav a{display:inline-flex;align-items:center;min-height:44px;color:inherit;font-weight:700;font-size:16px;text-underline-offset:4px}
+  nav a:hover{color:#B8320E}
+  @media (prefers-reduced-motion:reduce){.go{transition:none}}
+</style>

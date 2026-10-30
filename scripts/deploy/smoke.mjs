@@ -85,6 +85,7 @@ try {
 for (const [path, want] of [
   ['/robots.txt', 200],
   ['/llms.txt', 200],
+  ['/ar', 200],
   ['/cv/Rayan-Alyasi-CV.pdf', 200],
   ['/this-page-does-not-exist', 404],
 ]) {
