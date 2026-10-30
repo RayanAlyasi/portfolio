@@ -1,8 +1,9 @@
 ---
 // Fixed header: logo, case file and contact buttons.
+import Logo from '../ui/Logo.astro';
 
 ---
 <header class="hdr">
-  <button class="brand" type="button" data-go="0" aria-label="Rayan Alyasi, back to the start"><svg viewBox="12.5 9.5 50 47.5" fill="none" stroke="currentColor" stroke-width="5" aria-hidden="true"><path d="M41.5 29.5V27Q41.5 22 36.5 22H15.5V12H42A10.5 10.5 0 0 1 52.5 22.5V33Q52.5 39.5 44.5 42.5"/><path d="M44.5 54.5H15.5V33.5H36L58 57"/><path d="M23.5 43.5H30.5L42 55"/></svg><span>Rayan Alyasi</span></button>
+  <button class="brand" type="button" data-go="0" aria-label="Rayan Alyasi, back to the start"><Logo /><span>Rayan Alyasi</span></button>
   <nav><button type="button" class="hbtn" data-open="d-file"><span class="lg-only">Full case file</span><span class="sm-only">Case file</span></button><button type="button" class="hbtn solid" data-open="d-contact">Say hello</button></nav>
 </header>
