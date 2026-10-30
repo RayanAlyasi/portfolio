@@ -17,11 +17,12 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
+    "@fontsource/alexandria": "5.3.0",
     "@fontsource/big-shoulders-display": "5.3.0",
     "@fontsource/libre-franklin": "5.3.0",
     "astro": "7.3.5"
   },
-  "description": "Rayan Alyasi \u00b7 Not Just a Student. Portfolio built with Astro, self-hosted with Coolify behind Cloudflare.",
+  "description": "Rayan Alyasi · Not Just a Student. Portfolio built with Astro, self-hosted with Coolify behind Cloudflare.",
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "eslint": "10.12.0",

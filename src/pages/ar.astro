@@ -1,9 +1,14 @@
 ---
-// Arabic summary: where a search for the name in Arabic lands. A standalone page with no deck script, like the 404.
-// The site's fonts only cover Latin letters, so the Arabic text uses each device's own Arabic font.
-import '@fontsource/libre-franklin/latin-400';
+// The opening slide in Saudi Hijazi Arabic: where a search for the name in Arabic lands. A standalone page with no deck script, like the 404.
+// Alexandria supplies the Arabic letters and loads only here; Latin words use the site's Libre Franklin.
+import '@fontsource/alexandria/arabic-500';
+import '@fontsource/alexandria/arabic-700';
+import '@fontsource/alexandria/arabic-900';
+import '@fontsource/libre-franklin/latin-500';
 import '@fontsource/libre-franklin/latin-700';
 import PageHead from '../components/PageHead.astro';
+import Fan from '../components/ui/Fan.astro';
+import Logo from '../components/ui/Logo.astro';
 import { arabic, arabicStructuredData, site } from '../data/site';
 ---
 <!doctype html>
@@ -12,43 +17,72 @@ import { arabic, arabicStructuredData, site } from '../data/site';
     <PageHead path={arabic.path} title={arabic.title} description={arabic.description} shareTitle={arabic.title} shareDescription={arabic.description} data={arabicStructuredData} />
   </head>
   <body>
+    <header>
+      <a class="brand" href="/" hreflang="en" lang="en" dir="ltr"><Logo />{site.name}</a>
+      <nav><a class="hbtn" href="/" hreflang="en" lang="en" dir="ltr">English</a><a class="hbtn solid" href={`mailto:${site.email}`}>راسلني</a></nav>
+    </header>
+    <div class="sky" aria-hidden="true"><div class="bars"></div><div class="fan"><Fan /></div></div>
     <main>
-      <p class="latin" lang="en" dir="ltr">{site.name}</p>
+      <p class="pre">الفكرة من فيلمي المفضل <span lang="en" dir="ltr">12 Angry Men (1957)</span></p>
       <h1>{arabic.name}</h1>
-      <p class="lead">أنا متدرب في هندسة DevOps لدى تابي، وزميل برنامج جيل طموح من BCG، وطالب نظم معلومات في جامعة الملك عبدالعزيز.</p>
-      <ul>
-        <li>فزت بالمركز الأول في هاكاثونين عام 2026: TCS Sustainathon Saudi Arabia وTechHub Innovation Startup Challenge.</li>
-        <li>بنيت بوت واتساب بالذكاء الاصطناعي خدم أكثر من 8,000 شخص في يوم الهندسة بجامعة الملك عبدالعزيز، دون أي توقف.</li>
-        <li>حوّلت جهازي القديم من عام 2015 إلى خادم منزلي يشغّل 25 حاوية Docker.</li>
-      </ul>
-      <p>الموقع الكامل باللغة الإنجليزية، ويعرض أعمالي على شكل قضية أمام هيئة محلفين، مستوحاة من فيلمي المفضل <span lang="en" dir="ltr">12 Angry Men</span>.</p>
-      <a class="go" href="/" hreflang="en">افتح الموقع الكامل <span aria-hidden="true">←</span></a>
-      <nav aria-label="روابط">
-        <a href="/cv/Rayan-Alyasi-CV.pdf">السيرة الذاتية</a>
-        <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-        <a href={site.github} target="_blank" rel="noopener">GitHub</a>
-        <a href={site.x} target="_blank" rel="noopener">X</a>
-        <a href={`mailto:${site.email}`}>البريد الإلكتروني</a>
-      </nav>
+      <ul class="proof"><li style="--k:0">جبت المركز الأول في هاكاثونين</li><li style="--k:1">سويت بوت واتساب خدم أكتر من 8,000 شخص</li></ul>
+      <p class="lead">أنا متدرب DevOps في تابي، ومشارك في برنامج جيل طموح من BCG، وأدرس نظم معلومات في جامعة الملك عبدالعزيز.</p>
+      <p class="line">في الفيلم، اتناشر محلف يحكموا في قضية وحدة. وهنا، القضية هي أنا.</p>
+      <div class="ctas">
+        <a class="ocb solid" href="/" hreflang="en">ابدأ القضية (بالإنجليزي) <span aria-hidden="true">←</span></a>
+        <a class="ocb" href="/cv/Rayan-Alyasi-CV.pdf">السيرة الذاتية</a>
+        <a class="ocb" href={site.linkedin} target="_blank" rel="noopener" lang="en" dir="ltr">LinkedIn</a>
+        <a class="ocb" href={site.github} target="_blank" rel="noopener" lang="en" dir="ltr">GitHub</a>
+        <a class="ocb" href={site.x} target="_blank" rel="noopener" lang="en" dir="ltr">X</a>
+      </div>
     </main>
   </body>
 </html>
 <style is:global>
+  :root{--black:#000;--paper:#ECE9E3;--red:#E5481E;--ease:cubic-bezier(.2,.8,.2,1);--hh:64px}
   *{box-sizing:border-box}
-  html,body{margin:0;min-height:100%;background:#ECE9E3;color:#000;font-family:'Libre Franklin',system-ui,-apple-system,'Segoe UI','Noto Sans Arabic',Tahoma,sans-serif}
-  main{max-width:760px;margin-inline:auto;display:flex;flex-direction:column;gap:22px;padding:clamp(40px,10vh,96px) clamp(20px,6vw,40px)}
-  p{margin:0;font-size:clamp(17px,2vw,19px);line-height:1.75}
-  .latin{align-self:flex-start;padding:4px 10px;border:2px solid currentColor;font-weight:700;font-size:14px}
-  h1{margin:0;font-weight:800;font-size:clamp(60px,13vw,124px);line-height:1.15}
-  .lead{font-weight:700;font-size:clamp(20px,2.6vw,25px);line-height:1.7}
-  ul{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
-  li{padding-inline-start:16px;border-inline-start:4px solid #E5481E;font-size:clamp(17px,2vw,19px);line-height:1.75}
-  a:focus-visible{outline:3px solid #E5481E;outline-offset:3px}
-  .go{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:0 22px;border:2.5px solid #E5481E;background:#E5481E;color:#000;font-weight:700;font-size:17px;text-decoration:none;box-shadow:-5px 5px 0 #000;transition:translate .2s ease,box-shadow .2s ease}
-  .go:hover{translate:2px -2px;box-shadow:-7px 7px 0 #000}
-  .go:active{translate:-5px 5px;box-shadow:0 0 0 #000}
-  nav{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:6px}
-  nav a{display:inline-flex;align-items:center;min-height:44px;color:inherit;font-weight:700;font-size:16px;text-underline-offset:4px}
-  nav a:hover{color:#B8320E}
-  @media (prefers-reduced-motion:reduce){.go{transition:none}}
+  html{background:var(--paper)}
+  body{position:relative;display:flex;flex-direction:column;min-height:100vh;min-height:100svh;margin:0;overflow-x:clip;color:var(--black);font-family:Alexandria,'Libre Franklin',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  a:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+  header{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;height:var(--hh);padding-inline:clamp(16px,3.6vw,44px);background:var(--paper)}
+  .brand{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-weight:700;font-size:15px;text-decoration:none}
+  .brand svg{width:24px;height:23px}
+  header nav{display:flex;gap:10px}
+  .hbtn{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border:2px solid var(--black);font-weight:700;font-size:14px;text-decoration:none;transition:background .2s ease,color .2s ease}
+  .hbtn:hover,.hbtn.solid{background:var(--black);color:var(--paper)}
+  .hbtn.solid:hover{background:transparent;color:inherit}
+  .sky{position:relative;flex:1 0 clamp(150px,25vh,290px);overflow:hidden}
+  .bars{position:absolute;inset:0;background:repeating-linear-gradient(transparent 0 2.7vh,var(--black) 2.7vh 7.7vh,transparent 7.7vh 13vh)}
+  .fan{position:absolute;inset-block:12px;inset-inline-end:clamp(16px,7vw,44px);aspect-ratio:1;animation:roll 1.3s var(--ease) both}
+  .fan svg{display:block;width:100%;height:100%}
+  main{position:relative;z-index:1;padding:14px clamp(16px,4vw,64px) 22px;background:var(--paper)}
+  p{margin:0}
+  .pre{font-weight:500;font-size:14px;line-height:1.6}
+  h1{margin:0;padding-bottom:.18em;font-weight:900;font-size:min(15.1vw,112px);line-height:1.5;white-space:nowrap;text-shadow:-.035em .035em 0 var(--red);animation:rise .7s var(--ease) both .15s}
+  .proof{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0;padding:0;list-style:none}
+  .proof li{padding:4px 10px;background:var(--black);color:var(--paper);font-weight:700;font-size:13.5px;line-height:1.5;animation:rise .5s var(--ease) both calc(.35s + var(--k) * 90ms)}
+  .lead{margin-top:12px;font-weight:500;font-size:17px;line-height:1.7}
+  .line{margin-top:6px;font-weight:700;font-size:16px;line-height:1.6}
+  .ctas{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .ocb{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px;border:2.5px solid var(--black);font-weight:700;font-size:15px;text-decoration:none;transition:background .2s ease,color .2s ease,border-color .2s ease}
+  .ocb.solid{background:var(--black);color:var(--paper)}
+  .ocb:hover{background:var(--black);color:var(--paper)}
+  .ocb.solid:hover{background:var(--red);border-color:var(--red);color:var(--black)}
+  @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  @keyframes roll{from{transform:translateX(-60vw) rotate(260deg)}to{transform:none}}
+  @media (max-width:1279px){
+    .ocb{flex:1 1 auto;justify-content:center;padding:0 11px;white-space:nowrap}
+    .ocb.solid{flex-basis:100%}
+  }
+  @media (min-width:1280px) and (min-height:600px){
+    .sky{position:absolute;inset:var(--hh) 0 0}
+    .fan{inset-block:6vh auto;inset-inline-end:7vw;width:min(30vw,44vh)}
+    main{width:min(800px,58vw);margin-block:auto 9vh;margin-inline-start:clamp(40px,5vw,72px);padding:18px 28px 26px}
+    .pre{font-size:16px}
+    .proof li{padding:5px 12px;font-size:15px}
+    .lead{font-size:20px}
+    .line{font-size:18px}
+  }
+  @media (prefers-reduced-motion:reduce){h1,.proof li,.fan{animation:none}}
 </style>
