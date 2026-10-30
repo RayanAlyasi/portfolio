@@ -1,7 +1,7 @@
 ---
 // Panel: Get in touch.
 import Drawer from './Drawer.astro';
-import { site } from '../../data/site';
+import { arabic, site } from '../../data/site';
 ---
 <Drawer id="d-contact" label="Get in touch">
     <h2 id="d-contact-h">Say hello</h2>
@@ -13,5 +13,6 @@ import { site } from '../../data/site';
       <a class="cbtn" href="https://www.linkedin.com/in/rayanalyasi" target="_blank" rel="noopener">LinkedIn</a>
       <a class="cbtn" href="https://github.com/RayanAlyasi" target="_blank" rel="noopener">GitHub</a>
       <button class="cbtn" type="button" data-open="d-cv">View CV</button>
+      <a class="cbtn" href={arabic.path} hreflang="ar" lang="ar" dir="rtl">{arabic.name} بالعربية</a>
     </div>
 </Drawer>

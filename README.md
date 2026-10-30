@@ -18,8 +18,8 @@ npm run check           # everything CI checks; run it before pushing
 
 ```
 src/
-  pages/          index.astro, [slide].astro and panel/[panel].astro (pages for heatmaps), 404.astro
-  layouts/        Base.astro: metadata, structured data, fonts, analytics
+  pages/          index.astro, [slide].astro and panel/[panel].astro (pages for heatmaps), ar.astro (Arabic summary), 404.astro
+  layouts/        Base.astro: fonts and global styles around PageHead.astro (metadata, structured data, analytics)
   components/     Deck.astro (the whole page), slides/, panels/, chrome/, ui/ (Pic and Vid)
   scripts/        one ES module per feature, wired up in main.js
   styles/         one stylesheet per area, imported by index.css

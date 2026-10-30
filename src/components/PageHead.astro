@@ -1,0 +1,60 @@
+---
+// What search engines, link previews and analytics read from <head>. Shared by the deck (Base.astro) and the Arabic page.
+import { arabic, site, structuredData } from '../data/site';
+
+interface Props {
+  path?: string;
+  title?: string;
+  description?: string;
+  shareTitle?: string;
+  shareDescription?: string;
+  data?: object;
+}
+
+const { path = '/', title = site.title, description = site.description, shareTitle = site.shareTitle, shareDescription = site.shareDescription, data = structuredData } = Astro.props;
+const umamiHost = import.meta.env.PUBLIC_UMAMI_HOST?.replace(/\/$/, '');
+const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
+// Every slide's address shows the same page, so all of them name the home page as the original for search engines.
+const canonical = new URL(path, site.url).href;
+const home = new URL('/', site.url).href;
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#000000" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content={site.name} />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang="en" href={home} />
+<link rel="alternate" hreflang="ar" href={new URL(arabic.path, site.url).href} />
+<link rel="alternate" hreflang="x-default" href={home} />
+<meta property="og:type" content="profile" />
+<meta property="profile:first_name" content="Rayan" />
+<meta property="profile:last_name" content="Alyasi" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={shareTitle} />
+<meta property="og:description" content={shareDescription} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={`${site.url}/og-image.png`} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Rayan Alyasi: Not Just a Student, a portfolio inspired by 12 Angry Men" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={shareTitle} />
+<meta name="twitter:description" content={shareDescription} />
+<meta name="twitter:image" content={`${site.url}/og-image.png`} />
+{/* PNG first: Google Search does not accept SVG favicons and prefers ones larger than 48px. */}
+<link rel="icon" href="/favicon-192.png" sizes="192x192" type="image/png" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<script type="application/ld+json" set:html={JSON.stringify(data)} />
+{umamiHost && umamiId && (
+  <>
+    <script defer src={`${umamiHost}/script.js`} data-website-id={umamiId} data-domains="alyasi.tech" data-exclude-hash="true" data-before-send="umamiBeforeSend" />
+    <script defer src={`${umamiHost}/recorder.js`} data-website-id={umamiId} />
+  </>
+)}

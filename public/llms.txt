@@ -7,6 +7,7 @@ The portfolio at https://alyasi.tech/ is an interactive site inspired by the fil
 ## Links
 
 - [Portfolio](https://alyasi.tech/): the interactive site
+- [Arabic page](https://alyasi.tech/ar): ريان الياسي, a short summary in Arabic
 - [CV (PDF)](https://alyasi.tech/cv/Rayan-Alyasi-CV.pdf): one-page CV
 - [LinkedIn](https://www.linkedin.com/in/rayanalyasi)
 - [GitHub](https://github.com/RayanAlyasi)
