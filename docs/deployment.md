@@ -69,6 +69,7 @@ Every action is pinned to a full commit SHA (GitHub's guidance for immutable rel
    - image `ghcr.io/rayanalyasi/portfolio`, tag `staging` or `production`
    - port **8080**, health check `/healthz` on host **`127.0.0.1`**. Coolify checks from inside the container with `wget`, and there `localhost` resolves to IPv6 `::1`, where nginx does not listen
    - domain `https://staging.alyasi.tech` or `https://alyasi.tech`, with **Redirect HTTP to HTTPS** off (the tunnel connects over HTTP, so the redirect would loop)
+   - **Enable Gzip Compression** off (*Advanced*). nginx already compresses text. Coolify's proxy would also compress video, which removes byte-range support, and iPhones then refuse to play it. After turning it on by mistake, turn it off, redeploy and purge the Cloudflare cache, which keeps the compressed copies
 5. Each application's deploy webhook is `http://<server MagicDNS name>:8000/api/v1/deploy?uuid=<app uuid>`, called with the deploy token. Use the full `*.ts.net` name, not the `100.x` address: Tailscale Serve routes by hostname and answers 404 to the bare address ([deploy webhooks](https://coolify.io/docs/applications/deployments/automatic-deployments)). The address stays out of this public repository; it lives only in the `COOLIFY_WEBHOOK` secrets.
 6. After the first staging build publishes the image, make the GHCR package public (it contains only the public site), so the server needs no registry login.
 

@@ -11,7 +11,7 @@ import { chromium } from 'playwright';
 
 const SIZES = [
   ['SE', 375, 667],
-  ['i14', 390, 844],
+  ['max', 440, 720],
   ['pixel', 412, 915],
   ['small', 360, 640],
   ['land', 844, 390],
