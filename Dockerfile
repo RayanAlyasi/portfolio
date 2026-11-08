@@ -8,7 +8,7 @@
 #
 # Pinned to the nginx 1.30 stable line: patch releases (security fixes) arrive automatically,
 # and Dependabot proposes the next stable line.
-FROM nginxinc/nginx-unprivileged:1.30-alpine-slim
+FROM nginxinc/nginx-unprivileged:1.31-alpine-slim
 
 COPY deploy/nginx/site.conf /etc/nginx/conf.d/default.conf
 COPY dist/ /usr/share/nginx/html/
